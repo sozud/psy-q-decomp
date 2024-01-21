@@ -13,6 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Install deps
+      run: sudo apt-get install dos2unix
+
     - name: Install dosemu
       run: |
         git clone https://github.com/sozud/dosemu-deb.git
