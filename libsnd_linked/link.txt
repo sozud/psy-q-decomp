@@ -1,0 +1,28 @@
+
+	org     $80010000
+
+text    group                           ; main text group
+bss     group   bss                     ; main data group
+
+	section .rdata,text     ; main sections
+	section .text,text
+	section .data,text
+	section .sdata,text
+	section .sbss,bss
+	section .bss,bss
+
+	include "main.obj"
+
+	inclib libsn.lib
+	inclib libapi.lib
+	inclib libgpu.lib
+	inclib libspu.lib
+	inclib libsnd.lib
+	inclib libcd.lib
+	inclib libgs.lib
+	inclib libc.lib
+	inclib libetc.lib
+	inclib libgte.lib
+
+	regs    pc=__SN_ENTRY_POINT     ; entry point
+

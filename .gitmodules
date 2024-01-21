@@ -1,0 +1,9 @@
+[submodule "splat"]
+	path = splat
+	url = https://github.com/Xeeynamo/splat.git
+[submodule "psx_psyq_signatures"]
+	path = psx_psyq_signatures
+	url = https://github.com/lab313ru/psx_psyq_signatures.git
+[submodule "psy-q"]
+	path = psy-q
+	url = https://github.com/sozud/psy-q.git

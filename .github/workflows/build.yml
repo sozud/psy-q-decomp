@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dosemu
+      run: |
+        git clone https://github.com/sozud/dosemu-deb.git
+        cd dosemu-deb
+        sudo apt-get install xfonts-utils
+        sudo dpkg -i fdpp_1.6-1_amd64.deb
+        sudo dpkg -i fdpp-dev_1.6-1_amd64.deb
+        sudo dpkg -i comcom32_0.1~alpha3-1_all.deb
+        sudo dpkg -i dosemu2_2.0~pre9-1_amd64.deb
+
+    - name: Build
+      run: sh split.sh
