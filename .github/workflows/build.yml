@@ -18,9 +18,6 @@ jobs:
     - name: Install deps
       run: sudo apt-get install dos2unix
 
-    - name: Install splat deps
-      run: pip3 install -r ./splat/requirements.txt
-
     - name: Install dosemu
       run: |
         git clone https://github.com/sozud/dosemu-deb.git
@@ -32,4 +29,4 @@ jobs:
         sudo dpkg -i dosemu2_2.0~pre9-1_amd64.deb
 
     - name: Build
-      run: sh split.sh
+      run: sh build.sh
