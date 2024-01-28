@@ -2,6 +2,8 @@
 #define LIBSND_INTERNAL_H
 
 #include <libspu.h>
+#include <libsnd.h>
+#include <types.h>
 
 struct Unk {
     u16 unk0;
@@ -52,22 +54,6 @@ extern u8 svm_vab_used[];
 s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s32 arg2, u32 sbaddr);
 
 extern u16 _svm_vab_count;
-
-typedef struct VabHdr {
-    s32 form;
-    s32 ver;
-    s32 id;
-    u32 fsize;
-    u16 reserved0;
-    u16 ps;
-    u16 ts;
-    u16 vs;
-    u8 mvol;
-    u8 pan;
-    u8 attr1;
-    u8 attr2;
-    u32 reserved1;
-} VabHdr;
 
 s16 SsVabOpenHead(u8*, s16);
 s16 SsVabTransBody(u8*, s16);
@@ -174,20 +160,6 @@ extern struct SeqStruct* _ss_score[32];
 extern s16 _snd_seq_s_max;
 extern s16 _snd_seq_t_max;
 
-typedef struct ProgAtr { /* Program Headdings */
-
-    unsigned char tones;      /* # of tones */
-    unsigned char mvol;       /* program volume */
-    unsigned char prior;      /* program priority */
-    unsigned char mode;       /* program mode */
-    unsigned char mpan;       /* program pan */
-    char reserved0;           /* system reserved */
-    short attr;               /* program attribute */
-    unsigned long reserved1;  
-    unsigned short reserved2; 
-    unsigned short reserved3; 
-} ProgAtr;                    /* 16 byte */
-
 extern ProgAtr* D_8006C3B4;
 extern u8 svm_vab_used[];
 
@@ -220,32 +192,6 @@ struct SpuVoice {
 extern struct SpuVoice _svm_voice[24];
 u32 SpuVmVSetUp(s16, s16);
 
-typedef struct VagAtr { /* VAG Tone Headdings */
-
-    unsigned char prior;     /* tone priority */
-    unsigned char mode;      /* play mode */
-    unsigned char vol;       /* tone volume*/
-    unsigned char pan;       /* tone panning */
-    unsigned char center;    /* center note */
-    unsigned char shift;     /* center note fine tune */
-    unsigned char min;       /* minimam note limit */
-    unsigned char max;       /* maximam note limit */
-    unsigned char vibW;      /* vibrate depth */
-    unsigned char vibT;      /* vibrate duration */
-    unsigned char porW;      /* portamento depth */
-    unsigned char porT;      /* portamento duration */
-    unsigned char pbmin;     /* under pitch bend max */
-    unsigned char pbmax;     /* upper pitch bend max */
-    unsigned char reserved1; /* system reserved */
-    unsigned char reserved2; /* system reserved */
-    unsigned short adsr1;    /* adsr1 */
-    unsigned short adsr2;    /* adsr2 */
-    short prog;              /* parent program*/
-    short vag;               /* vag reference */
-    short reserved[4];       /* system reserved */
-
-} VagAtr; /* 32 byte */
-
 extern VagAtr* _svm_tn;
 
 void SpuVmFlush();
@@ -263,8 +209,6 @@ short SsUtGetVagAtr(
     short vabId, short progNum, short toneNum, VagAtr* vagatrptr);
 short SsUtSetVagAtr(
     short vabId, short progNum, short toneNum, VagAtr* vagatrptr);
-
-s16 SsVabTransBodyPartly(u8* addr, u32 bufsize, s16 vabid);
 
 extern s32 D_80032F08;
 extern s16 D_80032F0C;
