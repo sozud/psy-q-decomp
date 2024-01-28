@@ -7,3 +7,6 @@
 [submodule "tools/psy-q-splitter"]
 	path = tools/psy-q-splitter
 	url = https://github.com/sozud/psy-q-splitter.git
+[submodule "splat"]
+	path = splat
+	url = https://github.com/sozud/splat.git
