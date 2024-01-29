@@ -93,7 +93,7 @@ struct struct_svm {
     short field_0x1a;
 };
 
-extern struct struct_svm svm_cur;
+extern struct struct_svm _svm_cur;
 
 extern u8 spuVmMaxVoice;
 void SeAutoVol(s16, s16, s16, s16);
@@ -231,5 +231,7 @@ extern struct SndSeqTickEnv _snd_seq_tick_env;
 extern s32 _svm_vab_total[];
 extern s32 _svm_vab_start[];
 extern u8 _svm_vab_used[];
+extern s32 _svm_brr_start_addr[];
+extern s16 _svm_damper;
 
 #endif
