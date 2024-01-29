@@ -1,6 +1,7 @@
 #include "libsnd_i.h"
 
-short SsVabTransBodyPartly(unsigned char* addr, unsigned long bufsize, short vabid) {
+short SsVabTransBodyPartly(
+    unsigned char* addr, unsigned long bufsize, short vabid) {
     static s32 D_00000000 = 0;
     static s16 D_00000004 = 0xffff;
     s16 new_vabid;

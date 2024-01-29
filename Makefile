@@ -1,5 +1,6 @@
 SND_SRCS := $(wildcard src/snd/*.c)
 OBJS := $(patsubst src/snd/%.c, build/%.obj, $(SND_SRCS))
+SRC_DIR := src/snd
 
 all: $(OBJS)
 
@@ -15,6 +16,10 @@ prep:
 	cp psy-q/3.5/PSYQ/ASPSX.EXE build
 	# build splitter
 	cargo build --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
+
+format:
+	clang-format -i $$(find $(SRC_DIR)/ -type f -name "*.c")
+	clang-format -i $$(find $(SRC_DIR)/ -type f -name "*.h")
 
 build/%.obj: src/snd/%.c
 	# make build directory if it doesn't exist
