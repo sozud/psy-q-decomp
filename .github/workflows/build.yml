@@ -29,4 +29,4 @@ jobs:
         sudo dpkg -i dosemu2_2.0~pre9-1_amd64.deb
 
     - name: Build
-      run: sh build.sh
+      run: make prep && make
