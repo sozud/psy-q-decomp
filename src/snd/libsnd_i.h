@@ -228,4 +228,8 @@ struct SndSeqTickEnv {
 
 extern struct SndSeqTickEnv _snd_seq_tick_env;
 
+extern s32 _svm_vab_total[];
+extern s32 _svm_vab_start[];
+extern u8 _svm_vab_used[];
+
 #endif

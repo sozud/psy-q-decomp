@@ -32,6 +32,7 @@ cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. ssquit.c -ossquit.obj"
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. sstable.c -osstable.obj"
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. sstick.c -osstick.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. vs_vtbp.c -ovs_vtbp.obj"
 
 # build splitter
 cd $HOME_DIR && cargo run --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
@@ -48,7 +49,6 @@ cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSPLAY ./build/ssplay.obj &&
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSQUIT ./build/ssquit.obj &&
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSTABLE ./build/sstable.obj &&
-cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSTICK ./build/sstick.obj
-
-
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSTICK ./build/sstick.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB VS_VTBP ./build/vs_vtbp.obj
 
