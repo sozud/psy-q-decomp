@@ -1,5 +1,5 @@
 set COMPILER_PATH=%CD%build
-set C_INCLUDE_PATH=%CD%psy-q/3.5/PSX/include
+set C_INCLUDE_PATH=%CD%include
 set PSYQ_PATH=%CD%build
 set arg1=%1
 set arg2=%2

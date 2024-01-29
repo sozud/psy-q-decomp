@@ -15,7 +15,7 @@
  * $PSLibId: Runtime Library Version 3.5$
  */
 
-// #include <sys/types.h>
+/* #include <sys/types.h> */
 
 /*
  * Macro 
