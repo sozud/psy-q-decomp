@@ -160,7 +160,7 @@ extern struct SeqStruct* _ss_score[32];
 extern s16 _snd_seq_s_max;
 extern s16 _snd_seq_t_max;
 
-extern ProgAtr* D_8006C3B4;
+extern ProgAtr* _svm_pg;
 extern u8 svm_vab_used[];
 
 struct RegBufStruct {
@@ -233,5 +233,7 @@ extern s32 _svm_vab_start[];
 extern u8 _svm_vab_used[];
 extern s32 _svm_brr_start_addr[];
 extern s16 _svm_damper;
+
+void SpuVmSeKeyOff(s32, u8, u16, u8);
 
 #endif
