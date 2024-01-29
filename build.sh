@@ -26,6 +26,12 @@ cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. scssattr.c -oscssattr.obj"
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. scssvol.c -oscssvol.obj"
 cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. sscall.c -osscall.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. ssend.c -ossend.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. ssinit_h.c -ossinit_h.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. ssplay.c -ossplay.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. ssquit.c -ossquit.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. sstable.c -osstable.obj"
+cd $BUILD_DIR && dosemu -quiet -dumb -f ./dosemurc -K . -E "ccpsx.exe -v -O2 -g0 -G0 -funsigned-char -c -I. sstick.c -osstick.obj"
 
 # build splitter
 cd $HOME_DIR && cargo run --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
@@ -36,4 +42,13 @@ cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SCSMVOL ./build/scsmvol.obj &&
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SCSSATTR ./build/scssattr.obj &&
 cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SCSSVOL ./build/scssvol.obj &&
-cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSCALL ./build/sscall.obj
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSCALL ./build/sscall.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSEND ./build/ssend.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSINIT_H ./build/ssinit_h.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSPLAY ./build/ssplay.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSQUIT ./build/ssquit.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSTABLE ./build/sstable.obj &&
+cd $HOME_DIR && ./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB SSTICK ./build/sstick.obj
+
+
+
