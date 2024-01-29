@@ -7,6 +7,7 @@ clean:
 	rm -f $(OBJS)
 
 prep:
+	mkdir -p build
 	# put toolchain together
 	cp -r ./psy-q/3.3/PSYQ/* build
 	cp -r ./psy-q/cc_2.60/* build
