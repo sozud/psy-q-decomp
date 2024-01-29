@@ -14,7 +14,7 @@ prep:
 	# replace aspsx with newer one
 	cp psy-q/3.5/PSYQ/ASPSX.EXE build
 	# build splitter
-	cargo run --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
+	cargo build --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
 
 build/%.obj: src/snd/%.c
 	# make build directory if it doesn't exist
