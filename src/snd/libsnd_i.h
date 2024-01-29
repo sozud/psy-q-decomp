@@ -1,8 +1,8 @@
 #ifndef LIBSND_INTERNAL_H
 #define LIBSND_INTERNAL_H
 
-#include <libsnd.h>
-#include <libspu.h>
+#include <LIBSND.H>
+#include <LIBSPU.H>
 #include <types.h>
 
 struct Unk {

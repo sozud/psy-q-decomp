@@ -1,4 +1,4 @@
-#include <libsnd_i.h>
+#include "libsnd_i.h"
 #include <types.h>
 
 void _SsSndNextSep(s16 arg0, s16 arg1) {

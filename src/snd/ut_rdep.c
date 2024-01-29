@@ -1,4 +1,4 @@
-#include <libsnd_i.h>
+#include "libsnd_i.h"
 
 void SsUtSetReverbDepth(s16 ldepth, s16 rdepth) {
     _svm_rattr.mask = 6;

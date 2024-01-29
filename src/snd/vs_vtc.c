@@ -1,4 +1,4 @@
-#include <libsnd_i.h>
+#include "libsnd_i.h"
 
 s16 SsVabTransCompleted(s16 immediateFlag) {
     return SpuIsTransferCompleted(immediateFlag);

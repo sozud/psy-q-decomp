@@ -1,4 +1,4 @@
-#include <libsnd_i.h>
+#include "libsnd_i.h"
 
 s16 SsVabTransBody(u8* addr, s16 vabid) {
     s32 temp_s0;
