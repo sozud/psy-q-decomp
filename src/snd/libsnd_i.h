@@ -235,5 +235,6 @@ extern s32 _svm_brr_start_addr[];
 extern s16 _svm_damper;
 
 void SpuVmSeKeyOff(s32, u8, u16, u8);
+s32 SpuVmSeqKeyOff(s32, s32);
 
 #endif
