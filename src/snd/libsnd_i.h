@@ -3,7 +3,7 @@
 
 #include <LIBSND.H>
 #include <LIBSPU.H>
-#include <types.h>
+#include "../types.h"
 
 struct Unk {
     u16 unk0;

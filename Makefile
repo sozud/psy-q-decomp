@@ -1,11 +1,17 @@
 SND_SRCS := $(wildcard src/snd/*.c)
-OBJS := $(patsubst src/snd/%.c, build/%.obj, $(SND_SRCS))
+SND_OBJS := $(patsubst src/snd/%.c, build/snd/%.obj, $(SND_SRCS))
 SRC_DIR := src/snd
 
-all: $(OBJS)
+SPU_SRCS := $(wildcard src/spu/*.c)
+SPU_OBJS := $(patsubst src/spu/%.c, build/spu/%.obj, $(SPU_SRCS))
+
+ALL_SRCS := $(SND_SRCS) $(SPU_SRCS)
+ALL_OBJS := $(SND_OBJS) $(SPU_OBJS)
+
+all: $(ALL_OBJS)
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(ALL_OBJS)
 
 prep:
 	mkdir -p build
@@ -18,10 +24,12 @@ prep:
 	cargo build --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
 
 format:
-	clang-format -i $$(find $(SRC_DIR)/ -type f -name "*.c")
-	clang-format -i $$(find $(SRC_DIR)/ -type f -name "*.h")
+	clang-format -i $$(find src/snd -type f -name "*.c")
+	clang-format -i $$(find src/snd -type f -name "*.h")
+	clang-format -i $$(find src/spu -type f -name "*.c")
+	clang-format -i $$(find src/spu -type f -name "*.h")
 
-build/%.obj: src/snd/%.c
+build/snd/%.obj: src/snd/%.c
 	# make build directory if it doesn't exist
 	@mkdir -p $(@D)
 	@echo "Building $@ from $<"
@@ -30,5 +38,15 @@ build/%.obj: src/snd/%.c
 	# check it
 	./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB $@
 
+build/spu/%.obj: src/spu/%.c
+	# make build directory if it doesn't exist
+	@mkdir -p $(@D)
+	@echo "Building $@ from $<"
+	# subst since we need dos slashes for this to work
+	dosemu -quiet -dumb -f ./dosemurc -K . -E "build.bat $(subst /,\,$<) $(subst /,\,$@)"
+	# check it
+	./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSPU.LIB $@
+
 progress:
-	./tools/psy-q-splitter/splitter/target/release/splitter progress ./psy-q/3.5/PSX/LIB/LIBSND.LIB ./build
+	./tools/psy-q-splitter/splitter/target/release/splitter progress ./psy-q/3.5/PSX/LIB/LIBSND.LIB ./build/snd
+	./tools/psy-q-splitter/splitter/target/release/splitter progress ./psy-q/3.5/PSX/LIB/LIBSPU.LIB ./build/spu
