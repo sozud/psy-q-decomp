@@ -29,3 +29,6 @@ build/%.obj: src/snd/%.c
 	dosemu -quiet -dumb -f ./dosemurc -K . -E "build.bat $(subst /,\,$<) $(subst /,\,$@)"
 	# check it
 	./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib ./psy-q/3.5/PSX/LIB/LIBSND.LIB $@
+
+progress:
+	./tools/psy-q-splitter/splitter/target/release/splitter progress ./psy-q/3.5/PSX/LIB/LIBSND.LIB ./build

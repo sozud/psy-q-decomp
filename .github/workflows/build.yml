@@ -30,3 +30,6 @@ jobs:
 
     - name: Build
       run: make prep && make
+
+    - name: Progress
+      run: make progress
