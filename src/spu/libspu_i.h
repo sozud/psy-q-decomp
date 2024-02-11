@@ -165,7 +165,6 @@ extern s32 D_8003309C;
 
 void WaitEvent(s32);
 s32 _SpuIsInAllocateArea_(s32);
-extern s32 _spu_zerobuf;
 extern s32 _spu_rev_startaddr[];
 extern s32 _spu_EVdma;
 extern s32 _spu_mem_mode_plus;
@@ -180,5 +179,7 @@ extern s32 _spu_rev_reserve_wa;
 extern s32 _spu_rev_offsetaddr;
 extern long _spu_trans_mode;
 extern long _spu_transMode;
+
+extern s8 _spu_zerobuf[1024];
 
 #endif
