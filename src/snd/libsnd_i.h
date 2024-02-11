@@ -40,7 +40,6 @@ extern void (*D_80032EFC)();
 extern s32 D_80032F04;
 
 extern s32 D_8003C74C;
-extern SpuReverbAttr _svm_rattr;
 
 void SpuVmSeKeyOn(s32, u8, u16, u8, u16, u16);
 void SpuVmSetSeqVol(s16, u16, u16, s32);
@@ -53,15 +52,9 @@ extern u8 svm_vab_used[];
 
 s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s32 arg2, u32 sbaddr);
 
-extern u16 _svm_vab_count;
-
 s16 SsVabOpenHead(u8*, s16);
 s16 SsVabTransBody(u8*, s16);
 extern s32 D_80098854[];
-
-extern u8 spuVmMaxVoice;
-
-extern s16 _svm_stereo_mono;
 
 u8 SpuVmAlloc(u8);
 s32 vmNoiseOn2(u8, u16, u16, u16, u16);
@@ -91,11 +84,31 @@ struct struct_svm {
     short field_16_vag_idx;
     short field_18_voice_idx;
     short field_0x1a;
+    char  pad_0x1c[0x4];
 };
 
-extern struct struct_svm _svm_cur;
+/* vm/vm_g.c */
+extern s32 _svm_brr_start_addr[16]; /* number: 10 */
+extern s16 _svm_stereo_mono;        /* number: 11 */
+extern SpuReverbAttr _svm_rattr;    /* number: 12 */
+extern u8 _svm_vab_used[16];        /* number: 13 */
+extern u8 spuVmMaxVoice;            /* number: 14 */
+extern u16 _svm_vab_count;          /* number: 15 */
+extern s16 kMaxPrograms;            /* number: 16 */
+extern struct struct_svm _svm_cur;  /* number: 17 */
+extern s16 _svm_damper;             /* number: 18 */
+extern s16 _svm_vcf;                /* number: 19 */
+extern u8 _svm_auto_kof_mode;       /* number: 20 */
+extern VabHdr *_svm_vab_vh[16];     /* number: 21 */
+extern ProgAtr *_svm_vab_pg[16];    /* number: 22 */
+extern VagAtr *_svm_vab_tn[16];     /* number: 23 */
+extern s32 _svm_vab_start[16];      /* number: 24 */
+extern s32 _svm_vab_total[16];      /* number: 25 */
+extern VabHdr *_svm_vh;             /* number: 26 */
+extern ProgAtr* _svm_pg;            /* number: 27 */
+extern VagAtr *_svm_tn;             /* number: 28 */
+extern void* _svm_vg;               /* number: 29 */
 
-extern u8 spuVmMaxVoice;
 void SeAutoVol(s16, s16, s16, s16);
 void SeAutoPan(s16, s16, s16, s16);
 
@@ -160,7 +173,6 @@ extern struct SeqStruct* _ss_score[32];
 extern s16 _snd_seq_s_max;
 extern s16 _snd_seq_t_max;
 
-extern ProgAtr* _svm_pg;
 extern u8 svm_vab_used[];
 
 struct RegBufStruct {
@@ -227,12 +239,6 @@ struct SndSeqTickEnv {
 };
 
 extern struct SndSeqTickEnv _snd_seq_tick_env;
-
-extern s32 _svm_vab_total[];
-extern s32 _svm_vab_start[];
-extern u8 _svm_vab_used[];
-extern s32 _svm_brr_start_addr[];
-extern s16 _svm_damper;
 
 void SpuVmSeKeyOff(s32, u8, u16, u8);
 s32 SpuVmSeqKeyOff(s32, s32);
