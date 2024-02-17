@@ -19,7 +19,7 @@ struct SpuRevAttr _spu_rev_attr = {
     0,0,0,0,0,0
 };
 
-s16 _spu_voice_centerNote[24] = {
+u16 _spu_voice_centerNote[24] = {
     0xc000,0xc000,0xc000,0xc000,0xc000,0xc000,
     0xc000,0xc000,0xc000,0xc000,0xc000,0xc000,
     0xc000,0xc000,0xc000,0xc000,0xc000,0xc000,
@@ -88,17 +88,13 @@ s8 _spu_zerobuf[1024] = {
 void _spu_FsetRXX(s32, u32, s32);
 
 void _SpuInit(s32 arg0) {
-    u16* var_v0;
-    s32 var_v1;
-    u16 temp;
-
+    s32 i;
     ResetCallback();
     _spu_init(arg0);
     if (arg0 == 0) {
-        temp = 0xC000;
-        for(var_v1 = 0x17, var_v0 = &_spu_voice_centerNote[0x17]; var_v1 >= 0; var_v1--, var_v0--)
+        for(i = 0; i < 0x18; i++)
         {
-            *var_v0 = temp;
+            _spu_voice_centerNote[i] = 0xC000;
         }
     }
     SpuStart();
