@@ -84,7 +84,7 @@ struct struct_svm {
     short field_16_vag_idx;
     short field_18_voice_idx;
     short field_0x1a;
-    char  pad_0x1c[0x4];
+    char pad_0x1c[0x4];
 };
 
 /* vm/vm_g.c */
@@ -99,14 +99,14 @@ extern struct struct_svm _svm_cur;  /* number: 17 */
 extern s16 _svm_damper;             /* number: 18 */
 extern s16 _svm_vcf;                /* number: 19 */
 extern u8 _svm_auto_kof_mode;       /* number: 20 */
-extern VabHdr *_svm_vab_vh[16];     /* number: 21 */
-extern ProgAtr *_svm_vab_pg[16];    /* number: 22 */
-extern VagAtr *_svm_vab_tn[16];     /* number: 23 */
+extern VabHdr* _svm_vab_vh[16];     /* number: 21 */
+extern ProgAtr* _svm_vab_pg[16];    /* number: 22 */
+extern VagAtr* _svm_vab_tn[16];     /* number: 23 */
 extern s32 _svm_vab_start[16];      /* number: 24 */
 extern s32 _svm_vab_total[16];      /* number: 25 */
-extern VabHdr *_svm_vh;             /* number: 26 */
+extern VabHdr* _svm_vh;             /* number: 26 */
 extern ProgAtr* _svm_pg;            /* number: 27 */
-extern VagAtr *_svm_tn;             /* number: 28 */
+extern VagAtr* _svm_tn;             /* number: 28 */
 extern void* _svm_vg;               /* number: 29 */
 
 void SeAutoVol(s16, s16, s16, s16);

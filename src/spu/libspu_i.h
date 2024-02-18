@@ -153,7 +153,7 @@ union SpuUnion {
 
 extern union SpuUnion* _spu_RXX;
 
-s32 _SpuIsInAllocateArea_(s32);
+s32 _SpuIsInAllocateArea_(u32);
 extern s32 D_800330A0;
 extern s32 D_800330A4;
 extern s32 D_800330A8;
@@ -164,7 +164,7 @@ extern s32 D_8003309C;
 #define SPU_TRANSFER_BY_IO 1
 
 void WaitEvent(s32);
-s32 _SpuIsInAllocateArea_(s32);
+s32 _SpuIsInAllocateArea_(u32);
 extern s32 _spu_rev_startaddr[];
 extern s32 _spu_EVdma;
 extern s32 _spu_mem_mode_plus;
