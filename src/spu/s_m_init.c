@@ -1,6 +1,6 @@
 #include "libspu_i.h"
 
-extern long SpuInitMalloc(long num, char* top) {
+long SpuInitMalloc(long num, char* top) {
     SPU_MALLOC* temp = top;
     if (num > 0) {
         temp->addr = 0x40001010;
