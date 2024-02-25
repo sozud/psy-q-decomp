@@ -1,6 +1,6 @@
 #include "libsnd_i.h"
 
-void _SsClose(s16 seq_sep_num) {
+static void _SsClose(s16 seq_sep_num) {
     s32 seq_num;
     SpuVmSetSeqVol(seq_sep_num, 0, 0, 1);
     SpuVmSeqKeyOff(seq_sep_num);
