@@ -19,7 +19,6 @@ struct Unk {
 
 void _SsUtResolveADSR(u16 arg0, u16 arg1, struct Unk* arg2);
 void _SsSeqPlay(s16, s16);
-void _SsClose(s16);
 
 extern s32 D_80032EF4;
 extern u8 D_80032F00;
@@ -239,8 +238,8 @@ struct SndSeqTickEnv {
 };
 
 extern struct SndSeqTickEnv _snd_seq_tick_env;
+s32 SpuVmSeqKeyOff(s32);
 
 void SpuVmSeKeyOff(s32, u8, u16, u8);
-s32 SpuVmSeqKeyOff(s32, s32);
 
 #endif
