@@ -102,7 +102,7 @@ typedef struct tagSpuControl {
     u16 unk;
     u16 rev_work_addr;
     u16 irq_addr;
-    volatile u16 trans_addr;
+    u16 trans_addr;
     u16 trans_fifo;
     u16 spucnt;
     u16 data_trans;
@@ -147,7 +147,8 @@ typedef struct tagSpuControl {
 } SPU_RXX;
 
 union SpuUnion {
-    SPU_RXX rxx;
+    SPU_RXX rxxnv;
+    volatile SPU_RXX rxx;
     volatile u16 raw[0x100];
 };
 
