@@ -115,8 +115,8 @@ struct SeqStruct {
     u8 unk0;
     u8 pad1[3];
     u8* read_pos;
-    s32 unk8;
-    s32 unkc;
+    u8* next_sep_pos; /* 0x8 */
+    u8* loop_pos;     /* 0xC */
     u8 unk10;
     u8 unk11;
     u8 channel;
@@ -139,10 +139,10 @@ struct SeqStruct {
     s16 unk44;
     s16 unk46;
     s16 unk48;
-    u8 pad8[2];
+    s16 unk4a;
     s16 unk4c;
     s16 vol[16];
-    u8 pad10[1];
+    s16 unk6E;
     s16 unk70;
     s16 unk72;
     u16 unk74;
@@ -159,11 +159,10 @@ struct SeqStruct {
     s32 unk98;
     s32 unk9C;
     s32 unkA0;
-    s32 unkA4;
+    u32 unkA4;
     s16 padA6;
     s16 padaa;
 };
-
 extern struct SeqStruct* _ss_score[32];
 
 #define SPU_COMMON_MVOLL (0x01 << 0) /* master volume (left) */

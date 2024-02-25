@@ -22,7 +22,7 @@ static void _SsClose(s16 seq_sep_num) {
         _ss_score[seq_sep_num][seq_num].unk76 = 0x7f;
     }
 }
- 
+
 void SsSeqClose(short seq_access_num) { _SsClose(seq_access_num); }
 
 void SsSepClose(s16 sep_access_num) { _SsClose(sep_access_num); }
