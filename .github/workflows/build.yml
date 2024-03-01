@@ -30,8 +30,8 @@ jobs:
 
     - name: Build
       run: |
-        prep_35.sh
-        prep_36.sh
+        sh prep_35.sh
+        sh prep_36.sh
         python3 build.py
         ninja -j1
 
