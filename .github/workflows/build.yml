@@ -36,5 +36,5 @@ jobs:
         python3 build.py
         ninja -j1
 
-    - name: Progress
-      run: make progress
+    # - name: Progress
+    #   run: make progress
