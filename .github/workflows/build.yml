@@ -16,7 +16,7 @@ jobs:
         submodules: true
 
     - name: Install deps
-      run: sudo apt-get install dos2unix
+      run: sudo apt-get install dos2unix ninja-build
 
     - name: Install dosemu
       run: |
