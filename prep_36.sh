@@ -1,4 +1,4 @@
-mkdir -p build_36
+mkdir -p build/3.6
 # put toolchain together
-cp -r ./psy-q/3.6/PSYQ/* build_36
-cp -r ./psy-q/3.6/GNU/* build_36
+cp -r ./psy-q/3.6/PSYQ/* build/3.6
+cp -r ./psy-q/3.6/GNU/* build/3.6

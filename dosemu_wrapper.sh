@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if correct number of arguments are provided
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 4 ]; then
     echo "Usage: $0 input output"
     exit 1
 fi
@@ -11,4 +11,4 @@ in=$(echo "$1" | tr '/' '\\')
 out=$(echo "$2" | tr '/' '\\')
 
 # Run the command with substituted variables
-dosemu -quiet -dumb -f ./dosemurc -K . -E "build.bat $in $out $3"
+dosemu -quiet -dumb -f ./dosemurc -K . -E "build.bat $in $out $3 $4"

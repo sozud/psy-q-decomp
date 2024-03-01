@@ -8,7 +8,7 @@ void SsVabClose(s16 vabid) {
     }
 }
 
-#if VERSION != 35
+#if VERSION == 35
 s16 SsVabOpen(u8* addr, VabHdr* vab_header) {
     s16 vab_id;
 

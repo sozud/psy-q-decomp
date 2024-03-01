@@ -2,7 +2,7 @@ import os
 import subprocess
 import ninja_syntax
 
-def add_lib(srcs, output_dir, lib_name, flags):
+def add_lib(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
@@ -10,7 +10,7 @@ def add_lib(srcs, output_dir, lib_name, flags):
             obj_name, 
             'compile', 
             inputs=[src],
-            variables={'FLAGS': flags})
+            variables={'FLAGS': flags, 'FOLDER': folder})
 
         # this doesn't generate a file output but ninja apparently needs an output name
         ninja.build(
@@ -23,7 +23,7 @@ def add_lib(srcs, output_dir, lib_name, flags):
 ninja = ninja_syntax.Writer(open("build.ninja", "w"))
 
 ninja.rule('compile',
-           command='sh dosemu_wrapper.sh $in $out $FLAGS',
+           command='sh dosemu_wrapper.sh $in $out $FLAGS $FOLDER',
            description='Building $out from $in')
 
 ninja.rule(
@@ -74,7 +74,7 @@ def build_35():
         'src/snd/vs_vtc.c',
     ]
 
-    add_lib(snd_srcs, "build_35/snd", "./psy-q/3.5/PSX/LIB/LIBSND.LIB", "-DVERSION=35")
+    add_lib(snd_srcs, "build/3.5/snd", "./psy-q/3.5/PSX/LIB/LIBSND.LIB", "-DVERSION=35", "3.5")
 
     spu_srcs = [
         'src/spu/s_cb.c',
@@ -99,7 +99,7 @@ def build_35():
         'src/spu/sr_gaks.c',
     ]
 
-    add_lib(spu_srcs, "build_35/spu", "./psy-q/3.5/PSX/LIB/LIBSPU.LIB", "-DVERSION=35")
+    add_lib(spu_srcs, "build/3.5/spu", "./psy-q/3.5/PSX/LIB/LIBSPU.LIB", "-DVERSION=35", "3.5")
 
 def build_36():
     snd_srcs = [
@@ -147,7 +147,7 @@ def build_36():
         'src/3.6/snd/ssvkon.c',
     ]
 
-    add_lib(snd_srcs, "build_36/snd", "./psy-q/3.6/PSX/LIB/LIBSND.LIB", "-DVERSION=36")
+    add_lib(snd_srcs, "build/3.6/snd", "./psy-q/3.6/PSX/LIB/LIBSND.LIB", "-DVERSION=36", "3.6")
 
     spu_srcs = [
         'src/spu/s_cb.c',
@@ -172,7 +172,7 @@ def build_36():
         'src/spu/sr_gaks.c',
     ]
 
-    add_lib(spu_srcs, "build_36/spu", "./psy-q/3.6/PSX/LIB/LIBSPU.LIB", "-DVERSION=36")
+    add_lib(spu_srcs, "build/3.6/spu", "./psy-q/3.6/PSX/LIB/LIBSPU.LIB", "-DVERSION=36", "3.6")
 
 build_35()
 build_36()
