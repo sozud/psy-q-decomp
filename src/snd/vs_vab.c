@@ -8,6 +8,7 @@ void SsVabClose(s16 vabid) {
     }
 }
 
+#if VERSION != 35
 s16 SsVabOpen(u8* addr, VabHdr* vab_header) {
     s16 vab_id;
 
@@ -17,3 +18,4 @@ s16 SsVabOpen(u8* addr, VabHdr* vab_header) {
     }
     return vab_id;
 }
+#endif

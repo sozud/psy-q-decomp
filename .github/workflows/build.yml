@@ -29,7 +29,11 @@ jobs:
         sudo dpkg -i dosemu2_2.0~pre9-1_amd64.deb
 
     - name: Build
-      run: make prep && make
+      run: |
+        prep_35.sh
+        prep_36.sh
+        python3 build.py
+        ninja -j1
 
     - name: Progress
       run: make progress
