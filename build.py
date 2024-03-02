@@ -95,7 +95,7 @@ ninja.rule(
 def build_33():
     snd_srcs = [
         'src/snd/next.c',
-        # 'src/snd/pause.c',
+        'src/snd/pause.c',
         # 'src/snd/play.c',
         # 'src/snd/replay.c',
         'src/snd/scsmvol.c',
