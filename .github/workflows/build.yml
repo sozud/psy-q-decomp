@@ -31,6 +31,7 @@ jobs:
     - name: Build
       run: |
         cargo build --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
+        sh prep_33.sh
         sh prep_35.sh
         sh prep_36.sh
         python3 build.py
