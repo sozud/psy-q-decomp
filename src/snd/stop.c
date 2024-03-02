@@ -1,6 +1,10 @@
 #include "libsnd_i.h"
 
+#if VERSION == 33
+void Snd_stop(s16 arg0, s16 arg1)
+#else
 void _SsSndStop(s16 arg0, s16 arg1)
+#endif
 {
   int i;
   struct SeqStruct *score;
@@ -41,6 +45,18 @@ void _SsSndStop(s16 arg0, s16 arg1)
   score->unk7A = 0x7F;
 }
 
+#if VERSION == 33
+void SsSeqStop(s16 arg0) {
+    Snd_stop(arg0, 0);
+}
+#else
 void SsSeqStop(s16 arg0) { _SsSndStop(arg0, 0); }
+#endif
 
+#if VERSION == 33
+void SsSepStop(s16 arg0, s16 arg1) {
+    Snd_stop(arg0, arg1);
+}
+#else
 void SsSepStop(s16 arg0, s16 arg1) { _SsSndStop(arg0, arg1); }
+#endif

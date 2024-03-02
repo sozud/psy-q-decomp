@@ -26,12 +26,14 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
 
+        cpp_flags = f"-undef -D__GNUC__=2 {flags} -v -D__OPTIMIZE__ -I./src/snd -I./include -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C"
+
         # run c preprocessor
         ninja.build(
             f"{output_dir}/{filename_without_extension}.cpp",
             'cpp_263',
             inputs=[src],
-            variables={'FLAGS': flags, 'FOLDER': folder})
+            variables={'FLAGS': flags, 'FOLDER': folder, 'CPP_FLAGS': cpp_flags})
         
         # run cc1
         ninja.build(
@@ -69,9 +71,8 @@ ninja.rule('compile',
            command='sh dosemu_wrapper.sh $in $out $FLAGS $FOLDER',
            description='Building $out from $in')
 
-cpp_flags = "-undef -D__GNUC__=2 -DVERSION=35 -v -D__OPTIMIZE__ -I./src/snd -I./include -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C"
 ninja.rule('cpp_263',
-           command=f'cpp {cpp_flags} $in $out',
+           command=f'cpp $CPP_FLAGS $in $out',
            description='Running preprocessor on $out from $in')
 
 ninja.rule('cc1_263',
@@ -111,6 +112,7 @@ def build_33():
         # 'src/snd/sstable.c',
         # 'src/snd/sstick.c',
         # 'src/snd/ssvol.c',
+        'src/snd/stop.c',
         # 'src/snd/tempo.c',
         # 'src/snd/ut_gpa.c',
 
@@ -135,7 +137,7 @@ def build_33():
         'src/snd/vs_vtc.c',
     ]
 
-    add_lib(snd_srcs, "build/3.3/snd", "./psy-q/3.3/PSX/LIB/LIBSND.LIB", "-DVERSION=33", "3.3")
+    add_lib_263(snd_srcs, "build/3.3/snd", "./psy-q/3.3/PSX/LIB/LIBSND.LIB", "-DVERSION=33", "3.3")
 
     spu_srcs = [
         'src/spu/s_cb.c',
@@ -160,7 +162,7 @@ def build_33():
         'src/spu/sr_gaks.c',
     ]
 
-    add_lib(spu_srcs, "build/3.3/spu", "./psy-q/3.3/PSX/LIB/LIBSPU.LIB", "-DVERSION=33", "3.3")
+    add_lib_263(spu_srcs, "build/3.3/spu", "./psy-q/3.3/PSX/LIB/LIBSPU.LIB", "-DVERSION=33", "3.3")
 
 def build_35():
     snd_srcs = [
