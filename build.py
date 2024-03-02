@@ -20,11 +20,71 @@ def add_lib(srcs, output_dir, lib_name, flags, folder):
             variables={'LIBRARY': lib_name}
         )
 
+# original compiler missing so cobbling it together
+def add_lib_263(srcs, output_dir, lib_name, flags, folder):
+    for src in srcs:
+        filename_without_extension = os.path.splitext(os.path.basename(src))[0]
+        obj_name = f"{output_dir}/{filename_without_extension}.obj"
+
+        # run c preprocessor
+        ninja.build(
+            f"{output_dir}/{filename_without_extension}.cpp",
+            'cpp_263',
+            inputs=[src],
+            variables={'FLAGS': flags, 'FOLDER': folder})
+        
+        # run cc1
+        ninja.build(
+            f"{output_dir}/{filename_without_extension}.s",
+            'cc1_263',
+            inputs=[f"{output_dir}/{filename_without_extension}.cpp"],
+            variables={'FLAGS': flags, 'FOLDER': folder})
+        
+        # convert to dos
+        ninja.build(
+            f"{output_dir}/{filename_without_extension}.d",
+            'unix2dos_263',
+            inputs=[f"{output_dir}/{filename_without_extension}.s"],
+            variables={'FLAGS': flags, 'FOLDER': folder})
+        
+        # run aspsx
+        ninja.build(
+            f"{output_dir}/{filename_without_extension}.obj",
+            'aspsx_263',
+            inputs=[f"{output_dir}/{filename_without_extension}.d"],
+            variables={'FLAGS': flags, 'FOLDER': folder})
+        
+        # # check it
+        # # this doesn't generate a file output but ninja apparently needs an output name
+        ninja.build(
+            f"{obj_name}.check",
+            'check',
+            inputs=[obj_name],
+            variables={'LIBRARY': lib_name})
+
+
 ninja = ninja_syntax.Writer(open("build.ninja", "w"))
 
 ninja.rule('compile',
            command='sh dosemu_wrapper.sh $in $out $FLAGS $FOLDER',
            description='Building $out from $in')
+
+cpp_flags = "-undef -D__GNUC__=2 -DVERSION=35 -v -D__OPTIMIZE__ -I./src/snd -I./include -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C"
+ninja.rule('cpp_263',
+           command=f'cpp {cpp_flags} $in $out',
+           description='Running preprocessor on $out from $in')
+
+ninja.rule('cc1_263',
+           command='./cc1-psx-26 -O2 -g0 -G0 -funsigned-char $in -o $out',
+           description='Running cc1 on $out from $in')
+
+ninja.rule('aspsx_263',
+           command='sh aspsx_wrapper.sh $in $out dummy 3.5',
+           description='Running aspsx on $out from $in')
+
+ninja.rule('unix2dos_263',
+           command='unix2dos -n $in $out',
+           description='Running unix2dos on $out from $in')
 
 ninja.rule(
         'check',
@@ -122,6 +182,7 @@ def build_35():
         'src/snd/sstable.c',
         'src/snd/sstick.c',
         'src/snd/ssvol.c',
+        'src/snd/stop.c',
         'src/snd/tempo.c',
         'src/snd/ut_gpa.c',
         'src/snd/ut_gva.c',
@@ -145,7 +206,7 @@ def build_35():
         'src/snd/vs_vtc.c',
     ]
 
-    add_lib(snd_srcs, "build/3.5/snd", "./psy-q/3.5/PSX/LIB/LIBSND.LIB", "-DVERSION=35", "3.5")
+    add_lib_263(snd_srcs, "build/3.5/snd", "./psy-q/3.5/PSX/LIB/LIBSND.LIB", "-DVERSION=35", "3.5")
 
     spu_srcs = [
         'src/spu/s_cb.c',
@@ -170,7 +231,7 @@ def build_35():
         'src/spu/sr_gaks.c',
     ]
 
-    add_lib(spu_srcs, "build/3.5/spu", "./psy-q/3.5/PSX/LIB/LIBSPU.LIB", "-DVERSION=35", "3.5")
+    add_lib_263(spu_srcs, "build/3.5/spu", "./psy-q/3.5/PSX/LIB/LIBSPU.LIB", "-DVERSION=35", "3.5")
 
 def build_36():
     snd_srcs = [
@@ -248,5 +309,6 @@ def build_36():
 build_33()
 build_35()
 build_36()
+
 
 ninja.close()
