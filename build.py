@@ -75,7 +75,7 @@ ninja.rule('cpp_263',
            description='Running preprocessor on $out from $in')
 
 ninja.rule('cc1_263',
-           command='./cc1-psx-26 -O2 -g0 -G0 -funsigned-char $in -o $out',
+           command='./build/3.5/cc1-psx-26 -O2 -g0 -G0 -funsigned-char $in -o $out',
            description='Running cc1 on $out from $in')
 
 ninja.rule('aspsx_263',
