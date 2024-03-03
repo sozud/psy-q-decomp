@@ -104,10 +104,10 @@ def build_33():
         'src/snd/seskoff.c',
         'src/snd/seskon.c',
         'src/snd/sscall.c',
-        # 'src/snd/ssclose.c',
-        # 'src/snd/ssend.c',
-        # 'src/snd/ssinit_h.c',
-        # 'src/snd/ssplay.c',
+        'src/snd/ssclose.c',
+        # 'src/snd/ssend.c', # doesn't exist
+        # 'src/snd/ssinit_h.c', # doesn't exist
+        'src/snd/ssplay.c',
         # 'src/snd/ssquit.c',
         # 'src/snd/sstable.c',
         # 'src/snd/sstick.c',

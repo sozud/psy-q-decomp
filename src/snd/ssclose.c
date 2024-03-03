@@ -1,6 +1,10 @@
 #include "libsnd_i.h"
 
+#if VERSION == 33
+void seq_close(s16 seq_sep_num) {
+#else
 static void _SsClose(s16 seq_sep_num) {
+#endif
     s32 seq_num;
     SpuVmSetSeqVol(seq_sep_num, 0, 0, 1);
     SpuVmSeqKeyOff(seq_sep_num);
@@ -23,6 +27,13 @@ static void _SsClose(s16 seq_sep_num) {
     }
 }
 
+#if VERSION == 33
+void SsSeqClose(short seq_access_num) { seq_close(seq_access_num); }
+
+void SsSepClose(s16 sep_access_num) { seq_close(sep_access_num); }
+#else
+
 void SsSeqClose(short seq_access_num) { _SsClose(seq_access_num); }
 
 void SsSepClose(s16 sep_access_num) { _SsClose(sep_access_num); }
+#endif

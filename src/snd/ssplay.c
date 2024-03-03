@@ -25,3 +25,17 @@ void SsSepPlay(
     short sep_access_num, short seq_num, char play_mode, short l_count) {
     Snd_SetPlayMode(sep_access_num, seq_num, play_mode, l_count);
 }
+
+#if VERSION == 33
+void SsPlayBack(s16 arg0, s16 arg1, s16 arg2) {
+    struct SeqStruct* temp_t2;
+    temp_t2 = &_ss_score[arg0][arg1];
+    _ss_score[arg0][arg1].unk90 &= ~0x200;
+    _ss_score[arg0][arg1].unk90 &= ~0x4;
+    _ss_score[arg0][arg1].unk90 |= 1;
+    temp_t2->unk46 = arg2;
+    temp_t2->unk48 = 0;
+    temp_t2->read_pos = temp_t2->next_sep_pos;
+    SpuVmSetSeqVol(arg0 | (arg1 << 8), temp_t2->unk74, temp_t2->unk76, 0);
+}
+#endif
