@@ -10,10 +10,10 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
+typedef unsigned long u_long;
 /*
 typedef unsigned char u_char;
 typedef unsigned short u_short;
-typedef unsigned long u_long;
 typedef unsigned int size_t;
 */
 #else
