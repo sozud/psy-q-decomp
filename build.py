@@ -181,6 +181,7 @@ def build_35():
         'src/snd/ssinit_h.c',
         'src/snd/ssplay.c',
         'src/snd/ssquit.c',
+        'src/snd/ssstart.c',
         'src/snd/sstable.c',
         'src/snd/sstick.c',
         'src/snd/ssvol.c',

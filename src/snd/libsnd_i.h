@@ -27,7 +27,7 @@ extern u8 D_80032F02;
 void EnterCriticalSection(void);
 void VSyncCallback(void (*func)());
 void ExitCriticalSection(void);
-void InterruptCallback(s32, s32);
+void* InterruptCallback(u8, void (*)());
 void ResetCallback();
 void SpuInit();
 void _SsInit();
@@ -225,17 +225,17 @@ extern s16 D_80032F0C;
 
 s32 GetVideoMode();
 extern s32 VBLANK_MINUS;
-
 struct SndSeqTickEnv {
     s32 unk0;
     s32 unk4;
-    u32 unk8;
-    u32 unk12;
+    void (*unk8)();
+    void (*unk12)();
     u8 unk16;
     u8 unk17;
     u8 unk18;
+    u8 unk19;
+    u32 unk20;
 };
-
 extern struct SndSeqTickEnv _snd_seq_tick_env;
 s32 SpuVmSeqKeyOff(s32);
 
