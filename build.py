@@ -166,6 +166,7 @@ def build_33():
 
 def build_35():
     snd_srcs = [
+        'src/snd/adsr.c',
         'src/snd/next.c',
         'src/snd/pause.c',
         'src/snd/play.c',
@@ -179,6 +180,7 @@ def build_35():
         'src/snd/ssclose.c',
         'src/snd/ssend.c',
         'src/snd/ssinit_h.c',
+        'src/snd/ssinit.c',
         'src/snd/ssplay.c',
         'src/snd/ssquit.c',
         'src/snd/ssstart.c',
