@@ -238,7 +238,7 @@ def build_35():
 
     etc_srcs = [
         'src/etc/intr_dma.c',
-        'src/etc/intr_vb.c'
+        'src/etc/intr_vb.c',
         'src/etc/pad.c',
         'src/etc/vmode.c',
     ]
