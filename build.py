@@ -237,9 +237,10 @@ def build_35():
     add_lib_263(spu_srcs, "build/3.5/spu", "./psy-q/3.5/PSX/LIB/LIBSPU.LIB", "-DVERSION=35", "3.5")
 
     etc_srcs = [
-        'src/etc/vmode.c',
-        'src/etc/pad.c',
+        'src/etc/intr_dma.c',
         'src/etc/intr_vb.c'
+        'src/etc/pad.c',
+        'src/etc/vmode.c',
     ]
 
     add_lib_263(etc_srcs, "build/3.5/etc", "./psy-q/3.5/PSX/LIB/LIBETC.LIB", "-DVERSION=35", "3.5")
