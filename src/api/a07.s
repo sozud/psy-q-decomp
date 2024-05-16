@@ -1,5 +1,15 @@
-.globl DeliverEvent
-    addiu       $10, $0, 0xB0
-    jr          $10
-    addiu       $9, $0, 0x7
+    SECTION .rdata
+    SECTION .text
+
+    xdef	DeliverEvent
+
+DeliverEvent
+    addiu       t2, zero, $B0
+    jr          t2
+    addiu       t1, zero, $7
     nop
+
+    SECTION .data
+    SECTION .sdata
+    SECTION .bss
+    SECTION .sbss

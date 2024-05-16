@@ -52,7 +52,7 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
         # run aspsx
         ninja.build(
             f"{output_dir}/{filename_without_extension}.obj",
-            'aspsx_263',
+            'asmpsx',
             inputs=[f"{output_dir}/{filename_without_extension}.d"],
             variables={'FLAGS': flags, 'FOLDER': folder})
         
@@ -78,7 +78,7 @@ def add_lib_asmpsx(srcs, output_dir, lib_name, flags, folder):
         # run aspsx
         ninja.build(
             f"{output_dir}/{filename_without_extension}.obj",
-            'aspsx_263',
+            'asmpsx',
             inputs=[f"{output_dir}/{filename_without_extension}.d"],
             variables={'FLAGS': flags, 'FOLDER': folder})
 
@@ -111,7 +111,7 @@ ninja.rule('unix2dos_263',
            description='Running unix2dos on $out from $in')
 
 ninja.rule('asmpsx',
-           command='sh asmpsx_wrapper.sh -n $in $out',
+           command='sh asmpsx_wrapper.sh $in $out dummy 3.5',
            description='Running asmpsx on $out from $in')
 
 ninja.rule(
