@@ -253,6 +253,13 @@ def build_35():
 
     add_lib_263(gs_srcs, "build/3.5/gs", "./psy-q/3.5/PSX/LIB/LIBGS.LIB", "-DVERSION=35", "3.5")
 
+    api_srcs = [
+        'src/api/counter.c'
+    ]
+
+    add_lib_263(api_srcs, "build/3.5/api", "./psy-q/3.5/PSX/LIB/LIBAPI.LIB", "-DVERSION=35", "3.5")
+
+
 def build_36():
     snd_srcs = [
         # 'src/snd/next.c',
