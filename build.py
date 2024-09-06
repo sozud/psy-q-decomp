@@ -248,7 +248,9 @@ def build_35():
     add_lib_263(etc_srcs, "build/3.5/etc", "./psy-q/3.5/PSX/LIB/LIBETC.LIB", "-DVERSION=35", "3.5")
 
     gs_srcs = [
-        'src/gs/gs_007.c'
+        'src/gs/gs_007.c',
+        'src/gs/gs_008.c',
+        'src/gs/gs_009.c'
     ]
 
     add_lib_263(gs_srcs, "build/3.5/gs", "./psy-q/3.5/PSX/LIB/LIBGS.LIB", "-DVERSION=35", "3.5")
