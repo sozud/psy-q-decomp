@@ -261,6 +261,12 @@ def build_35():
 
     add_lib_263(api_srcs, "build/3.5/api", "./psy-q/3.5/PSX/LIB/LIBAPI.LIB", "-DVERSION=35", "3.5")
 
+    c_srcs = [
+        'src/c/memmove.c',
+    ]
+
+    add_lib_263(c_srcs, "build/3.5/c", "./psy-q/3.5/PSX/LIB/LIBC.LIB", "-DVERSION=35", "3.5")
+
 
 def build_36():
     snd_srcs = [
