@@ -89,7 +89,7 @@ ninja.rule('unix2dos_263',
 
 ninja.rule(
         'check',
-        command='RUST_BACKTRACE=1 ./tools/psy-q-splitter/splitter/target/debug/splitter diff_obj_with_lib $LIBRARY $in',
+        command='./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib $LIBRARY $in',
         description='Checking that $in matches')
 
 def build_33():
