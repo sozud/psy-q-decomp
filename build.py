@@ -89,7 +89,7 @@ ninja.rule('unix2dos_263',
 
 ninja.rule(
         'check',
-        command='./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib $LIBRARY $in',
+        command='RUST_BACKTRACE=1 ./tools/psy-q-splitter/splitter/target/debug/splitter diff_obj_with_lib $LIBRARY $in',
         description='Checking that $in matches')
 
 def build_33():
@@ -267,6 +267,11 @@ def build_35():
 
     add_lib_263(c_srcs, "build/3.5/c", "./psy-q/3.5/PSX/LIB/LIBC.LIB", "-DVERSION=35", "3.5")
 
+    c_srcs = [
+        'src/cd/c_002.c',
+    ]
+
+    add_lib_263(c_srcs, "build/3.5/cd", "./psy-q/3.5/PSX/LIB/LIBCD.LIB", "-DVERSION=35", "3.5")
 
 def build_36():
     snd_srcs = [
