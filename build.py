@@ -243,6 +243,7 @@ def build_35():
         'src/etc/intr_vb.c',
         'src/etc/pad.c',
         'src/etc/vmode.c',
+        'src/etc/intr.c'
     ]
 
     add_lib_263(etc_srcs, "build/3.5/etc", "./psy-q/3.5/PSX/LIB/LIBETC.LIB", "-DVERSION=35", "3.5")
