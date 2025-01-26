@@ -9,66 +9,28 @@ static void* restartIntr();
 static void memclr(void* ptr, s32 size);
 static void trapIntr();
 s32 setjmp(s32*);
-
-#define JB_PC 0
-#define JB_SP 1
-#define JB_FP 2
-#define JB_S0 3
-#define JB_S1 4
-#define JB_S2 5
-#define JB_S3 6
-#define JB_S4 7
-#define JB_S5 8
-#define JB_S6 9
-#define JB_S7 10
-#define JB_GP 11
-#define JB_SIZE 12
-
-
-typedef int jmp_buf[JB_SIZE];
-
-// 56 + 4144 + 32
-
-struct intrEnv_t  {
-    u16 interruptsInitialized; // 2
-    u16 inInterrupt; //2 
-    Callback handlers[11]; // 44
-    u16 enabledInterruptsMask; // 2
-    u16 savedMask; // 2
-    struct Temp {
-        int savedPcr; // 4
-        jmp_buf buf; // 48
-        s32 stack[1024];
-    } temp;
-};
+void* startIntrVSync(); /* extern */
+long long startIntrDMA();
 
 static struct intrEnv_t intrEnv = {
-    0,                         // interruptsInitialized
-    0,                         // inInterrupt
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // handlers (explicit zeros for each element)
-    0,                         // enabledInterruptsMask
-    0,                         // savedMask
+    0, // interruptsInitialized
+    0, // inInterrupt
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0}, // handlers (explicit zeros for each element)
+    0,   // enabledInterruptsMask
+    0,   // savedMask
     {0}, // temp
 };
-void InterruptCallback(int irq, void (*f)());
 
-static s32 D_8002D350;
-
-
-// static void* (*resetCallbackPointer)(void) = NULL;
-static const char thing[];
-static struct Callbacks callbacks
-  = {
-        thing,
-        0,
-        setIntr,
-        startIntr,
-        stopIntr,
-        0,
-        restartIntr,
-        &intrEnv};
-
-static const char thing[] = "$Id: intr.c,v 1.73 1995/11/10 05:29:40 suzu Exp $";
+static struct Callbacks callbacks = {
+    "$Id: intr.c,v 1.73 1995/11/10 05:29:40 suzu Exp $",
+    0,
+    setIntr,
+    startIntr,
+    stopIntr,
+    0,
+    restartIntr,
+    &intrEnv};
 
 static struct Callbacks* pCallbacks = &callbacks;
 
@@ -94,7 +56,7 @@ void* RestartCallback(void) { return pCallbacks->RestartCallback(); }
 
 int CheckCallback(void) { return intrEnv.inInterrupt; }
 
-static volatile u16* i_mask=  (u16*)0x1F801070;
+static volatile u16* i_mask = (u16*)0x1F801070;
 static volatile u16* g_InterruptMask = (u16*)0x1F801074;
 static volatile s32* d_pcr = (s32*)0x1F8010F0;
 
