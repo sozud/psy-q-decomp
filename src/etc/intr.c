@@ -19,7 +19,7 @@ static struct intrEnv_t intrEnv = {
      0}, // handlers (explicit zeros for each element)
     0,   // enabledInterruptsMask
     0,   // savedMask
-    {0}, // temp
+    0,
 };
 
 static struct Callbacks callbacks = {
@@ -77,11 +77,11 @@ void* startIntr() {
     *i_mask = *g_InterruptMask = 0;
     *d_pcr = 0x33333333;
     memclr(&intrEnv, sizeof(intrEnv) / sizeof(s32));
-    if (setjmp(intrEnv.temp.buf) != 0) {
+    if (setjmp(intrEnv.buf) != 0) {
         trapIntr();
     }
-    intrEnv.temp.buf[JB_SP] = (s32)&intrEnv.temp.stack[1004];
-    HookEntryInt((u16*)intrEnv.temp.buf);
+    intrEnv.buf[JB_SP] = (s32)&intrEnv.stack[1004];
+    HookEntryInt((u16*)intrEnv.buf);
     intrEnv.interruptsInitialized = 1;
     pCallbacks->VSyncCallbacks = startIntrVSync();
     pCallbacks->DMACallback = startIntrDMA();
@@ -169,7 +169,7 @@ void* stopIntr() {
     }
     EnterCriticalSection();
     intrEnv.savedMask = *g_InterruptMask;
-    intrEnv.temp.savedPcr = *d_pcr;
+    intrEnv.savedPcr = *d_pcr;
     *i_mask = *g_InterruptMask = 0;
     *d_pcr &= 0x77777777;
     ResetEntryInt();
@@ -182,10 +182,10 @@ void* restartIntr() {
         return 0;
     }
 
-    HookEntryInt((u16*)intrEnv.temp.buf);
+    HookEntryInt((u16*)intrEnv.buf);
     intrEnv.interruptsInitialized = 1;
     *g_InterruptMask = intrEnv.savedMask;
-    *d_pcr = intrEnv.temp.savedPcr;
+    *d_pcr = intrEnv.savedPcr;
     ExitCriticalSection();
     return &intrEnv;
 }

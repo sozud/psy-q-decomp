@@ -23,11 +23,9 @@ struct intrEnv_t {
     Callback handlers[11];     // 44
     u16 enabledInterruptsMask; // 2
     u16 savedMask;             // 2
-    struct Temp {
-        int savedPcr; // 4
-        jmp_buf buf;  // 48
-        s32 stack[1024];
-    } temp;
+    int savedPcr;              // 4
+    jmp_buf buf;               // 48
+    s32 stack[1024];
 };
 
 struct Callbacks {
