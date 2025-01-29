@@ -275,6 +275,12 @@ def build_35():
 
     add_lib_263(c_srcs, "build/3.5/cd", "./psy-q/3.5/PSX/LIB/LIBCD.LIB", "-DVERSION=35", "3.5")
 
+    c_srcs = [
+        'src/press/libpress.c',
+    ]
+
+    add_lib_263(c_srcs, "build/3.5/press", "./psy-q/3.5/PSX/LIB/LIBPRESS.LIB", "-DVERSION=35", "3.5")
+
 def build_36():
     snd_srcs = [
         # 'src/snd/next.c',
