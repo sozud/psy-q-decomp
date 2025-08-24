@@ -92,6 +92,30 @@ ninja.rule(
         command='./tools/psy-q-splitter/splitter/target/release/splitter diff_obj_with_lib $LIBRARY $in',
         description='Checking that $in matches')
 
+
+
+def add_lib_wibo(srcs, output_dir, lib_name, flags, folder):
+    for src in srcs:
+        filename_without_extension = os.path.splitext(os.path.basename(src))[0]
+        obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        ninja.build(
+            obj_name, 
+            'compile_wibo', 
+            inputs=[src],
+            variables={'FLAGS': flags, 'FOLDER': folder})
+
+        # this doesn't generate a file output but ninja apparently needs an output name
+        ninja.build(
+            f"{obj_name}.check",
+            'check',
+            inputs=[obj_name],
+            variables={'LIBRARY': lib_name}
+        )
+
+ninja.rule('compile_wibo',
+           command='WIBO_DEBUG=1 PSYQ_PATH=build/4.0 COMPILER_PATH=build/4.0 C_INCLUDE_PATH=include build/4.0/wibo build/4.0/CCPSX.EXE $in $FLAGS -o$out',
+           description='Building $out from $in')
+
 def build_33():
     snd_srcs = [
         'src/snd/next.c',
@@ -354,9 +378,35 @@ def build_36():
 
     add_lib(spu_srcs, "build/3.6/spu", "./psy-q/3.6/PSX/LIB/LIBSPU.LIB", "-DVERSION=36", "3.6")
 
+def build_40():
+    spu_srcs = [
+        'src/spu/s_cb.c',
+        'src/spu/s_crwa.c',
+        'src/spu/s_dcb.c',
+        'src/spu/s_i.c',
+        # 'src/spu/s_ini.c',
+        # 'src/spu/s_it.c',
+        # 'src/spu/s_m_f.c',
+        'src/spu/s_m_init.c',
+        # 'src/spu/s_m_util.c',
+        # 'src/spu/s_r.c',
+        # 'src/spu/s_sav.c',
+        'src/spu/s_sic.c',
+        # 'src/spu/s_sk.c',
+        'src/spu/s_snv.c',
+        'src/spu/s_sr.c',
+        'src/spu/s_stm.c',
+        # 'src/spu/s_stsa.c',
+        # 'src/spu/s_w.c',
+        # 'src/spu/s_wp.c',
+        # 'src/spu/sr_gaks.c',
+    ]
+
+    add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
 build_33()
 build_35()
 build_36()
-
+build_40()
 
 ninja.close()
