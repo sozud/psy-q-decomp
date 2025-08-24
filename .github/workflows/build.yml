@@ -34,6 +34,7 @@ jobs:
         sh prep_33.sh
         sh prep_35.sh
         sh prep_36.sh
+        sh prep_40.sh
         python3 build.py
         ninja -j1
 
