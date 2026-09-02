@@ -1,0 +1,37 @@
+{
+  "versions": {
+    "3.3": {
+      "library_dir": "psy-q/3.3/PSX/LIB",
+      "builds": {
+        "LIBSND": { "build_dir": "build/3.3/snd", "source_dir": "src/snd" },
+        "LIBSPU": { "build_dir": "build/3.3/spu", "source_dir": "src/spu" }
+      }
+    },
+    "3.5": {
+      "library_dir": "psy-q/3.5/PSX/LIB",
+      "builds": {
+        "LIBAPI": { "build_dir": "build/3.5/api", "source_dir": "src/api" },
+        "LIBC": { "build_dir": "build/3.5/c", "source_dir": "src/c" },
+        "LIBCD": { "build_dir": "build/3.5/cd", "source_dir": "src/cd" },
+        "LIBETC": { "build_dir": "build/3.5/etc", "source_dir": "src/etc" },
+        "LIBGS": { "build_dir": "build/3.5/gs", "source_dir": "src/gs" },
+        "LIBPRESS": { "build_dir": "build/3.5/press", "source_dir": "src/press" },
+        "LIBSND": { "build_dir": "build/3.5/snd", "source_dir": "src/snd" },
+        "LIBSPU": { "build_dir": "build/3.5/spu", "source_dir": "src/spu" }
+      }
+    },
+    "3.6": {
+      "library_dir": "psy-q/3.6/PSX/LIB",
+      "builds": {
+        "LIBSND": { "build_dir": "build/3.6/snd", "source_dir": "src/snd" },
+        "LIBSPU": { "build_dir": "build/3.6/spu", "source_dir": "src/spu" }
+      }
+    },
+    "4.0": {
+      "library_dir": "psy-q/4.0/PSX/LIB",
+      "builds": {
+        "LIBSPU": { "build_dir": "build/4.0/spu", "source_dir": "src/spu" }
+      }
+    }
+  }
+}
