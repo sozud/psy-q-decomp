@@ -1,5 +1,5 @@
 #include "libspu_i.h"
-static inline void test(s16 *vol, u16 var_t2) {
+static void test(s16 *vol, u16 var_t2) {
         *vol = var_t2;
     if (var_t2 >= 0x4000) {
         *vol -= 0x8000u;
@@ -86,4 +86,3 @@ void SpuGetCommonMasterVolumeAttr(s16 *mvol_left, s16 *mvol_right, s16 *mvolmode
 
     CALC_VOL(*mvol_right, var_t3);
 }
-

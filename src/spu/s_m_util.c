@@ -1,7 +1,7 @@
 #include "libspu_i.h"
 
 #if VERSION == 40
-inline s32 _SpuIsInAllocateArea(u32 arg0) {
+s32 _SpuIsInAllocateArea(u32 arg0) {
     int i = 0;
 
     if (_spu_memList == NULL) {

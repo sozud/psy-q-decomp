@@ -863,7 +863,7 @@ extern vu16 _spu_RQ[10];
 
 
 
-static inline void _memcpy(void* _dst, void* _src, u32 _size) {
+static void _memcpy(void* _dst, void* _src, u32 _size) {
     char *pDst = (char*)_dst;
     char *pSrc = (char*)_src;
 

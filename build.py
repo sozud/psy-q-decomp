@@ -1,11 +1,20 @@
 import os
 import subprocess
+import glob
 import ninja_syntax
+
+progress_objects = {"3.3": [], "3.5": [], "3.6": [], "4.0": []}
+
+def track_progress_object(obj_name):
+    parts = obj_name.split('/')
+    if len(parts) > 2 and parts[0] == 'build' and parts[1] in progress_objects:
+        progress_objects[parts[1]].append(obj_name)
 
 def add_lib(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
         ninja.build(
             obj_name,
             'compile',
@@ -25,6 +34,7 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
 
         cpp_flags = f"-undef -D__GNUC__=2 {flags} -v -D__OPTIMIZE__ -I./src/snd -I./include -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C"
 
@@ -98,6 +108,7 @@ def add_lib_wibo(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
         ninja.build(
             obj_name,
             'compile_wibo',
@@ -113,7 +124,7 @@ def add_lib_wibo(srcs, output_dir, lib_name, flags, folder):
         )
 
 ninja.rule('compile_wibo',
-           command='WIBO_DEBUG=0 PSYQ_PATH=build/4.0 COMPILER_PATH=build/4.0 C_INCLUDE_PATH=include build/4.0/wibo build/4.0/CCPSX.EXE $in $FLAGS -o$out',
+           command='bash wibo_ccpsx_wrapper.sh $in $out $FLAGS',
            description='Building $out from $in')
 
 def build_33():
@@ -490,11 +501,29 @@ def build_40():
         # 'src/spu/sr_gaks.c',
     ]
 
-    add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+    add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
 
 build_33()
 build_35()
 build_36()
 build_40()
+
+ninja.rule(
+    'progress_report',
+    command='./tools/psy-q-splitter/splitter/target/release/splitter report --manifest config/progress.json --version $VERSION --output $out',
+    description='Generating progress report for PSY-Q $VERSION')
+
+reports = []
+for version, objects in progress_objects.items():
+    report = f"build/{version}/report.json"
+    ninja.build(
+        report,
+        'progress_report',
+        inputs=['config/progress.json'],
+        implicit=sorted(objects + glob.glob(f'psy-q/{version}/PSX/LIB/*.LIB')),
+        variables={'VERSION': version})
+    ninja.build(f"progress-{version}", 'phony', implicit=[report])
+    reports.append(report)
+ninja.build('progress', 'phony', implicit=reports)
 
 ninja.close()

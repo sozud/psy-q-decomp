@@ -1,5 +1,5 @@
 #include "libspu_i.h"
-inline u32 _spu_2pitch(s32 arg0, u32 arg1) {
+u32 _spu_2pitch(s32 arg0, u32 arg1) {
     u32 sp8;
     s32 var_t0;
     s32 temp_a3;
@@ -121,4 +121,3 @@ epilogue:
     fine = arg1 + f;
     return (note << 8) | fine;
 }
-
