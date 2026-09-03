@@ -1,6 +1,12 @@
 #ifndef LIBSPU_INTERNAL_H
 #define LIBSPU_INTERNAL_H
 
+#if VERSION == 40
+
+#include "libspu_40.h"
+
+#else
+
 #include "../types.h"
 #include <LIBSPU.H>
 
@@ -179,5 +185,7 @@ extern long _spu_trans_mode;
 extern long _spu_transMode;
 
 extern s8 _spu_zerobuf[1024];
+
+#endif
 
 #endif

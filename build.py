@@ -1,14 +1,23 @@
 import os
 import subprocess
+import glob
 import ninja_syntax
+
+progress_objects = {"3.3": [], "3.5": [], "3.6": [], "4.0": []}
+
+def track_progress_object(obj_name):
+    parts = obj_name.split('/')
+    if len(parts) > 2 and parts[0] == 'build' and parts[1] in progress_objects:
+        progress_objects[parts[1]].append(obj_name)
 
 def add_lib(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
         ninja.build(
-            obj_name, 
-            'compile', 
+            obj_name,
+            'compile',
             inputs=[src],
             variables={'FLAGS': flags, 'FOLDER': folder})
 
@@ -25,6 +34,7 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
 
         cpp_flags = f"-undef -D__GNUC__=2 {flags} -v -D__OPTIMIZE__ -I./src/snd -I./include -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C"
 
@@ -34,28 +44,28 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
             'cpp_263',
             inputs=[src],
             variables={'FLAGS': flags, 'FOLDER': folder, 'CPP_FLAGS': cpp_flags})
-        
+
         # run cc1
         ninja.build(
             f"{output_dir}/{filename_without_extension}.s",
             'cc1_263',
             inputs=[f"{output_dir}/{filename_without_extension}.cpp"],
             variables={'FLAGS': flags, 'FOLDER': folder})
-        
+
         # convert to dos
         ninja.build(
             f"{output_dir}/{filename_without_extension}.d",
             'unix2dos_263',
             inputs=[f"{output_dir}/{filename_without_extension}.s"],
             variables={'FLAGS': flags, 'FOLDER': folder})
-        
+
         # run aspsx
         ninja.build(
             f"{output_dir}/{filename_without_extension}.obj",
             'aspsx_263',
             inputs=[f"{output_dir}/{filename_without_extension}.d"],
             variables={'FLAGS': flags, 'FOLDER': folder})
-        
+
         # # check it
         # # this doesn't generate a file output but ninja apparently needs an output name
         ninja.build(
@@ -98,9 +108,10 @@ def add_lib_wibo(srcs, output_dir, lib_name, flags, folder):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
+        track_progress_object(obj_name)
         ninja.build(
-            obj_name, 
-            'compile_wibo', 
+            obj_name,
+            'compile_wibo',
             inputs=[src],
             variables={'FLAGS': flags, 'FOLDER': folder})
 
@@ -113,7 +124,7 @@ def add_lib_wibo(srcs, output_dir, lib_name, flags, folder):
         )
 
 ninja.rule('compile_wibo',
-           command='WIBO_DEBUG=1 PSYQ_PATH=build/4.0 COMPILER_PATH=build/4.0 C_INCLUDE_PATH=include build/4.0/wibo build/4.0/CCPSX.EXE $in $FLAGS -o$out',
+           command='bash wibo_ccpsx_wrapper.sh $in $out $FLAGS',
            description='Building $out from $in')
 
 def build_33():
@@ -383,30 +394,136 @@ def build_40():
         'src/spu/s_cb.c',
         'src/spu/s_crwa.c',
         'src/spu/s_dcb.c',
+        'src/spu/s_f.c',
+        'src/spu/s_gav.c',
+        'src/spu/s_gca.c',
+        'src/spu/s_gcmv.c',
+        'src/spu/s_gcmva.c',
+        'src/spu/s_gcmvx.c',
+        'src/spu/s_gi.c',
+        'src/spu/s_gia.c',
+        'src/spu/s_gks.c',
+        'src/spu/s_gm.c',
+        'src/spu/s_gnc.c',
+        'src/spu/s_gnv.c',
+        'src/spu/s_gplv.c',
+        'src/spu/s_gr.c',
+        'src/spu/s_grmd.c',
+        'src/spu/s_grmdt.c',
+        'src/spu/s_grmfb.c',
+        'src/spu/s_grmp.c',
+        'src/spu/s_grmt.c',
+        'src/spu/s_grv.c',
+        'src/spu/s_gtm.c',
+        'src/spu/s_gtsa.c',
+        'src/spu/s_gva.c',
+        'src/spu/s_gvad.c',
+        'src/spu/s_gvada.c',
+        'src/spu/s_gvar.c',
+        'src/spu/s_gvara.c',
+        'src/spu/s_gvdr.c',
+        'src/spu/s_gvea.c',
+        'src/spu/s_gvex.c',
+        'src/spu/s_gvlsa.c',
+        'src/spu/s_gvn.c',
+        'src/spu/s_gvp.c',
+        'src/spu/s_gvrr.c',
+        'src/spu/s_gvrra.c',
+        'src/spu/s_gvsa.c',
+        'src/spu/s_gvsl.c',
+        'src/spu/s_gvsn.c',
+        'src/spu/s_gvsr.c',
+        'src/spu/s_gvsra.c',
+        'src/spu/s_gvv.c',
+        'src/spu/s_gvva.c',
+        'src/spu/s_gvvx.c',
         'src/spu/s_i.c',
-        # 'src/spu/s_ini.c',
-        # 'src/spu/s_it.c',
-        # 'src/spu/s_m_f.c',
+        'src/spu/s_ih.c',
+        'src/spu/s_ini.c',
+        'src/spu/s_irwar.c',
+        'src/spu/s_it.c',
+        'src/spu/s_itc.c',
+        'src/spu/s_m.c',
+        'src/spu/s_m_f.c',
         'src/spu/s_m_init.c',
-        # 'src/spu/s_m_util.c',
-        # 'src/spu/s_r.c',
-        # 'src/spu/s_sav.c',
+        'src/spu/s_m_int.c',
+        'src/spu/s_m_m.c',
+        'src/spu/s_m_util.c',
+        'src/spu/s_m_wsa.c',
+        'src/spu/s_m_x.c',
+        'src/spu/s_n2p.c',
+        'src/spu/s_q.c',
+        'src/spu/s_r.c',
+        'src/spu/s_rdd.c',
+        'src/spu/s_rmp.c',
+        'src/spu/s_rrwa.c',
+        'src/spu/s_sav.c',
+        'src/spu/s_sca.c',
+        'src/spu/s_sccv.c',
+        'src/spu/s_scmva.c',
+        'src/spu/s_si.c',
+        'src/spu/s_sia.c',
         'src/spu/s_sic.c',
         # 'src/spu/s_sk.c',
+        'src/spu/s_skowa.c',
+        'src/spu/s_sm.c',
+        'src/spu/s_snc.c',
         'src/spu/s_snv.c',
+        'src/spu/s_splv.c',
         'src/spu/s_sr.c',
+        'src/spu/s_sra.c',
+        'src/spu/s_srd.c',
+        'src/spu/s_srmd.c',
+        'src/spu/s_srmdt.c',
+        'src/spu/s_srmfb.c',
+        'src/spu/s_srmp.c',
+        'src/spu/s_srmt.c',
+        'src/spu/s_srv.c',
+        'src/spu/s_stc.c',
         'src/spu/s_stm.c',
-        # 'src/spu/s_stsa.c',
-        # 'src/spu/s_w.c',
+        'src/spu/s_stsa.c',
+        'src/spu/s_sva.c',
+        'src/spu/s_svad.c',
+        'src/spu/s_svar.c',
+        'src/spu/s_svdr.c',
+        'src/spu/s_svlsa.c',
+        'src/spu/s_svn.c',
+        'src/spu/s_svp.c',
+        'src/spu/s_svrr.c',
+        'src/spu/s_svsa.c',
+        'src/spu/s_svsl.c',
+        'src/spu/s_svsn.c',
+        'src/spu/s_svsr.c',
+        'src/spu/s_svv.c',
+        'src/spu/s_w.c',
+        'src/spu/s_w0.c',
         # 'src/spu/s_wp.c',
         # 'src/spu/sr_gaks.c',
     ]
 
-    add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+    add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
 
 build_33()
 build_35()
 build_36()
 build_40()
+
+ninja.rule(
+    'progress_report',
+    command='./tools/psy-q-splitter/splitter/target/release/splitter report --manifest config/progress.json --version $VERSION --output $out',
+    description='Generating progress report for PSY-Q $VERSION')
+
+reports = []
+for version, objects in progress_objects.items():
+    report = f"build/{version}/report.json"
+    ninja.build(
+        report,
+        'progress_report',
+        inputs=['config/progress.json'],
+        implicit=sorted(objects + glob.glob(f'psy-q/{version}/PSX/LIB/*.LIB')),
+        variables={'VERSION': version})
+    ninja.build(f"progress-{version}", 'phony', implicit=[report])
+    reports.append(report)
+ninja.build('progress', 'phony', implicit=reports)
 
 ninja.close()
