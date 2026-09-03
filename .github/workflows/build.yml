@@ -38,5 +38,29 @@ jobs:
         python3 build.py
         ninja -j1
 
-    # - name: Progress
-    #   run: make progress
+    - name: Progress
+      run: ninja -j1 progress
+
+    - name: Upload progress report (3.3)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 3.3_report
+        path: build/3.3/report.json
+
+    - name: Upload progress report (3.5)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 3.5_report
+        path: build/3.5/report.json
+
+    - name: Upload progress report (3.6)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 3.6_report
+        path: build/3.6/report.json
+
+    - name: Upload progress report (4.0)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 4.0_report
+        path: build/4.0/report.json
