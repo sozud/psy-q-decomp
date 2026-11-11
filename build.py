@@ -90,7 +90,7 @@ ninja.rule('cc1_263',
            description='Running cc1 on $out from $in')
 
 ninja.rule('aspsx_263',
-           command='sh aspsx_wrapper.sh $in $out dummy $ASPSX',
+           command='bash daze_wrapper.sh aspsx $in $out -G0 $ASPSX',
            description='Running aspsx on $out from $in')
 
 ninja.rule('unix2dos_263',

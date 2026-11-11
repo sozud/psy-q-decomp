@@ -18,6 +18,12 @@ jobs:
     - name: Install deps
       run: sudo apt-get install dos2unix ninja-build
 
+    - name: Install daze
+      run: |
+        mkdir -p build
+        curl -sSfL -o build/daze https://github.com/mkst/daze/releases/download/0.3.1/daze
+        chmod +x build/daze
+
     - name: Install dosemu
       run: |
         git clone https://github.com/sozud/dosemu-deb.git
