@@ -7,3 +7,5 @@ tar -xvf cc1-psx-26.tar.gz -C build/3.3
 cp -r ./psy-q/cc_2.60/* build/3.3
 # replace aspsx with newer one
 cp psy-q/3.5/PSYQ/ASPSX.EXE build/3.3
+mkdir -p build/aspsx221
+cp psy-q/3.3/PSYQ/ASPSX.EXE build/aspsx221
