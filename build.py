@@ -146,7 +146,7 @@ def build_33():
         # 'src/snd/ssquit.c',
         # 'src/snd/sstable.c',
         # 'src/snd/sstick.c',
-        # 'src/snd/ssvol.c',
+        'src/snd/ssvol.c',
         'src/snd/stop.c',
         # 'src/snd/tempo.c',
         # 'src/snd/ut_gpa.c',
@@ -154,7 +154,7 @@ def build_33():
         # 'src/snd/ut_gva.c',
         # 'src/snd/ut_rdel.c',
         # 'src/snd/ut_rdep.c',
-        # 'src/snd/ut_rev.c',
+        'src/snd/ut_rev.c',
         # 'src/snd/ut_rfb.c',
         # 'src/snd/ut_roff.c',
         # 'src/snd/ut_ron.c',
@@ -181,13 +181,17 @@ def build_33():
         'src/spu/s_i.c',
         # 'src/spu/s_ini.c',
         'src/spu/s_it.c',
+        'src/spu/s_itc.c',
         'src/spu/s_m_f.c',
         'src/spu/s_m_init.c',
+        'src/spu/s_m_int.c',
+        'src/spu/s_m_m.c',
         'src/spu/s_m_util.c',
         'src/spu/s_r.c',
         'src/spu/s_sav.c',
+        'src/spu/s_si.c',
         'src/spu/s_sic.c',
-        # 'src/spu/s_sk.c',
+        'src/spu/s_sk.c',
         'src/spu/s_snv.c',
         'src/spu/s_sr.c',
         'src/spu/s_stm.c',
@@ -202,6 +206,8 @@ def build_33():
 def build_35():
     snd_srcs = [
         'src/snd/adsr.c',
+        'src/snd/cres.c',
+        'src/snd/decre.c',
         'src/snd/next.c',
         'src/snd/pause.c',
         'src/snd/play.c',
@@ -209,6 +215,8 @@ def build_35():
         'src/snd/scsmvol.c',
         'src/snd/scssattr.c',
         'src/snd/scssvol.c',
+        'src/snd/seqinit.c',
+        'src/snd/seqread.c',
         'src/snd/seskoff.c',
         'src/snd/seskon.c',
         'src/snd/sscall.c',
@@ -233,6 +241,7 @@ def build_35():
         'src/snd/ut_roff.c',
         'src/snd/ut_ron.c',
         'src/snd/ut_sva.c',
+        'src/snd/vmanager.c',
         'src/snd/vm_doff.c',
         'src/snd/vm_don.c',
         'src/snd/vm_g.c',
@@ -241,6 +250,7 @@ def build_35():
         'src/snd/vs_srv.c',
         'src/snd/vs_vab.c',
         'src/snd/vs_vfb.c',
+        'src/snd/vs_vh.c',
         'src/snd/vs_vtb.c',
         'src/snd/vs_vtbp.c',
         'src/snd/vs_vtc.c',
@@ -252,22 +262,32 @@ def build_35():
         'src/spu/s_cb.c',
         'src/spu/s_crwa.c',
         'src/spu/s_dcb.c',
+        'src/spu/s_gva.c',
         'src/spu/s_i.c',
         'src/spu/s_ini.c',
         'src/spu/s_it.c',
+        'src/spu/s_itc.c',
         'src/spu/s_m_f.c',
         'src/spu/s_m_init.c',
+        'src/spu/s_m_int.c',
+        'src/spu/s_m_m.c',
         'src/spu/s_m_util.c',
+        'src/spu/s_n2p.c',
         'src/spu/s_r.c',
         'src/spu/s_sav.c',
+        'src/spu/s_sca.c',
+        'src/spu/s_si.c',
         'src/spu/s_sic.c',
         'src/spu/s_sk.c',
         'src/spu/s_snv.c',
         'src/spu/s_sr.c',
+        'src/spu/s_srmp.c',
         'src/spu/s_stm.c',
         'src/spu/s_stsa.c',
+        'src/spu/s_sva.c',
         'src/spu/s_w.c',
         'src/spu/s_wp.c',
+        'src/spu/spu.c',
         'src/spu/sr_gaks.c',
     ]
 
@@ -300,12 +320,28 @@ def build_35():
 
     c_srcs = [
         'src/c/memmove.c',
+        'src/c/sprintf.c',
     ]
 
     add_lib_263(c_srcs, "build/3.5/c", "./psy-q/3.5/PSX/LIB/LIBC.LIB", "-DVERSION=35", "3.5")
 
     c_srcs = [
+        'src/cd/bios.c',
         'src/cd/c_002.c',
+        'src/cd/c_003.c',
+        'src/cd/c_004.c',
+        'src/cd/c_005.c',
+        'src/cd/c_007.c',
+        'src/cd/c_008.c',
+        'src/cd/c_009.c',
+        'src/cd/c_010.c',
+        'src/cd/c_011.c',
+        'src/cd/cdread.c',
+        'src/cd/cdread2.c',
+        'src/cd/cdrom.c',
+        'src/cd/event.c',
+        'src/cd/iso9660.c',
+        'src/cd/sys.c',
     ]
 
     add_lib_263(c_srcs, "build/3.5/cd", "./psy-q/3.5/PSX/LIB/LIBCD.LIB", "-DVERSION=35", "3.5")
@@ -315,6 +351,36 @@ def build_35():
     ]
 
     add_lib_263(c_srcs, "build/3.5/press", "./psy-q/3.5/PSX/LIB/LIBPRESS.LIB", "-DVERSION=35", "3.5")
+
+    c2_srcs = [
+        'src/c/sprintf.c',
+    ]
+
+    add_lib_263(c2_srcs, "build/3.5/c2", "./psy-q/3.5/PSX/LIB/LIBC2.LIB", "-DVERSION=35", "3.5")
+
+    card_srcs = [
+        'src/card/card.c',
+    ]
+
+    add_lib_263(card_srcs, "build/3.5/card", "./psy-q/3.5/PSX/LIB/LIBCARD.LIB", "-DVERSION=35", "3.5")
+
+    gpu_srcs = [
+        'src/gpu/ext.c',
+        'src/gpu/font.c',
+        'src/gpu/prim.c',
+        'src/gpu/sys.c',
+    ]
+
+    add_lib_263(gpu_srcs, "build/3.5/gpu", "./psy-q/3.5/PSX/LIB/LIBGPU.LIB", "-DVERSION=35", "3.5")
+
+    gte_srcs = [
+        'src/gte/fog_01.c',
+        'src/gte/geo_00.c',
+        'src/gte/geo_01.c',
+        'src/gte/ratan.c',
+    ]
+
+    add_lib_263(gte_srcs, "build/3.5/gte", "./psy-q/3.5/PSX/LIB/LIBGTE.LIB", "-DVERSION=35", "3.5")
 
 def build_36():
     snd_srcs = [
@@ -369,6 +435,7 @@ def build_36():
         'src/spu/s_crwa.c',
         'src/spu/s_dcb.c',
         'src/spu/s_i.c',
+        'src/spu/s_itc.c',
         # 'src/spu/s_ini.c',
         # 'src/spu/s_it.c',
         # 'src/spu/s_m_f.c',
@@ -388,6 +455,133 @@ def build_36():
     ]
 
     add_lib(spu_srcs, "build/3.6/spu", "./psy-q/3.6/PSX/LIB/LIBSPU.LIB", "-DVERSION=36", "3.6")
+
+    snd_srcs = [
+        'src/snd/cres.c',
+        'src/snd/next.c',
+        'src/snd/pause.c',
+        'src/snd/replay.c',
+        'src/snd/seqinit.c',
+        'src/snd/sscall.c',
+        'src/snd/ssclose.c',
+        'src/snd/ssinit.c',
+        'src/snd/ssplay.c',
+        'src/snd/ssstart.c',
+        'src/snd/sstable.c',
+        'src/snd/tempo.c',
+        'src/snd/ut_gpa.c',
+        'src/snd/ut_gva.c',
+        'src/snd/ut_sva.c',
+        'src/snd/vm_vsu.c',
+        'src/snd/vs_srv.c',
+        'src/snd/vs_vab.c',
+        'src/snd/vs_vtbp.c',
+    ]
+
+    add_lib_263(snd_srcs, "build/3.6/snd", "./psy-q/3.6/PSX/LIB/LIBSND.LIB", "-DVERSION=36", "3.6")
+
+    snd_srcs = [
+        'src/snd/vs_vh.c',
+    ]
+
+    add_lib_263(snd_srcs, "build/3.6/snd", "./psy-q/3.6/PSX/LIB/LIBSND.LIB", "-DVERSION=35", "3.6")
+
+    spu_srcs = [
+        'src/spu/s_gva.c',
+        'src/spu/s_it.c',
+        'src/spu/s_m_int.c',
+        'src/spu/s_m_m.c',
+        'src/spu/s_n2p.c',
+        'src/spu/s_r.c',
+        'src/spu/s_srmp.c',
+        'src/spu/s_w.c',
+        'src/spu/s_wp.c',
+        'src/spu/sr_gaks.c',
+    ]
+
+    add_lib_263(spu_srcs, "build/3.6/spu", "./psy-q/3.6/PSX/LIB/LIBSPU.LIB", "-DVERSION=36", "3.6")
+
+    api_srcs = [
+        'src/api/counter.c',
+    ]
+
+    add_lib_263(api_srcs, "build/3.6/api", "./psy-q/3.6/PSX/LIB/LIBAPI.LIB", "-DVERSION=36", "3.6")
+
+    c_srcs = [
+        'src/c/sprintf.c',
+    ]
+
+    add_lib_263(c_srcs, "build/3.6/c", "./psy-q/3.6/PSX/LIB/LIBC.LIB", "-DVERSION=36", "3.6")
+
+    c2_srcs = [
+        'src/c/sprintf.c',
+    ]
+
+    add_lib_263(c2_srcs, "build/3.6/c2", "./psy-q/3.6/PSX/LIB/LIBC2.LIB", "-DVERSION=36", "3.6")
+
+    card_srcs = [
+        'src/card/card.c',
+    ]
+
+    add_lib_263(card_srcs, "build/3.6/card", "./psy-q/3.6/PSX/LIB/LIBCARD.LIB", "-DVERSION=36", "3.6")
+
+    cd_srcs = [
+        'src/cd/bios.c',
+        'src/cd/c_002.c',
+        'src/cd/c_003.c',
+        'src/cd/c_004.c',
+        'src/cd/c_005.c',
+        'src/cd/c_007.c',
+        'src/cd/c_008.c',
+        'src/cd/c_009.c',
+        'src/cd/c_010.c',
+        'src/cd/c_011.c',
+        'src/cd/cdread.c',
+        'src/cd/cdread2.c',
+        'src/cd/cdrom.c',
+        'src/cd/event.c',
+        'src/cd/iso9660.c',
+        'src/cd/sys.c',
+    ]
+
+    add_lib_263(cd_srcs, "build/3.6/cd", "./psy-q/3.6/PSX/LIB/LIBCD.LIB", "-DVERSION=36", "3.6")
+
+    etc_srcs = [
+        'src/etc/intr_dma.c',
+        'src/etc/intr_vb.c',
+        'src/etc/pad.c',
+        'src/etc/vmode.c',
+        'src/etc/intr.c',
+        'src/etc/vsync.c',
+    ]
+
+    add_lib_263(etc_srcs, "build/3.6/etc", "./psy-q/3.6/PSX/LIB/LIBETC.LIB", "-DVERSION=36", "3.6")
+
+    gpu_srcs = [
+        'src/gpu/ext.c',
+        'src/gpu/font.c',
+        'src/gpu/prim.c',
+        'src/gpu/sys.c',
+    ]
+
+    add_lib_263(gpu_srcs, "build/3.6/gpu", "./psy-q/3.6/PSX/LIB/LIBGPU.LIB", "-DVERSION=36", "3.6")
+
+    gs_srcs = [
+        'src/gs/gs_007.c',
+        'src/gs/gs_008.c',
+        'src/gs/gs_009.c',
+    ]
+
+    add_lib_263(gs_srcs, "build/3.6/gs", "./psy-q/3.6/PSX/LIB/LIBGS.LIB", "-DVERSION=36", "3.6")
+
+    gte_srcs = [
+        'src/gte/fog_01.c',
+        'src/gte/geo_00.c',
+        'src/gte/geo_01.c',
+        'src/gte/ratan.c',
+    ]
+
+    add_lib_263(gte_srcs, "build/3.6/gte", "./psy-q/3.6/PSX/LIB/LIBGTE.LIB", "-DVERSION=36", "3.6")
 
 def build_40():
     spu_srcs = [
@@ -464,7 +658,7 @@ def build_40():
         'src/spu/s_si.c',
         'src/spu/s_sia.c',
         'src/spu/s_sic.c',
-        # 'src/spu/s_sk.c',
+        'src/spu/s_sk.c',
         'src/spu/s_skowa.c',
         'src/spu/s_sm.c',
         'src/spu/s_snc.c',
@@ -497,11 +691,129 @@ def build_40():
         'src/spu/s_svv.c',
         'src/spu/s_w.c',
         'src/spu/s_w0.c',
-        # 'src/spu/s_wp.c',
-        # 'src/spu/sr_gaks.c',
+        'src/spu/s_wp.c',
+        'src/spu/spu.c',
+        'src/spu/sr_gaks.c',
     ]
 
     add_lib_wibo(spu_srcs, "build/4.0/spu", "./psy-q/4.0/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    snd_srcs = [
+        'src/snd/cres.c',
+        'src/snd/next.c',
+        'src/snd/pause.c',
+        'src/snd/play.c',
+        'src/snd/replay.c',
+        'src/snd/seqinit.c',
+        'src/snd/sscall.c',
+        'src/snd/ssclose.c',
+        'src/snd/ssend.c',
+        'src/snd/ssinit_h.c',
+        'src/snd/ssinit.c',
+        'src/snd/ssplay.c',
+        'src/snd/ssstart.c',
+        'src/snd/sstable.c',
+        'src/snd/sstick.c',
+        'src/snd/ssvol.c',
+        'src/snd/tempo.c',
+        'src/snd/ut_gpa.c',
+        'src/snd/ut_gva.c',
+        'src/snd/ut_rev.c',
+        'src/snd/ut_sva.c',
+        'src/snd/vm_doff.c',
+        'src/snd/vm_don.c',
+        'src/snd/vm_vsu.c',
+        'src/snd/vs_srv.c',
+        'src/snd/vs_vab.c',
+        'src/snd/vs_vfb.c',
+        'src/snd/vs_vh.c',
+        'src/snd/vs_vtb.c',
+        'src/snd/vs_vtbp.c',
+    ]
+
+    add_lib_wibo(snd_srcs, "build/4.0/snd", "./psy-q/4.0/PSX/LIB/LIBSND.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    api_srcs = [
+        'src/api/counter.c',
+    ]
+
+    add_lib_wibo(api_srcs, "build/4.0/api", "./psy-q/4.0/PSX/LIB/LIBAPI.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    c_srcs = [
+        'src/c/sprintf.c',
+    ]
+
+    add_lib_wibo(c_srcs, "build/4.0/c", "./psy-q/4.0/PSX/LIB/LIBC.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    c2_srcs = [
+        'src/c/sprintf.c',
+    ]
+
+    add_lib_wibo(c2_srcs, "build/4.0/c2", "./psy-q/4.0/PSX/LIB/LIBC2.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    card_srcs = [
+        'src/card/card.c',
+    ]
+
+    add_lib_wibo(card_srcs, "build/4.0/card", "./psy-q/4.0/PSX/LIB/LIBCARD.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    cd_srcs = [
+        'src/cd/bios.c',
+        'src/cd/c_002.c',
+        'src/cd/c_003.c',
+        'src/cd/c_004.c',
+        'src/cd/c_005.c',
+        'src/cd/c_007.c',
+        'src/cd/c_008.c',
+        'src/cd/c_009.c',
+        'src/cd/c_010.c',
+        'src/cd/c_011.c',
+        'src/cd/cdread.c',
+        'src/cd/cdread2.c',
+        'src/cd/cdrom.c',
+        'src/cd/event.c',
+        'src/cd/iso9660.c',
+        'src/cd/sys.c',
+    ]
+
+    add_lib_wibo(cd_srcs, "build/4.0/cd", "./psy-q/4.0/PSX/LIB/LIBCD.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    etc_srcs = [
+        'src/etc/intr_dma.c',
+        'src/etc/intr_vb.c',
+        'src/etc/pad.c',
+        'src/etc/vmode.c',
+        'src/etc/intr.c',
+        'src/etc/vsync.c',
+    ]
+
+    add_lib_wibo(etc_srcs, "build/4.0/etc", "./psy-q/4.0/PSX/LIB/LIBETC.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    gpu_srcs = [
+        'src/gpu/ext.c',
+        'src/gpu/font.c',
+        'src/gpu/prim.c',
+        'src/gpu/sys.c',
+    ]
+
+    add_lib_wibo(gpu_srcs, "build/4.0/gpu", "./psy-q/4.0/PSX/LIB/LIBGPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    gs_srcs = [
+        'src/gs/gs_007.c',
+        'src/gs/gs_008.c',
+        'src/gs/gs_009.c',
+    ]
+
+    add_lib_wibo(gs_srcs, "build/4.0/gs", "./psy-q/4.0/PSX/LIB/LIBGS.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
+
+    gte_srcs = [
+        'src/gte/fog_01.c',
+        'src/gte/geo_00.c',
+        'src/gte/geo_01.c',
+        'src/gte/ratan.c',
+    ]
+
+    add_lib_wibo(gte_srcs, "build/4.0/gte", "./psy-q/4.0/PSX/LIB/LIBGTE.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
 
 build_33()
 build_35()

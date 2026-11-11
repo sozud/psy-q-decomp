@@ -1,6 +1,6 @@
 #include "libspu_i.h"
 
-#if VERSION == 40
+#if VERSION >= 36
 void _spu_setInTransfer(s32 arg0) {
     if (arg0 == 1) {
         _spu_inTransfer = 0;

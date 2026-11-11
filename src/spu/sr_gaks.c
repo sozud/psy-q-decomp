@@ -1,3 +1,96 @@
+#if VERSION <= 30
+#define SPU_OLD_LOCAL_RXX
+#define SpuRGetAllKeysStatus header_SpuRGetAllKeysStatus
+#include "spu_old.h"
+#undef SpuRGetAllKeysStatus
+
+long SpuRGetAllKeysStatus(char* status, long min, long max) {
+    s32 last_voice;
+    s32 var_a1;
+    s32 voice;
+    s32 var_v0;
+    s8* var_a2;
+    u16 volume;
+    if (min < 0) {
+        min = 0;
+    }
+    if (min < NUM_SPU_CHANNELS) {
+        if (max >= NUM_SPU_CHANNELS) {
+            max = NUM_SPU_CHANNELS - 1;
+        }
+    } else {
+        return -3;
+    }
+    if ((max < 0) || (max < min)) {
+        return -3;
+    }
+    voice = min;
+    last_voice = max + 1;
+
+    for (voice = min; voice < last_voice; voice++) {
+        volume = _spu_RXX->raw[(8 * voice) + 6];
+        if ((1 << voice) & _spu_keystat) {
+            if (volume != 0) {
+                status[voice] = 1;
+            } else {
+                status[voice] = 3;
+            }
+        } else if (volume != 0) {
+            status[voice] = 2;
+        } else {
+            status[voice] = 0;
+        }
+    }
+
+    return 0;
+}
+#else
+#if VERSION == 40
+#include "libspu_i.h"
+inline long SpuRGetAllKeysStatus(long min, long max, char* status) {
+    s32 voice;
+    u16 volume;
+
+    if (min < 0) {
+        min = 0;
+    }
+
+    if (min >= 24) {
+        return -3;
+    }
+
+    if (max >= 24) {
+        max = 24 - 1;
+    }
+
+    if ((max < 0) || (max < min)) {
+        return -3;
+    }
+
+    max++;
+
+    for (voice = min; voice < max; voice++) {
+        volume = _spu_RXX->raw[(8 * voice) + 6];
+        if (_spu_keystat & (1 << voice)) {
+            if (volume != 0) {
+                status[voice] = 1;
+            } else {
+                status[voice] = 3;
+            }
+        } else if (volume != 0) {
+            status[voice] = 2;
+        } else {
+            status[voice] = 0;
+        }
+    }
+
+    return 0;
+}
+
+void SpuGetAllKeysStatus(char *status) {
+    SpuRGetAllKeysStatus(0, 24, status);
+}
+#else
 #include "libspu_i.h"
 
 extern s32 _spu_keystat;
@@ -66,3 +159,5 @@ void SpuGetAllKeysStatus(char* status) {
         }
     }
 }
+#endif
+#endif

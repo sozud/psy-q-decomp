@@ -24,7 +24,7 @@ temp_dir=$(mktemp -d)
 trap 'rm -rf -- "$temp_dir"' EXIT
 
 cd "$temp_dir"
-WIBO_DEBUG=0 \
+unset WIBO_DEBUG
 PSYQ_PATH="$repo_dir/build/4.0" \
 COMPILER_PATH="$repo_dir/build/4.0" \
 C_INCLUDE_PATH="$repo_dir/include" \

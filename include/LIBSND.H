@@ -57,7 +57,11 @@
 #define SS_REV_TYPE_DELAY      8
 #define SS_REV_TYPE_PIPE       9
 
+#if VERSION == 40
+#define SS_SEQ_TABSIZ     176
+#else
 #define SS_SEQ_TABSIZ     172
+#endif
 
 /*
  * Vag & Vab Structure 
@@ -91,7 +95,8 @@ typedef struct ProgAtr {        /* Program Headdings */
 	char          reserved0;      /* system reserved */
 	short         attr;           /* program attribute */
 	unsigned long reserved1;      /* system reserved */
-	unsigned long reserved2;      /* system reserved */
+	unsigned short reserved2;
+	unsigned short reserved3;
 
 } ProgAtr;			/* 16 byte */
 
@@ -248,8 +253,10 @@ extern void  SsUtAllKeyOff (short);
 
 extern void  SsSetAutoKeyOffMode( short mode );
 extern void  SsUtFlush( void );
+#if VERSION < 36
 extern void  SsUtVibrateOn( short vc, short vibW, short vibT );
 extern void  SsUtVibrateOff( short vc );
+#endif
 
 extern short SsVabFakeHead (unsigned char*, short, unsigned long);
 extern short SsVabFakeBody (short);

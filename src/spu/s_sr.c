@@ -1,3 +1,26 @@
+#if VERSION <= 30
+#include "spu_old.h"
+
+long SpuSetReverb(long on_off) {
+    switch (on_off) {
+    case SPU_OFF:
+        _spu_rev_flag = SPU_OFF;
+        _spu_ioctl(_spu_fd, 0x60, &_spu_rev_flag);
+        break;
+    case SPU_ON:
+        if ((_spu_rev_reserve_wa != on_off) &&
+            (_SpuIsInAllocateArea_(_spu_rev_offsetaddr) != 0)) {
+            _spu_rev_flag = SPU_OFF;
+            _spu_ioctl(_spu_fd, 0x60, &_spu_rev_flag);
+        } else {
+            _spu_rev_flag = on_off;
+            _spu_ioctl(_spu_fd, 0x60, &_spu_rev_flag);
+        }
+        break;
+    }
+    return _spu_rev_flag;
+}
+#else
 #include "libspu_i.h"
 
 long SpuSetReverb(long on_off) {
@@ -29,3 +52,4 @@ long SpuSetReverb(long on_off) {
 
     return _spu_rev_flag;
 }
+#endif

@@ -10,11 +10,11 @@ typedef struct {
 } Counter;
 
 // https://psx-spx.consoledev.net/timers/
-static volatile s32 *_interrupt_status_register = 0x1F801070;
+static volatile s32 *intc = 0x1F801070;
 
-static volatile Counter* _counters = 0x1F801100;
+static volatile Counter* timer = 0x1F801100;
 
-static volatile s32 _interrupt_status_masks[4] = {
+static volatile s32 rcntmask[4] = {
     0x00000010,
     0x00000020,
     0x00000040,
@@ -27,8 +27,8 @@ s32 SetRCnt(s32 spec, s16 target, s32 flags) {
     if (i >= 3) {
         return 0;
     }
-    _counters[i].mode = 0;
-    _counters[i].target = target;
+    timer[i].mode = 0;
+    timer[i].target = target;
 
     if (i < 2u) {
         if (flags & 0x10) {
@@ -46,7 +46,7 @@ s32 SetRCnt(s32 spec, s16 target, s32 flags) {
         final_mode |= 0x10;
     }
 
-    _counters[i].mode = final_mode;
+    timer[i].mode = final_mode;
     return 1;
 }
 
@@ -55,20 +55,20 @@ long GetRCnt(long spec) {
     if (i >= 3) {
         return 0;
     }
-    return _counters[i].rootCounter;
+    return timer[i].rootCounter;
 }
 
 s32 StartRCnt(s32 spec) {
     s32 i = spec & 0xFFFF;
-    long* mask = _interrupt_status_masks;
-    _interrupt_status_register[1] |= mask[i];
+    long* mask = rcntmask;
+    intc[1] |= mask[i];
     return i < 3;
 }
 
 long StopRCnt(long spec) {
     s32 i = spec & 0xFFFF;
-    long* mask = _interrupt_status_masks;
-    _interrupt_status_register[1] &= ~mask[i];
+    long* mask = rcntmask;
+    intc[1] &= ~mask[i];
     return 1;
 }
 
@@ -77,6 +77,6 @@ long ResetRCnt(long spec) {
     if (i >= 3) {
         return 0;
     }
-    _counters[i].rootCounter = 0;
+    timer[i].rootCounter = 0;
     return 1;
 }

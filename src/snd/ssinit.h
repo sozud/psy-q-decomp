@@ -14,8 +14,8 @@ extern s32 dummy_9;
 extern s32 dummy_10;
 extern SndSsMarkCallbackProc _SsMarkCallback[32][16]; /* #11 */
 extern struct SeqStruct* _ss_score[32];               /* #12 */
-extern s32 VBLANK_MINUS;                              /* #13 */
+extern u32 VBLANK_MINUS;
 extern s32 _snd_openflag;                             /* #14 */
 extern s16 _snd_seq_s_max;                            /* #15 */
 extern s16 _snd_seq_t_max;                            /* #16 */
-extern s32 _snd_ev_flag;                              /* #17 */
+extern s32 _snd_ev_flag;

@@ -1,6 +1,10 @@
+#if VERSION == 36
+#include "libspu_40.h"
+#else
 #include "libspu_i.h"
+#endif
 
-#if VERSION == 40
+#if VERSION >= 36
 u32 _SpuSetAnyVoice(long on_off, unsigned long voice_bit, s32 arg2, s32 arg3) {
     s32 var_t2;
 

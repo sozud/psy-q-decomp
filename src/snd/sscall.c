@@ -1,6 +1,56 @@
+#if VERSION >= 36
 #include "libsnd_i.h"
 
-#if VERSION == 33
+void SsSeqCalledTbyT(void) {
+    int seq_index;
+    int tIndex;
+    int bit;
+
+    if (_snd_ev_flag == 1) {
+        return;
+    }
+    _snd_ev_flag = 1;
+    _SsVmFlush();
+
+    for (seq_index = 0; seq_index < _snd_seq_s_max; seq_index++) {
+        bit = 1 << seq_index;
+        if (!(_snd_openflag & bit)) {
+            continue;
+        }
+        for (tIndex = 0; tIndex < _snd_seq_t_max; tIndex++) {
+            if (_ss_score[seq_index][tIndex].flags & 1) {
+                _SsSndPlay(seq_index, tIndex);
+                if (_ss_score[seq_index][tIndex].flags & 0x10) {
+                    _SsSndCrescendo(seq_index, tIndex);
+                }
+                if (_ss_score[seq_index][tIndex].flags & 0x20) {
+                    _SsSndDecrescendo(seq_index, tIndex);
+                }
+                if (_ss_score[seq_index][tIndex].flags & 0x40) {
+                    _SsSndTempo(seq_index, tIndex);
+                }
+                if (_ss_score[seq_index][tIndex].flags & 0x80) {
+                    _SsSndTempo(seq_index, tIndex);
+                }
+            }
+            if (_ss_score[seq_index][tIndex].flags & 2) {
+                _SsSndPause(seq_index, tIndex);
+            }
+            if (_ss_score[seq_index][tIndex].flags & 8) {
+                _SsSndReplay(seq_index, tIndex);
+            }
+            if (_ss_score[seq_index][tIndex].flags & 4) {
+                _SsSndStop(seq_index, tIndex);
+                _ss_score[seq_index][tIndex].flags = 0;
+            }
+        }
+    }
+    _snd_ev_flag = 0;
+}
+#else
+#include "libsnd_i.h"
+
+#if VERSION <= 33
 void Snd_play(s16 arg0, s16 arg1);
 void Snd_crescendo(s16 arg0, s16 arg1);
 void Snd_decrescendo(s16 arg0, s16 arg1);
@@ -25,14 +75,14 @@ void SsSeqCalledTbyT(void) {
                 /* Go through each SEQ track */
                 for (j = 0; j < _snd_seq_t_max; j++) {
                     if (_ss_score[i][j].unk90 & 1) {
-#if VERSION == 33
+#if VERSION <= 33
                         Snd_play(i, j);
 #else
                         _SsSndPlay(i, j);
 #endif
 
                         if (_ss_score[i][j].unk90 & 0x10) {
-#if VERSION == 33
+#if VERSION <= 33
                             Snd_crescendo(i, j);
 #else
                             _SsSndCrescendo(i, j);
@@ -40,7 +90,7 @@ void SsSeqCalledTbyT(void) {
                         }
 
                         if (_ss_score[i][j].unk90 & 0x20) {
-#if VERSION == 33
+#if VERSION <= 33
                             Snd_decrescendo(i, j);
 #else
                             _SsSndDecrescendo(i, j);
@@ -48,7 +98,7 @@ void SsSeqCalledTbyT(void) {
                         }
 
                         if (_ss_score[i][j].unk90 & 0x40) {
-#if VERSION == 33
+#if VERSION <= 33
                             Snd_tempo(i, j);
 #else
                             _SsSndTempo(i, j);
@@ -56,7 +106,7 @@ void SsSeqCalledTbyT(void) {
                         }
 
                         if (_ss_score[i][j].unk90 & 0x80) {
-#if VERSION == 33
+#if VERSION <= 33
                             Snd_tempo(i, j);
 #else
                             _SsSndTempo(i, j);
@@ -65,7 +115,7 @@ void SsSeqCalledTbyT(void) {
                     }
 
                     if (_ss_score[i][j].unk90 & 2) {
-#if VERSION == 33
+#if VERSION <= 33
                         Snd_pause(i, j);
 #else
                         _SsSndPause(i, j);
@@ -73,7 +123,7 @@ void SsSeqCalledTbyT(void) {
                     }
 
                     if (_ss_score[i][j].unk90 & 8) {
-#if VERSION == 33
+#if VERSION <= 33
                         Snd_replay(i, j);
 #else
                         _SsSndReplay(i, j);
@@ -81,7 +131,7 @@ void SsSeqCalledTbyT(void) {
                     }
 
                     if (_ss_score[i][j].unk90 & 4) {
-#if VERSION == 33
+#if VERSION <= 33
                         Snd_stop(i, j);
 #else
                         _SsSndStop(i, j);
@@ -94,3 +144,4 @@ void SsSeqCalledTbyT(void) {
         _snd_ev_flag = 0;
     }
 }
+#endif

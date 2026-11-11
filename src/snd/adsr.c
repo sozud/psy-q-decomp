@@ -1,5 +1,11 @@
 #include "libsnd_i.h"
 
+#if VERSION <= 30
+
+#define _SsUtResolveADSR SsUtResolveADSR
+#define _SsUtBuildADSR SsUtBuildADSR
+#endif
+
 void _SsUtResolveADSR(u16 arg0, u16 arg1, struct Unk* arg2) {
     arg2->unkA = arg0 & 0x8000;
     arg2->unkC = arg1 & 0x8000;

@@ -1,6 +1,8 @@
 #ifndef LIBSPU_INTERNAL_H
 #define LIBSPU_INTERNAL_H
 
+#define NUM_SPU_CHANNELS 24
+
 #if VERSION == 40
 
 #include "libspu_40.h"
@@ -12,25 +14,37 @@
 
 void InterruptCallback(s32, s32);
 void _SpuInit(s32);
-s32 _spu_read(s32 arg0, s32 arg1);
+s32 _spu_read(s32 arg0, u32 size);
 void _spu_FiDMA();
 
 extern s32 D_80033098;
 extern s32 _spu_EVdma;
 extern s32 _spu_isCalled;
 extern s32 _spu_inTransfer;
+extern u16 _spu_voice_centerNote[];
+s32 _spu_pitch2note(u16, u16, u16);
 
 extern s32 D_8003355C;
 extern s32 D_80033560;
 extern s8* D_80033564;
 extern s32 _spu_mem_mode_plus;
+extern s32 _spu_mem_mode_unitM;
 
 typedef struct tagSpuMalloc {
     u32 addr;
     u32 size;
 } SPU_MALLOC;
 
-extern s32 D_80033550;
+#define SPU_MALLOC_FREE_ENTRY 0x80000000
+#define SPU_MALLOC_END_MARKER 0x40000000
+#define SPU_MALLOC_DEAD_MARKER 0x2FFFFFFF
+#define SPU_MALLOC_ADDR_MASK 0x0FFFFFFF
+#define BLK(i) (&((SPU_MALLOC*)_spu_memList)[i])
+#define BLK_ADDR(i) (BLK(i)->addr & SPU_MALLOC_ADDR_MASK)
+#define BLK_ADDR_END(i) (BLK_ADDR(i) + BLK(i)->size)
+#define BLK_IS_FREE(i) (BLK(i)->addr & SPU_MALLOC_FREE_ENTRY)
+#define BLK_IS_END(i) (BLK(i)->addr & SPU_MALLOC_END_MARKER)
+
 extern void (* volatile _spu_transferCallback)();
 extern s32 _spu_inTransfer;
 
@@ -40,14 +54,14 @@ extern void (*_spu_IRQCallback)();
 s32 _SpuSetAnyVoice(s32 on_off, u32 bits, s32 addr1, s32 addr2);
 
 s32 _spu_t(s32, ...);
-s32 _spu_writeByIO(s32, s32);
+s32 _spu_writeByIO(u8* addr, u32 size);
 extern u16 _spu_tsa;
 
-u16 _spu_FsetRXXa(s32, s32);
-s32 _spu_write(u32, u32);
+u32 _spu_FsetRXXa(s32 arg0, u32 arg1);
+s32 _spu_write(u8* arg0, u32 size);
 extern s32 _spu_inTransfer;
 
-void _SpuSetVoiceAttr(SpuVoiceAttr* arg, s32, s32, s32);
+s32 _SpuSetVoiceAttr(SpuVoiceAttr* arg, s32, s32, s32);
 
 struct rev_param_entry {
     u32 flags;
@@ -84,6 +98,11 @@ struct rev_param_entry {
     u16 vLIN;
     u16 vRIN;
 };
+
+typedef struct {
+    u32 flags;
+    u16 values[32];
+} ReverbPreset;
 
 typedef struct tagSpuVoiceRegister {
     SpuVolume volume;
@@ -186,6 +205,20 @@ extern long _spu_transMode;
 
 extern s8 _spu_zerobuf[1024];
 
+#endif
+
+#if VERSION == 40
+#define SPU_FW1TS() _spu_Fw1ts()
+#else
+static inline void _spu_Fw1ts_inline(void) {
+    volatile s32 count;
+    volatile s32 value;
+    value = 1;
+    for (count = 0; count < 2; count++) {
+        value *= 13;
+    }
+}
+#define SPU_FW1TS() _spu_Fw1ts_inline()
 #endif
 
 #endif
