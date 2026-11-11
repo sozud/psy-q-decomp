@@ -30,7 +30,7 @@ def add_lib(srcs, output_dir, lib_name, flags, folder):
         )
 
 # original compiler missing so cobbling it together
-def add_lib_263(srcs, output_dir, lib_name, flags, folder):
+def add_lib_263(srcs, output_dir, lib_name, flags, folder, aspsx="3.5"):
     for src in srcs:
         filename_without_extension = os.path.splitext(os.path.basename(src))[0]
         obj_name = f"{output_dir}/{filename_without_extension}.obj"
@@ -64,7 +64,7 @@ def add_lib_263(srcs, output_dir, lib_name, flags, folder):
             f"{output_dir}/{filename_without_extension}.obj",
             'aspsx_263',
             inputs=[f"{output_dir}/{filename_without_extension}.d"],
-            variables={'FLAGS': flags, 'FOLDER': folder})
+            variables={'FLAGS': flags, 'FOLDER': folder, 'ASPSX': aspsx})
 
         # # check it
         # # this doesn't generate a file output but ninja apparently needs an output name
@@ -90,7 +90,7 @@ ninja.rule('cc1_263',
            description='Running cc1 on $out from $in')
 
 ninja.rule('aspsx_263',
-           command='sh aspsx_wrapper.sh $in $out dummy 3.5',
+           command='bash daze_wrapper.sh aspsx $in $out -G0 $ASPSX',
            description='Running aspsx on $out from $in')
 
 ninja.rule('unix2dos_263',
@@ -202,6 +202,8 @@ def build_33():
     ]
 
     add_lib_263(spu_srcs, "build/3.3/spu", "./psy-q/3.3/PSX/LIB/LIBSPU.LIB", "-DVERSION=33", "3.3")
+
+    add_lib_263(['src/press/libpress.c'], "build/3.3/press", "./psy-q/3.3/PSX/LIB/LIBPRESS.LIB", "-DVERSION=33", "3.3", aspsx="aspsx221")
 
 def build_35():
     snd_srcs = [
