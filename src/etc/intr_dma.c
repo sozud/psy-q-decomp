@@ -1,3 +1,105 @@
+#if VERSION == 26 || VERSION == 30
+
+typedef void (*Callback)();
+
+extern Callback InterruptCallback(int irq, Callback f);
+extern int printf(const char*, ...);
+
+static void intDMA(void);
+static Callback setDMACallback(int index, Callback f);
+
+static volatile unsigned long* d_icr = (unsigned long*)0x1F8010F4;
+#if VERSION == 26
+static Callback DMACallback[8];
+static void intDMAError(void);
+#else
+static Callback DMACallback[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+static long initialized = 0;
+#endif
+
+void* DMAInit(void) {
+    int i;
+
+#if VERSION == 26
+    if (InterruptCallback(3, intDMA) != intDMA) {
+        *d_icr = 0;
+        for (i = 6; i >= 0; i--) {
+            DMACallback[i] = 0;
+        }
+        DMACallback[7] = intDMAError;
+    }
+#else
+    *d_icr = 0;
+    for (i = 6; i >= 0; i--) {
+        DMACallback[i] = 0;
+    }
+    InterruptCallback(3, intDMA);
+    initialized = 1;
+#endif
+    return setDMACallback;
+}
+
+#if VERSION == 26
+static void intDMAError(void) {
+    printf("DMA Bus Error: code=%08x\n", *d_icr);
+}
+#else
+void DMAStop(void) {
+    int i;
+
+    initialized = 0;
+    *d_icr = 0;
+    InterruptCallback(3, 0);
+    for (i = 6; i >= 0; i--) {
+        DMACallback[i] = 0;
+    }
+}
+#endif
+
+static void intDMA(void) {
+    int i;
+    unsigned long mask;
+
+    while (*d_icr & 0x7F000000) {
+        for (i = 0, mask = 0x1000000; i < 7; i++, mask <<= 1) {
+            if (*d_icr & mask) {
+                *d_icr &= mask | 0xFFFFFF;
+                *d_icr;
+                if (DMACallback[i] != 0) {
+                    DMACallback[i]();
+                }
+            }
+        }
+    }
+    if ((*d_icr & 0xFF000000) == 0x80000000 || (*d_icr & 0x8000)) {
+        printf("DMA bus error: code=%08x\n", *d_icr);
+    }
+}
+
+static Callback setDMACallback(int index, Callback f) {
+    Callback old;
+
+#if VERSION == 30
+    if (initialized) {
+#endif
+        old = DMACallback[index];
+        if (f != old) {
+            DMACallback[index] = 0;
+            if (f != 0) {
+                DMACallback[index] = f;
+                *d_icr |= 0x800000 | (0x1010000 << index);
+            } else {
+                *d_icr &= ~(0xFF000000 | (0x10000 << index));
+            }
+        }
+#if VERSION == 30
+    }
+#endif
+    return old;
+}
+
+#else
+
 #include "../types.h"
 
 typedef void (*Callback)();
@@ -7,8 +109,8 @@ void trapIntrDMA(void);
 void memclr(int* ptr, int size);
 
 extern void InterruptCallback(int, void*);
-static volatile u_long* D_8002D37C = 0x1F8010F4; /* 0x1F8010F4 - DMA Interrupt Register */
-static Callback D_8002D380[8] = {
+static volatile u_long* d_icr = 0x1F8010F4;
+static Callback cbIntrDMA[8] = {
     NULL,
     NULL,
     NULL,
@@ -18,11 +120,11 @@ static Callback D_8002D380[8] = {
     NULL,
     NULL
 };
-static unsigned long* D_8002D3A0 = 0x1f801080;
+static unsigned long* madr_top = 0x1f801080;
 
 void* startIntrDMA(void) {
-    memclr(&D_8002D380, 8);
-    *D_8002D37C = 0;
+    memclr(&cbIntrDMA, 8);
+    *d_icr = 0;
     InterruptCallback(3, &trapIntrDMA);
     return &setIntrDMA;
 }
@@ -31,36 +133,36 @@ static void trapIntrDMA(void) {
     u32 mask;
     int i;
 
-    while ((mask = (*D_8002D37C >> 24) & 0x7f) != 0) {
+    while ((mask = (*d_icr >> 24) & 0x7f) != 0) {
         for (i = 0; mask != 0 && i < 7; i++, mask >>= 1) {
             if (mask & 1) {
-                *D_8002D37C &= (0xffffff | (1 << (i + 24)));
-                if (D_8002D380[i] != NULL) {
-                    D_8002D380[i]();
+                *d_icr &= (0xffffff | (1 << (i + 24)));
+                if (cbIntrDMA[i] != NULL) {
+                    cbIntrDMA[i]();
                 }
             }
         }
     }
 
-    if ((*D_8002D37C & 0xFF000000) == 0x80000000 || *D_8002D37C & 0x8000) {
-        printf("DMA bus error: code=%08x\n", *D_8002D37C);
+    if ((*d_icr & 0xFF000000) == 0x80000000 || *d_icr & 0x8000) {
+        printf("DMA bus error: code=%08x\n", *d_icr);
         for (i = 0; i < 7; i++) {
-            printf("MADR[%d]=%08x\n", i, D_8002D3A0[4 * i]);
+            printf("MADR[%d]=%08x\n", i, madr_top[4 * i]);
         }
     }
 }
 
 static Callback setIntrDMA(int index, Callback callback) {
-    Callback prev = D_8002D380[index];
+    Callback prev = cbIntrDMA[index];
     if (callback != prev) {
         if (callback != NULL) {
-            D_8002D380[index] = callback;
-            *D_8002D37C =
-                (*D_8002D37C & 0xFFFFFF) | 0x800000 | ((1 << (index + 16)));
+            cbIntrDMA[index] = callback;
+            *d_icr =
+                (*d_icr & 0xFFFFFF) | 0x800000 | ((1 << (index + 16)));
         } else {
-            D_8002D380[index] = 0;
-            *D_8002D37C =
-                ((*D_8002D37C & 0xFFFFFF) | 0x800000) & ~(1 << (index + 16));
+            cbIntrDMA[index] = 0;
+            *d_icr =
+                ((*d_icr & 0xFFFFFF) | 0x800000) & ~(1 << (index + 16));
         }
     }
     return prev;
@@ -75,3 +177,5 @@ static void memclr(int* ptr, int size) {
         e++;
     }
 }
+
+#endif

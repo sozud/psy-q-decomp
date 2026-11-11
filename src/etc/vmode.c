@@ -1,14 +1,14 @@
 #include "../types.h"
 #include <LIBETC.H>
 
-static long D_8002D3A4 = 0;
+static long _etc_vmode = 0;
 
 long SetVideoMode(long mode) {
     long prev;
 
-    prev = D_8002D3A4;
-    D_8002D3A4 = mode;
+    prev = _etc_vmode;
+    _etc_vmode = mode;
     return prev;
 }
 
-long GetVideoMode(void) { return D_8002D3A4; }
+long GetVideoMode(void) { return _etc_vmode; }

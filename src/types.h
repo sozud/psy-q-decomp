@@ -1,7 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#ifndef VERSION_PC
 typedef char int8_t;
 typedef short int16_t;
 typedef int int32_t;
@@ -12,13 +11,7 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 typedef unsigned long u_long;
 typedef unsigned char u_char;
-/*
 typedef unsigned short u_short;
-typedef unsigned int size_t;
-*/
-#else
-#include <sys/types.h>
-#endif
 
 #ifdef _MSC_VER
 typedef unsigned char u_char;

@@ -1,3 +1,56 @@
+#if VERSION <= 30
+#if VERSION == 26
+static char rcsid[] = "$Id: s_crwa.c,v 1.7 1995/01/23 03:35:08 kaol Exp $ : \tCopyright (C) by 1993, 1994 Sony Computer Entertainment Inc.";
+#else
+static char rcsid[] = "$Id: s_crwa.c,v 1.8 1995/03/11 08:24:16 kaol Exp $ : \tCopyright (C) by 1994-95 Sony Computer Entertainment Inc.";
+#endif
+
+#define SPU_OLD_LOCAL_RXX
+#include "spu_old.h"
+
+long SpuClearReverbWorkArea(long mode) {
+    unsigned long n;
+    unsigned long size;
+    unsigned long addr;
+    long more;
+    long restore;
+    long trans;
+    long io;
+
+    more = 1;
+    restore = 0;
+    n = (_spu_RXX->rxx.data_trans & 0xE) >> 1;
+    n++;
+    if ((unsigned long)mode >= 10 || _SpuIsInAllocateArea_(_spu_rev_startaddr[mode])) {
+        return -1;
+    }
+    size = (0x10000 - _spu_rev_startaddr[mode]) << n;
+    addr = _spu_rev_startaddr[mode] << n;
+    _spu_ioctl(_spu_fd, 0x2F, &trans);
+    if (trans == 0) {
+        io = 1;
+        _spu_ioctl(_spu_fd, 0x2E, &io);
+        restore = 1;
+    }
+    do {
+        if (size > 0x400) {
+            n = 0x400;
+        } else {
+            n = size;
+            more = 0;
+        }
+        SpuSetTransferStartAddr(addr);
+        SpuWrite(_spu_zerobuf, n);
+        SpuIsTransferCompleted(1);
+        size -= 0x400;
+        addr += 0x400;
+    } while (more == 1);
+    if (restore) {
+        _spu_ioctl(_spu_fd, 0x2E, &trans);
+    }
+    return 0;
+}
+#else
 #include "libspu_i.h"
 
 long SpuClearReverbWorkArea(long mode) {
@@ -54,3 +107,4 @@ long SpuClearReverbWorkArea(long mode) {
     }
     return 0;
 }
+#endif

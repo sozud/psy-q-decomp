@@ -1,5 +1,30 @@
+#if VERSION >= 36
 #include "libsnd_i.h"
 
+void _SsSndPause(short seq_access_num, short arg1) {
+    struct SeqStruct* score = &_ss_score[seq_access_num][arg1];
+    _SsVmSeqKeyOff(arg1 << 8 | seq_access_num);
+    score->play_mode = 0;
+    _ss_score[seq_access_num][arg1].flags &= ~2;
+}
+#else
+#include "libsnd_i.h"
+
+#if VERSION == 30
+void Snd_pause(s16 arg0, s16 arg1) {
+    struct SeqStruct* score;
+    score = &_ss_score[arg0][arg1];
+    SpuVmSeqKeyOff(arg0, arg1);
+    score->unk2b = 0;
+    _ss_score[arg0][arg1].unk90 &= ~2;
+}
+#elif VERSION == 26
+void Snd_pause(s16 arg0, s16 arg1) {
+    SpuVmSeqKeyOff(arg0, arg1);
+    _ss_score[arg0][arg1].unk2b = 0;
+    _ss_score[arg0][arg1].unk90 &= ~2;
+}
+#else
 #if VERSION == 33
 void Snd_pause(s16 arg0, s16 arg1) {
 #else
@@ -11,10 +36,12 @@ void _SsSndPause(s16 arg0, s16 arg1) {
     temp_s2->unk2b = 0;
     _ss_score[arg0][arg1].unk90 &= ~2;
 }
+#endif
 
-#if VERSION == 33
+#if VERSION <= 33
 void Snd_nextpause(s16 arg0, s16 arg1) {
     _ss_score[arg0][arg1].unk2b = 0;
     _ss_score[arg0][arg1].unk90 &= ~0x100;
 }
+#endif
 #endif

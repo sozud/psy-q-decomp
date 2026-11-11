@@ -1,3 +1,10 @@
+#if VERSION <= 30
+#include "spu_old.h"
+
+SpuIRQCallbackProc SpuSetIRQCallback(SpuIRQCallbackProc func) {
+    return (SpuIRQCallbackProc)_spu_ioctl(_spu_fd, 0x15, func);
+}
+#else
 #include "libspu_i.h"
 
 SpuIRQCallbackProc SpuSetIRQCallback(SpuIRQCallbackProc func) {
@@ -10,3 +17,4 @@ SpuIRQCallbackProc SpuSetIRQCallback(SpuIRQCallbackProc func) {
     }
     return temp_s0;
 }
+#endif

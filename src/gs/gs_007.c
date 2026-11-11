@@ -1,22 +1,19 @@
-#include "../types.h"
-#include "KERNEL.H"
-#include "gs_007.h"
+#include "libgs_i.h"
+#if VERSION <= 33
 
-s32 PSDOFSX;
-s32 PSDOFSY;
-s32 CLIP2[2]; 
-s32 PSDBASEX;
-s32 PSDBASEY;
-s32 POSITION;
-s16 GsDISPENV[10];
-s16 PSDGPU;
-s16 GsORGOFSX;
-s16 GsORGOFSY;
-s16 PSDIDX;
-s32 PSDCNT;
-u8 GsDRAWENV[92];
+#define RCntCNT1 0xF2000001
+#define RCntMdNOINTR 0x2000
+extern long SetRCnt(unsigned long spec, long target, long mode);
+extern long StartRCnt(unsigned long spec);
+#else
+#include "KERNEL.H"
+#endif
 
 void GsInitVcount(void) {
-    SetRCnt(RCntCNT1, 0xFFFFU, RCntMdNOINTR);
+#if VERSION <= 33
+    SetRCnt(RCntCNT1, -1, RCntMdNOINTR);
+#else
+    SetRCnt(RCntCNT1, 0xFFFF, RCntMdNOINTR);
+#endif
     StartRCnt(RCntCNT1);
 }

@@ -1,10 +1,75 @@
 #ifndef LIBSND_INTERNAL_H
 #define LIBSND_INTERNAL_H
 
+#if VERSION <= 36
+#define _SsVmSetSeqVol SpuVmSetSeqVol
+#define _SsVmGetSeqVol SpuVmGetSeqVol
+#define _SsVmGetSeqLVol SpuVmGetSeqLVol
+#define _SsVmGetSeqRVol SpuVmGetSeqRVol
+#define _SsVmSeqKeyOff SpuVmSeqKeyOff
+#define _SsVmSetVol SpuVmSetVol
+#define _SsVmSetProgVol SpuVmSetProgVol
+#define _SsVmGetProgVol SpuVmGetProgVol
+#define _SsVmSetProgPan SpuVmSetProgPan
+#define _SsVmGetProgPan SpuVmGetProgPan
+#define _SsVmDamperOff SpuVmDamperOff
+#define _SsVmDamperOn SpuVmDamperOn
+#define _SsVmPitchBend SpuVmPitchBend
+#define _SsVmPBVoice SpuVmPBVoice
+#define _SsVmKeyOn SpuVmKeyOn
+#define _SsVmKeyOff SpuVmKeyOff
+#define _SsVmSeKeyOn SpuVmSeKeyOn
+#define _SsVmSeKeyOff SpuVmSeKeyOff
+#define _SsVmKeyOnNow SpuVmKeyOnNow
+#define _SsVmKeyOffNow SpuVmKeyOffNow
+#define _SsVmFlush SpuVmFlush
+#define _SsVmInit SpuVmInit
+#define _SsVmNoiseOn SpuVmNoiseOn
+#define _SsVmNoiseOff SpuVmNoiseOff
+#define _SsVmNoiseOnWithAdsr SpuVmNoiseOnWithAdsr
+#define _SsVmVSetUp SpuVmVSetUp
+#define _SsVmAlloc SpuVmAlloc
+#define _SsVmDoAllocate SpuVmDoAllocate
+#define _SsVmSelectToneAndVag SpuVmSelectToneAndVag
+#define _SsVmMaxVoice spuVmMaxVoice
+#endif
+
+#if VERSION >= 36
+#include "libsnd40.h"
+#else
+
 #include <LIBSND.H>
 #include <LIBSPU.H>
 #include "../types.h"
 #include "snd_defs.h"
+
+#if VERSION <= 30
+
+typedef struct {
+    unsigned short left;
+    unsigned short right;
+} SndSpuVolume;
+
+typedef struct {
+    SndSpuVolume volume;
+    long reverb;
+    long mix;
+} SndSpuExtAttr;
+
+typedef struct {
+    unsigned long mask;
+    SndSpuVolume mvol;
+    SndSpuVolume depth;
+    SndSpuExtAttr cd;
+    SndSpuExtAttr ext;
+    short noise_clock;
+    char pad[0x12];
+} SndSpuCommonAttr;
+
+#define SND_SPU_SET_COMMON 0x100
+#define SND_SPU_GET_COMMON 0x101
+extern long _spu_ioctl(long fd, long cmd, ...);
+#endif
 
 struct Unk {
     u16 unk0;
@@ -40,7 +105,11 @@ extern s32 D_80032F04;
 
 extern s32 D_8003C74C;
 
+#if VERSION <= 30
+void SpuVmSeKeyOn(s16, u8, s16, u8, u16, u16);
+#else
 void SpuVmSeKeyOn(s32, u8, u16, u8, u16, u16);
+#endif
 void SpuVmSetSeqVol(s16, u16, u16, s32);
 s32 SpuVmGetSeqVol(s16, s16*, s16*);
 
@@ -48,8 +117,6 @@ void _spu_setInTransfer(s32);
 extern s32 D_800987CC[];
 extern s32 D_80098810[];
 extern u8 svm_vab_used[];
-
-s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s32 arg2, u32 sbaddr);
 
 s16 SsVabOpenHead(u8*, s16);
 s16 SsVabTransBody(u8*, s16);
@@ -79,11 +146,13 @@ struct struct_svm {
     unsigned char field_11_shift;
     char field_12_mode;
     char field_0x13;
-    short field_14_seq_sep_no;
+    u8 field_14_seq_sep_no;
+    u8 pad;
     short field_16_vag_idx;
     short field_18_voice_idx;
     short field_0x1a;
-    char pad_0x1c[0x4];
+    short field_0x1c;
+    short field_0x1e;
 };
 
 /* vm/vm_g.c */
@@ -140,11 +209,38 @@ extern volatile u16* D_80032F10;
 extern u8 spuVmMaxVoice;
 
 struct SpuVoice {
-    u8 pad[4];
+    s16 unk0;
+    s16 unk2;
     s16 unk04;
-    u8 pad2[21];
+    u16 unk6;
+#if VERSION >= 35
+    s16 unk8;
+    s8 unka;
+    s8 unkb;
+#endif
+    s16 note;
+    s16 unke;
+    s16 unk10;
+    s16 prog;
+    s16 tone;
+    s16 vabId;
+    s16 unk18;
+    u8 pad4[1];
     u8 unk1b;
-    u8 pad3[24];
+#if VERSION >= 33 || !defined(VERSION)
+    s16 auto_vol;
+    s16 unk1e;
+    s16 unk20;
+    s16 unk22;
+    s16 start_vol;
+    s16 end_vol;
+    s16 auto_pan;
+    s16 unk2a;
+    s16 unk2c;
+    s16 unk2e;
+    s16 start_pan;
+    s16 end_pan;
+#endif
 };
 
 extern struct SpuVoice _svm_voice[24];
@@ -153,6 +249,7 @@ u32 SpuVmVSetUp(s16, s16);
 extern VagAtr* _svm_tn;
 
 void SpuVmFlush();
+void _SsVmFlush();
 void _SsSndCrescendo(s16, s16);
 void _SsSndDecrescendo(s16, s16);
 void _SsSndPause(s16, s16);
@@ -172,7 +269,7 @@ extern s32 D_80032F08;
 extern s16 D_80032F0C;
 
 s32 GetVideoMode();
-extern s32 VBLANK_MINUS;
+extern u32 VBLANK_MINUS;
 struct SndSeqTickEnv {
     s32 unk0;
     s32 unk4;
@@ -185,8 +282,18 @@ struct SndSeqTickEnv {
     u32 unk20;
 };
 extern struct SndSeqTickEnv _snd_seq_tick_env;
+#if VERSION <= 30
+s32 SpuVmSeqKeyOff();
+#else
 s32 SpuVmSeqKeyOff(s32);
+#endif
 
+#if VERSION <= 30
+void SpuVmSeKeyOff(s16, u8, s16, u8);
+#else
 void SpuVmSeKeyOff(s32, u8, u16, u8);
+#endif
+
+#endif
 
 #endif

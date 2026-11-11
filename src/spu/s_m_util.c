@@ -1,6 +1,10 @@
+#if VERSION == 36 || VERSION == 37
+#include "libspu_40.h"
+#else
 #include "libspu_i.h"
+#endif
 
-#if VERSION == 40
+#if VERSION >= 36
 s32 _SpuIsInAllocateArea(u32 arg0) {
     int i = 0;
 
@@ -25,9 +29,36 @@ s32 _SpuIsInAllocateArea(u32 arg0) {
     return 0;
 }
 
+#if VERSION == 36
+s32 _SpuIsInAllocateArea_(u32 arg0) {
+    int i = 0;
+
+    arg0 <<= _spu_mem_mode_plus;
+    if (_spu_memList == NULL) {
+        return 0;
+    }
+
+    for (i = 0; 1; i++) {
+        if (BLK_IS_FREE(i)) continue;
+
+        if (BLK_IS_END(i)) break;
+
+        if (BLK_ADDR(i) >= arg0) {
+            return 1;
+        }
+
+        if (BLK_ADDR_END(i) > arg0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+#else
 s32 _SpuIsInAllocateArea_(s32 arg0) {
     return _SpuIsInAllocateArea(arg0 << _spu_mem_mode_plus);
 }
+#endif
 
 #else
 

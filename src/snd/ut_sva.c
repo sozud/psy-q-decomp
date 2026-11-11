@@ -1,3 +1,35 @@
+#if VERSION >= 36
+#include "libsnd_i.h"
+
+s16 SsUtSetVagAtr(s16 vabId, s16 progNum, s16 toneNum, VagAtr* vagatrptr) {
+    s16 tone;
+
+    if (_svm_vab_used[vabId] == 1) {
+        _SsVmVSetUp(vabId, progNum);
+        tone = toneNum + _svm_cur.fake_program * 16;
+        _svm_tn[tone].prior = vagatrptr->prior;
+        _svm_tn[tone].mode = vagatrptr->mode;
+        _svm_tn[tone].vol = vagatrptr->vol;
+        _svm_tn[tone].pan = vagatrptr->pan;
+        _svm_tn[tone].center = vagatrptr->center;
+        _svm_tn[tone].shift = vagatrptr->shift;
+        _svm_tn[tone].max = vagatrptr->max;
+        _svm_tn[tone].min = vagatrptr->min;
+        _svm_tn[tone].vibW = vagatrptr->vibW;
+        _svm_tn[tone].vibT = vagatrptr->vibT;
+        _svm_tn[tone].porW = vagatrptr->porW;
+        _svm_tn[tone].porT = vagatrptr->porT;
+        _svm_tn[tone].pbmin = vagatrptr->pbmin;
+        _svm_tn[tone].pbmax = vagatrptr->pbmax;
+        _svm_tn[tone].adsr1 = vagatrptr->adsr1;
+        _svm_tn[tone].adsr2 = vagatrptr->adsr2;
+        _svm_tn[tone].prog = vagatrptr->prog;
+        _svm_tn[tone].vag = vagatrptr->vag;
+        return 0;
+    }
+    return -1;
+}
+#else
 #include "libsnd_i.h"
 
 short SsUtSetVagAtr(
@@ -28,3 +60,4 @@ short SsUtSetVagAtr(
     }
     return -1;
 }
+#endif

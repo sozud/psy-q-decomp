@@ -1,5 +1,23 @@
 #include "libsnd_i.h"
 
+#if VERSION <= 30
+s16 SsVabTransBody(u8* addr, s16 vabid) {
+    s32 start;
+
+    if (vabid >= 0 && vabid < 0x11) {
+        if (_svm_vab_used[vabid] == 2) {
+            start = _svm_vab_start[vabid];
+            SpuSetTransferMode(0);
+            SpuSetTransferStartAddr(start);
+            if (SpuWrite(addr, _svm_vab_total[vabid]) == _svm_vab_total[vabid]) {
+                _svm_vab_used[vabid] = 1;
+                return vabid;
+            }
+        }
+    }
+    return -1;
+}
+#else
 s16 SsVabTransBody(u8* addr, s16 vabid) {
     s32 temp_s0;
 
@@ -16,3 +34,4 @@ s16 SsVabTransBody(u8* addr, s16 vabid) {
     _spu_setInTransfer(0);
     return -1;
 }
+#endif
