@@ -44,7 +44,6 @@
 #include "snd_defs.h"
 
 #if VERSION <= 30
-
 typedef struct {
     unsigned short left;
     unsigned short right;

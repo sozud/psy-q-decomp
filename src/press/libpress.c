@@ -244,6 +244,12 @@ static s32 mdec_coef[] = {
     0xB8E37D8A, 0x89BE30FB, 0xCF047641, 0x7641CF04, 0x30FB89BE, 0xB8E318F8,
     0x82756A6D, 0x95927D8A, 0xE707471C};
 
+#if VERSION == 36
+static u32 __ps_libinfo__[2] = {0x0A0E7350, 0x1036F41A};
+#elif VERSION >= 40
+static u32 __ps_libinfo__[2] = {0x150E7350, 0x0040AE9C};
+#endif
+
 typedef struct {
     u_char iq_y[64];
     u_char iq_c[64];
@@ -338,9 +344,31 @@ void DecDCTin(s32* arg0, s32 arg1) {
 
 void DecDCTout(s32 arg0, u32 arg1) { MDEC_out(arg0, arg1); }
 
+#if VERSION >= 36
+static u_long MDEC_status(void);
+
+int DecDCTinSync(int mode) {
+    int result;
+    if (mode == 0)
+        result = MDEC_in_sync();
+    else
+        result = (MDEC_status() >> 29) & 1;
+    return result;
+}
+
+int DecDCToutSync(int mode) {
+    int result;
+    if (mode == 0)
+        result = MDEC_out_sync();
+    else
+        result = (MDEC_status() >> 24) & 1;
+    return result;
+}
+#else
 void DecDCTinSync(void) { MDEC_in_sync(); }
 
 void DecDCToutSync(void) { MDEC_out_sync(); }
+#endif
 
 void DecDCTinCallback(void (*func)()) { DMACallback(0, func); }
 
@@ -353,12 +381,12 @@ static volatile u32* d1_madr = 0x1F801090;
 static volatile u32* d1_bcr = 0x1F801094;
 static volatile u32* d1_chcr = 0x1F801098;
 
-static volatile u32 unk0 = 0x1F8010A0;
-static volatile u32 unk1 = 0x1F8010A4;
-static volatile u32 unk2 = 0x1F8010A8;
-static volatile u32 unk3 = 0x1F8010B0;
-static volatile u32 unk4 = 0x1F8010B4;
-static volatile u32 unk5 = 0x1F8010B8;
+static volatile u32 d2_madr = 0x1F8010A0;
+static volatile u32 d2_bcr = 0x1F8010A4;
+static volatile u32 d2_chcr = 0x1F8010A8;
+static volatile u32 d3_madr = 0x1F8010B0;
+static volatile u32 d3_bcr = 0x1F8010B4;
+static volatile u32 d3_chcr = 0x1F8010B8;
 static volatile u32* mdec0 = 0x1F801820;
 static volatile u32* mdec1 = 0x1F801824;
 static volatile u32* d_pcr = 0x1F8010F0;
@@ -433,6 +461,10 @@ static int MDEC_out_sync(void) {
 
     return 0;
 }
+
+#if VERSION >= 36
+static u_long MDEC_status(void) { return *mdec1; }
+#endif
 
 static const char g_MDEC_ErrDma[] = "\t DMA=(%d,%d), ADDR=(0x%08x->0x%08x)\n";
 static const char g_MDEC_ErrFifo[] =

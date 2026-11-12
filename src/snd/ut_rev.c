@@ -1,7 +1,6 @@
 #include "libsnd_i.h"
 
 #if VERSION <= 33
-
 void SsUtReverbOn(void) { SpuSetReverb(1); }
 
 void SsUtReverbOff(void) { SpuSetReverb(0); }

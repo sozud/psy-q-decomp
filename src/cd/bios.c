@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #include "libcd.h"
 
 extern volatile int Vcount;
@@ -45,23 +44,21 @@ static int ComSync[32] = {
     0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
     0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
-
 static int ComReady[32] = {
     0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 #if VERSION != 26
-
 static int ComStat[32] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 #endif
-
 static int ComParm[32] = {
     0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0,
     0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
+
 
 #if VERSION == 26
 
@@ -842,7 +839,6 @@ void CD_set_test_parmnum(int n)
 // SPDX-License-Identifier: MIT
 #include "libcd.h"
 #if VERSION == 40
-
 typedef struct {
     short left;
     short right;
@@ -944,20 +940,16 @@ char* CD_intstr[] = {
     "DataEnd", "DiskError", "?",        "?",
 };
 static int ComAttr[4][32] = {
-
     {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
 #if VERSION == 33
      0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 #else
      0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0},
 #endif
-
     {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
      0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-
     {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0,
      0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
@@ -971,7 +963,6 @@ static volatile int* com_delay = (int*)0x1F801020;
 static volatile SPU_RXX* spu = (SPU_RXX*)0x1F801C00;
 #if VERSION == 33
 static volatile CD_intr Intr = {0, 0, 0, 0};
-
 static struct {
     int retry;
     int nsect;
@@ -1010,7 +1001,6 @@ static inline void _memcpy(void* _dst, void* _src, size_t _size) {
 #endif
 
 static inline void set_alarm(char* name) {
-
     ((Alarm_t*)&Alarm)->unk0 = VSync(-1) + ALARM_VSYNC;
     ((Alarm_t*)&Alarm)->unk4 = 0;
     ((Alarm_t*)&Alarm)->unk8 = name;

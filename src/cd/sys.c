@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #include "libcd.h"
 
 #define btoi(b) ((b) / 16 * 10 + (b) % 16)
@@ -176,7 +175,6 @@ int CdRead(int sectors, u_long* buf, int mode) {
         size = 0x246;
         break;
     }
-
     if (CD_cw(CdlSetloc, (u8*)&CurrentPos, NULL, 0) == 0) {
         param[0] = mode;
         if (CD_cw(CdlSetmode, param, NULL, 0) == 0) {

@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #define _spu_RXX header_spu_RXX
 #define _spu_AllocBlockNum header_spu_AllocBlockNum
 #define _spu_AllocLastNum header_spu_AllocLastNum
@@ -149,6 +148,7 @@ long SpuMalloc(long size) {
     if (BLK_IS_END(var_s2)) {
         if (var_s2 < _spu_AllocBlockNum && BLK(var_s2)->size - var_s3 >= size) {
             int next = var_s2 + 1;
+
 
             BLK(next)->addr =
                 ((*(volatile int*)&BLK(var_s2)->addr & SPU_MALLOC_ADDR_MASK) +
@@ -330,6 +330,7 @@ long SpuMallocWithStartAddr(unsigned long _addr, long _size) {
 
     if (((0x10000 << spu_mem_mode) - var_s2) < temp_a3_2) return -1;
 
+
     if (BLK(0)->addr & SPU_MALLOC_END_MARKER) {
         temp_a2 = (BLK(0)->size + (0x1000 - addr)) - size;
         if ((addr - 0x1000) > 0) {
@@ -401,6 +402,7 @@ long SpuMallocWithStartAddr(unsigned long _addr, long _size) {
 
     return -1;
 }
+
 
 s32 _SpuIsInAllocateArea(u32 arg0) {
     SPU_MALLOC* var_a1;
@@ -554,6 +556,7 @@ void _spu_gcSPU(void) {
 #else
 void _spu_gcSPU(void) {
     int i, j;
+
 
     for (i = 0; i <= _spu_AllocLastNum;) {
         if (BLK_IS_FREE(i)) {

@@ -3,8 +3,6 @@
 
 #include "../types.h"
 
-#define STATIC_PAD_CAT_(a, b) a##b
-#define STATIC_PAD_CAT(a, b) STATIC_PAD_CAT_(a, b)
-#define STATIC_PAD_BSS(size) static u8 STATIC_PAD_CAT(static_pad_bss_, __LINE__)[size]
+#define STATIC_PAD_BSS(size) static u8 static_pad_bss[size]
 
 #endif

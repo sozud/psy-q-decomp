@@ -12,6 +12,8 @@ s32 _snd_openflag;
 
 #if VERSION == 36
 static int __ps_libinfo__[] = {0x0A107350, 0x113699AB};
+#elif VERSION == 37 && defined(LIBSND_37_RELEASE)
+static int __ps_libinfo__[] = {0x0C107350, 0x0037C1DA};
 #elif VERSION == 37
 static int __ps_libinfo__[] = {0x12107350, 0x3037B53B};
 #else
@@ -52,7 +54,6 @@ void _SsInit(void) {
     _snd_ev_flag = 0;
 }
 #elif VERSION <= 30
-
 #include "libsnd_i.h"
 
 extern long SetRCnt(unsigned long, unsigned short, long);
@@ -283,6 +284,18 @@ void SsEnd(void) {
 
 void SsQuit(void) { SpuQuit(); }
 #elif VERSION <= 33
+#include "snd_defs.h"
+
+#if VERSION == 33
+#define _SsMarkCallback _ss_MarkCallback
+#endif
+extern SndSsMarkCallbackProc _SsMarkCallback[32][16];
+extern struct SeqStruct* _ss_score[32];
+extern u32 VBLANK_MINUS;
+extern s32 _snd_openflag;
+extern s16 _snd_seq_s_max;
+extern s16 _snd_seq_t_max;
+extern s32 _snd_ev_flag;
 
 #define InterruptCallback header_InterruptCallback
 #include "libsnd_i.h"
@@ -294,10 +307,6 @@ extern long SetRCnt(unsigned long, unsigned short, long);
 extern long ResetRCnt(unsigned long);
 extern long StartRCnt(unsigned long);
 void SpuInitHot(void);
-
-#if VERSION == 33
-#define _SsMarkCallback _ss_MarkCallback
-#endif
 
 SndSsMarkCallbackProc _SsMarkCallback[32][16];
 s32 _snd_openflag;

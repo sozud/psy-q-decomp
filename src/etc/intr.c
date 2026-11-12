@@ -1,5 +1,4 @@
 #if VERSION == 26 || VERSION == 30
-
 typedef void (*Callback)();
 
 struct Callbacks {

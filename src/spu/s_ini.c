@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 typedef struct {
     short left;
     short right;
@@ -50,7 +49,6 @@ unsigned long _spu_keyoff_bit;
 unsigned long _spu_keystat;
 
 #if VERSION == 26
-
 long _spu_inTransfer;
 extern void _spu_init(void);
 
@@ -229,6 +227,7 @@ void _SpuInit(s32 arg0) {
     _spu_RQvoice = 0;
     _spu_env = 0;
 }
+
 
 s32 _spu_isCalled = 0;
 

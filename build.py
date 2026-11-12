@@ -3,7 +3,7 @@ import subprocess
 import glob
 import ninja_syntax
 
-progress_objects = {"3.3": [], "3.5": [], "3.6": [], "4.0": []}
+progress_objects = {"3.3": [], "3.5": [], "3.6": [], "3.7": [], "4.0": []}
 
 def track_progress_object(obj_name):
     parts = obj_name.split('/')
@@ -817,9 +817,180 @@ def build_40():
 
     add_lib_wibo(gte_srcs, "build/4.0/gte", "./psy-q/4.0/PSX/LIB/LIBGTE.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "4.0")
 
+def build_37():
+    api37_srcs = [
+        'src/api/pad.c',
+    ]
+    add_lib_wibo(api37_srcs, "build/3.7/api", "./psy-q/3.7/PSX/LIB/LIBAPI.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    api40_srcs = [
+        'src/api/counter.c',
+    ]
+    add_lib_wibo(api40_srcs, "build/3.7/api", "./psy-q/3.7/PSX/LIB/LIBAPI.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
+    card37_srcs = [
+        'src/card/init.c',
+    ]
+    add_lib_wibo(card37_srcs, "build/3.7/card", "./psy-q/3.7/PSX/LIB/LIBCARD.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    card40_srcs = [
+        'src/card/card.c',
+    ]
+    add_lib_wibo(card40_srcs, "build/3.7/card", "./psy-q/3.7/PSX/LIB/LIBCARD.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
+    cd37_srcs = [
+        'src/cd/bios.c',
+        'src/cd/c_002.c',
+        'src/cd/c_003.c',
+        'src/cd/c_004.c',
+        'src/cd/c_005.c',
+        'src/cd/c_007.c',
+        'src/cd/c_008.c',
+        'src/cd/c_009.c',
+        'src/cd/c_010.c',
+        'src/cd/c_011.c',
+        'src/cd/cdread.c',
+        'src/cd/cdread2.c',
+        'src/cd/cdrom.c',
+        'src/cd/event.c',
+        'src/cd/sys.c',
+    ]
+    add_lib_wibo(cd37_srcs, "build/3.7/cd", "./psy-q/3.7/PSX/LIB/LIBCD.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    etc37_srcs = [
+        'src/etc/intr.c',
+        'src/etc/vsync.c',
+    ]
+    add_lib_wibo(etc37_srcs, "build/3.7/etc", "./psy-q/3.7/PSX/LIB/LIBETC.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    etc40_srcs = [
+        'src/etc/intr_dma.c',
+        'src/etc/intr_vb.c',
+        'src/etc/vmode.c',
+    ]
+    add_lib_wibo(etc40_srcs, "build/3.7/etc", "./psy-q/3.7/PSX/LIB/LIBETC.LIB", "-O2 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
+    gpu37_srcs = [
+        'src/gpu/ext.c',
+        'src/gpu/prim.c',
+        'src/gpu/sys.c',
+    ]
+    add_lib_wibo(gpu37_srcs, "build/3.7/gpu", "./psy-q/3.7/PSX/LIB/LIBGPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    press37_srcs = [
+        'src/press/libpress.c',
+    ]
+    add_lib_wibo(press37_srcs, "build/3.7/press", "./psy-q/3.7/PSX/LIB/LIBPRESS.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    press40_srcs = [
+        'src/press/table.c',
+    ]
+    add_lib_wibo(press40_srcs, "build/3.7/press", "./psy-q/3.7/PSX/LIB/LIBPRESS.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
+    snd37_srcs = [
+        'src/snd/cc_100.c',
+        'src/snd/cc_7.c',
+        'src/snd/cres.c',
+        'src/snd/decres.c',
+        'src/snd/dmyprint.c',
+        'src/snd/midicc.c',
+        'src/snd/midinote.c',
+        'src/snd/midiprog.c',
+        'src/snd/midiread.c',
+        'src/snd/miditime.c',
+        'src/snd/next.c',
+        'src/snd/pause.c',
+        'src/snd/playmode.c',
+        'src/snd/replay.c',
+        'src/snd/sscall.c',
+        'src/snd/ssclose.c',
+        'src/snd/ssinit.c',
+        'src/snd/ssloop.c',
+        'src/snd/ssstop.c',
+        'src/snd/sstable.c',
+        'src/snd/ssvol.c',
+        'src/snd/tempo.c',
+        'src/snd/ut_vvol.c',
+        'src/snd/vm_aloc1.c',
+        'src/snd/vm_key.c',
+        'src/snd/vm_no1.c',
+        'src/snd/vm_nowon.c',
+        'src/snd/vm_seq.c',
+        'src/snd/vm_vol.c',
+    ]
+    add_lib_wibo(snd37_srcs, "build/3.7/snd", "./psy-q/3.7/PSX/LIB/LIBSND.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    snd40_srcs = [
+        'src/snd/play.c',
+        'src/snd/ssend.c',
+        'src/snd/ssinit_c.c',
+        'src/snd/ssopenpj.c',
+        'src/snd/ssplay.c',
+        'src/snd/ssquit.c',
+        'src/snd/sssattr.c',
+        'src/snd/sssmv.c',
+        'src/snd/ssstart.c',
+        'src/snd/sssv.c',
+        'src/snd/sstick.c',
+        'src/snd/ut_gva.c',
+        'src/snd/ut_keyv.c',
+        'src/snd/ut_rdep.c',
+        'src/snd/ut_rev.c',
+        'src/snd/ut_roff.c',
+        'src/snd/ut_ron.c',
+        'src/snd/vm_aloc2.c',
+        'src/snd/vm_f.c',
+        'src/snd/vm_init.c',
+        'src/snd/vm_n2p.c',
+        'src/snd/vm_noff.c',
+        'src/snd/vm_nowof.c',
+        'src/snd/vm_stav.c',
+        'src/snd/vm_vsu.c',
+        'src/snd/vs_mono.c',
+        'src/snd/vs_vab.c',
+        'src/snd/vs_vh.c',
+        'src/snd/vs_vtbp.c',
+        'src/snd/vs_vtc.c',
+    ]
+    add_lib_wibo(snd40_srcs, "build/3.7/snd", "./psy-q/3.7/PSX/LIB/LIBSND.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
+    spu37_srcs = [
+        'src/spu/s_ini.c',
+        'src/spu/s_wp.c',
+        'src/spu/spu.c',
+    ]
+    add_lib_wibo(spu37_srcs, "build/3.7/spu", "./psy-q/3.7/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=37", "3.7")
+
+    spu40_srcs = [
+        'src/spu/s_crwa.c',
+        'src/spu/s_dcb.c',
+        'src/spu/s_gks.c',
+        'src/spu/s_i.c',
+        'src/spu/s_it.c',
+        'src/spu/s_itc.c',
+        'src/spu/s_m.c',
+        'src/spu/s_m_f.c',
+        'src/spu/s_m_init.c',
+        'src/spu/s_m_int.c',
+        'src/spu/s_m_m.c',
+        'src/spu/s_m_util.c',
+        'src/spu/s_q.c',
+        'src/spu/s_rmp.c',
+        'src/spu/s_sav.c',
+        'src/spu/s_sca.c',
+        'src/spu/s_snv.c',
+        'src/spu/s_sr.c',
+        'src/spu/s_sra.c',
+        'src/spu/s_srmp.c',
+        'src/spu/s_stm.c',
+        'src/spu/s_stsa.c',
+    ]
+    add_lib_wibo(spu40_srcs, "build/3.7/spu", "./psy-q/3.7/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
+
 build_33()
 build_35()
 build_36()
+build_37()
 build_40()
 
 ninja.rule(

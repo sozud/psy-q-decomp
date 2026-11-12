@@ -111,7 +111,6 @@ extern s32 _spu_mem_mode;
 extern s32 _spu_mem_mode_unit;
 
 #if VERSION == 33
-
 typedef struct {
     u32 voice;
     u32 mask;

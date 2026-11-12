@@ -32,7 +32,6 @@ static short SsVabOpenHeadWithMode(
     VabHdr* vab_header;
 
     vab_id = NUM_VAB;
-
     if (_spu_getInTransfer() == 1) {
         return -1;
     }
@@ -174,7 +173,6 @@ static s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s16 mode,
     s32 size;
     s16 vab_id;
     u16 vag_len;
-    u16* ptr_vag_off_table;
     u32 magic;
     u32 spuAllocMem;
     u8 num_vags;
@@ -210,8 +208,8 @@ static s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s16 mode,
     }
     ptr = addr;
     _svm_vab_vh[vab_id] = (VabHdr*)ptr;
-    _svm_vh = (VabHdr*)addr;
     ptr += 0x20;
+    _svm_vh = (VabHdr*)addr;
     vab_hdr = (VabHdr*)addr;
     magic = vab_hdr->form;
     if ((magic >> 8) != ('V' << 0x10 | 'A' << 0x8 | 'B')) {
@@ -238,11 +236,11 @@ static s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s16 mode,
     _svm_vab_tn[vab_id] = (VagAtr*)ptr;
     _svm_tn = (VagAtr*)ptr;
     size = 0;
-    ptr_vag_off_table = (u16*)(ptr + (_svm_vh->ps << 9));
+    ptr += _svm_vh->ps << 9;
     num_vags = _svm_vh->vs;
     for (i = 0; i < 256; i++) {
         if (num_vags >= i) {
-            vag_len = *ptr_vag_off_table;
+            vag_len = *(u16*)ptr;
             if (_svm_vh->ver >= 5) {
                 vagLens[i] = vag_len * 8;
             } else {
@@ -250,15 +248,19 @@ static s16 SsVabOpenHeadWithMode(u8* addr, s16 vabid, s16 mode,
             }
             size += vagLens[i];
         }
-        ptr_vag_off_table++;
+        ptr += 2;
     }
-    _svm_brr_start_addr[vab_id] = (s32)ptr_vag_off_table;
-    spuAllocMem = sbaddr;
+    _svm_brr_start_addr[vab_id] = (s32)ptr;
     if (mode == 0) {
         spuAllocMem = SpuMalloc(size);
         if (spuAllocMem == -1) {
-            goto end;
+            _svm_vab_used[vabid] = 0;
+            _spu_setInTransfer(0);
+            _svm_vab_count--;
+            return -1;
         }
+    } else {
+        spuAllocMem = sbaddr;
     }
     if (spuAllocMem + size > 0x80000U) {
     end:

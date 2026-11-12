@@ -42,6 +42,7 @@ long SpuMalloc(long size) {
         if (var_s2 < _spu_AllocBlockNum && BLK(var_s2)->size - var_s3 >= size) {
             int next = var_s2 + 1;
 
+
             BLK(next)->addr =
                 ((*(volatile int*)&BLK(var_s2)->addr & SPU_MALLOC_ADDR_MASK) +
                  size) |
