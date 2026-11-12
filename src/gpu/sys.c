@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-
 #include "common.h"
 #include <psxsdk/libgpu.h>
 
 #if VERSION == 26
+
 
 #define LOW(x) (*(s32*)&(x))
 
@@ -737,7 +737,6 @@ static int _sync(int mode) {
 static int target;
 
 static void set_alarm(void) {
-
     target = Vcount + 240;
 }
 
@@ -769,6 +768,7 @@ static void memset(void* ptr, int value, int num) {
 }
 
 #elif VERSION == 30
+
 
 #define LOW(x) (*(s32*)&(x))
 
@@ -1506,7 +1506,6 @@ static int _sync(int mode) {
 static int target;
 
 static void set_alarm(void) {
-
     target = Vcount + 240;
 }
 
@@ -1538,10 +1537,6 @@ static void memset(void* ptr, int value, int num) {
 }
 
 #elif VERSION == 31
-
-#ifndef LOW
-#define LOW(x) (*(s32*)&(x))
-#endif
 
 typedef struct {
      const char* rcsid;
@@ -2461,7 +2456,6 @@ int _sync(int arg0) {
 }
 
 void set_alarm(void) {
-
     D_80039254 = VSync(-1) + 240;
     D_80039258 = 0;
 }
@@ -2484,6 +2478,8 @@ static void memset2(s8* ptr, int value, int num) {
 }
 
 #elif VERSION == 40 || VERSION == 37 || VERSION == 36 || VERSION == 35
+
+
 
 #define LOW(x) (*(s32*)&(x))
 
@@ -2573,7 +2569,6 @@ int SetIntrMask(int);
 int VSync(int);
 
 #if VERSION == 35
-
 #elif VERSION == 36
 static int __ps_libinfo__[2] = {0x0A077350, 0x1036D61A};
 #elif VERSION == 37
@@ -3359,7 +3354,6 @@ static int _clr(RECT* rect, u_long color) {
     rect->h = CLAMP(rect->h, 0, GEnv.h - 1);
 #endif
 #if VERSION == 35
-
     if ((rect->x & 0x3F) || (rect->w & 0x3F)) {
         p0[0] = ((u_long)p1 & 0xFFFFFF) | 0x07000000;
         p0[1] = 0xE3000000;
@@ -3672,7 +3666,6 @@ static int target = 0;
 static int nenter = 0;
 
 static void set_alarm(void) {
-
     target = VSync(-1) + 240;
     nenter = 0;
 }
@@ -4556,7 +4549,6 @@ static int D_alarm_time = 0;
 static int D_alarm_count = 0;
 
 static void set_alarm(void) {
-
     D_alarm_time = VSync(-1) + 240;
     D_alarm_count = 0;
 }

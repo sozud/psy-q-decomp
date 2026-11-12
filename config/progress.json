@@ -27,6 +27,19 @@
         "LIBSPU": { "build_dir": "build/3.6/spu", "source_dir": "src/spu" }
       }
     },
+    "3.7": {
+      "library_dir": "psy-q/3.7/PSX/LIB",
+      "builds": {
+        "LIBAPI": { "build_dir": "build/3.7/api", "source_dir": "src/api" },
+        "LIBCARD": { "build_dir": "build/3.7/card", "source_dir": "src/card" },
+        "LIBCD": { "build_dir": "build/3.7/cd", "source_dir": "src/cd" },
+        "LIBETC": { "build_dir": "build/3.7/etc", "source_dir": "src/etc" },
+        "LIBGPU": { "build_dir": "build/3.7/gpu", "source_dir": "src/gpu" },
+        "LIBPRESS": { "build_dir": "build/3.7/press", "source_dir": "src/press" },
+        "LIBSND": { "build_dir": "build/3.7/snd", "source_dir": "src/snd" },
+        "LIBSPU": { "build_dir": "build/3.7/spu", "source_dir": "src/spu" }
+      }
+    },
     "4.0": {
       "library_dir": "psy-q/4.0/PSX/LIB",
       "builds": {

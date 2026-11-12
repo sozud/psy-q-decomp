@@ -1,5 +1,4 @@
 #if VERSION <= 33
-
 #if VERSION <= 30
 #define SPU_OLD_LOCAL_RXX
 #endif

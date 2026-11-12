@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #include "common.h"
 #define _spu_writeByIO header_spu_writeByIO
 #define _spu_write header_spu_write
@@ -110,7 +109,6 @@ unsigned short SysSpu_getRegister(long reg) {
 }
 #elif VERSION >= 36
 #if VERSION == 36 || VERSION == 37
-
 #define _spu_Fw1ts header_spu_Fw1ts
 #define _spu_FwriteByIO _spu_writeByIO
 #define _spu_Fr_ _spu_r_
@@ -160,6 +158,7 @@ volatile SpuIRQCallbackProc _spu_transferCallback = NULL;
 volatile SpuTransferCallbackProc _spu_IRQCallback = NULL;
 
 volatile u16 _spu_RQ[10];
+
 
 #include "spu_i.c"
 #include "spu_sb.c"

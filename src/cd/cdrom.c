@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #include "libcd.h"
 
 void EnterCriticalSection(void);
@@ -189,7 +188,6 @@ void StSetMask(u32 mask, u32 start, u32 end) {
 void StCdInterrupt(void) {
     volatile s16 st[3];
     u_char result[8];
-
     static int cause = 0;
     static volatile u16* HeaderArea;
     static s16 sector_offset = 0;

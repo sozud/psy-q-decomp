@@ -30,7 +30,6 @@
 #define CC_EXTERNAL 11
 #define CC_RESETALL 12
 #else
-
 #define CC_EXPRESSION 5
 #define CC_DAMPER 5
 #define CC_NRPN1 6
@@ -109,7 +108,6 @@ typedef struct {
 } SsAdsr;
 
 #if VERSION < 40
-
 struct SeqStruct {
      u8 unk23;
      u8 pad1[3];
@@ -168,7 +166,6 @@ struct SeqStruct {
 #endif
 };
 #else
-
 struct SeqStruct {
      u8* seq_ptr;
      u8* read_pos;
@@ -339,6 +336,9 @@ typedef struct tagSpuControl {
 #define SPURV(n, field) (((SPU_VOICE_REG*)_svm_sreg)[n].field)
 #define SPUWV(n, field, val) ((SPU_VOICE_REG*)_svm_sreg)[n].field = (val)
 
+#if VERSION == 36
+extern s32 _svm_brr_start_addr[16];
+#endif
 extern short _svm_stereo_mono;
 extern SpuReverbAttr _svm_rattr;
 extern u8 _svm_vab_used[NUM_VAB];
@@ -368,8 +368,8 @@ extern s16 _snd_seq_t_max;
 extern s32 _snd_ev_flag;
 extern struct SndSeqTickEnv _snd_seq_tick_env;
 extern SPU_RXX* _svm_sreg;
-
-extern s32 _svm_brr_start_addr[];
+extern SPU_VOICE_REG _svm_sreg_buf[NUM_VOICES];
+extern char _svm_sreg_dirty[NUM_VOICES];
 extern unsigned short _svm_okon1;
 extern unsigned short _svm_okon2;
 extern unsigned short _svm_okof1;
@@ -377,14 +377,15 @@ extern unsigned short _svm_okof2;
 extern unsigned short _svm_orev1;
 extern unsigned short _svm_orev2;
 extern struct SpuVoice _svm_voice[NUM_VOICES];
+extern unsigned int _svm_envx_ptr;
 extern int _svm_envx_hist[16];
+extern void (*_autovol)();
+extern void (*_autopan)();
+
+extern s32 _svm_brr_start_addr[];
 #if VERSION != 36
 extern u8 spuVmMaxVoice;
 #endif
-extern void (*_autovol)();
-extern void (*_autopan)();
-extern SPU_VOICE_REG _svm_sreg_buf[NUM_VOICES];
-extern char _svm_sreg_dirty[NUM_VOICES];
 
 void ResetCallback();
 void SpuInit();

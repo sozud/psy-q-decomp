@@ -863,6 +863,7 @@ extern vu16 _spu_RQ[10];
 
 
 
+#if VERSION >= 40
 static void _memcpy(void* _dst, void* _src, u32 _size) {
     char *pDst = (char*)_dst;
     char *pSrc = (char*)_src;
@@ -871,9 +872,22 @@ static void _memcpy(void* _dst, void* _src, u32 _size) {
         *pDst++ = *pSrc++;
     }
 }
+#endif
 
 
 
+#if VERSION == 36
+#define CALC_VOL(_dst, _val) { \
+    u32 x = 0x8000; \
+    u32 y = _val; \
+    \
+    if (y < 0x4000) { \
+        _dst = _val; \
+    } else { \
+        _dst = y - x; \
+    }\
+}
+#else
 #define CALC_VOL(_dst, _val) { \
     u32 x = 0x8000; \
     u32 y = _val; \
@@ -884,6 +898,7 @@ static void _memcpy(void* _dst, void* _src, u32 _size) {
         _dst = _val; \
     }\
 }
+#endif
 
 
 extern int printf(char *fmt, ...);

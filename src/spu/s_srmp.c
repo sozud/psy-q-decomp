@@ -1,5 +1,4 @@
 #if VERSION <= 30
-
 #define SPU_OLD_LOCAL_RXX
 #define SPU_OLD_DEFER_RXX
 #include "spu_old.h"
@@ -672,6 +671,8 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     return 0;
 }
 
+
 #endif
+
 
 #endif
