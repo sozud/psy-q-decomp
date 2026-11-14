@@ -1,6 +1,26 @@
 #if VERSION >= 36
 #include "libsnd_i.h"
 
+#if VERSION >= 43
+short _SsVabOpenHeadWithMode(
+    u_char* addr, short vabid, long (*alloc)(long, long, short), long mode);
+static long VsGetAddr(long size, long mode, short vabid);
+
+short SsVabOpenHeadSticky(u_char* addr, short vabid, u_long sbaddr) {
+    return _SsVabOpenHeadWithMode(addr, vabid, VsGetAddr, sbaddr);
+}
+
+short SsVabFakeHead(u_char* addr, short vabid, u_long sbaddr) {
+    return _SsVabOpenHeadWithMode(addr, vabid, VsGetAddr, sbaddr);
+}
+
+static long VsGetAddr(long size, long mode, short vabid) {
+    return mode;
+}
+
+short _SsVabOpenHeadWithMode(
+    u_char* addr, short vabid, long (*alloc)(long, long, short), long mode) {
+#else
 static short SsVabOpenHeadWithMode(
     u_char* addr, short vabid, short mode, u_long sbaddr);
 
@@ -18,6 +38,7 @@ short SsVabFakeHead(u_char* addr, short vabid, u_long sbaddr) {
 
 static short SsVabOpenHeadWithMode(
     u_char* addr, short vabid, short mode, u_long sbaddr) {
+#endif
     int vagLens[256];
     int i;
     int size;
@@ -116,6 +137,12 @@ static short SsVabOpenHeadWithMode(
         ptr_vag_off_table++;
     }
 
+#if VERSION >= 43
+    spuAllocMem = alloc(size, mode, vab_id);
+    if (spuAllocMem == -1) {
+        return -1;
+    }
+#else
     if (mode == 0) {
         spuAllocMem = (unsigned)SpuMalloc(size);
         if (spuAllocMem == -1) {
@@ -127,6 +154,7 @@ static short SsVabOpenHeadWithMode(
     } else {
         spuAllocMem = sbaddr;
     }
+#endif
     if (spuAllocMem + size > 0x80000) {
         _svm_vab_used[vab_id] = 0;
         _spu_setInTransfer(0);

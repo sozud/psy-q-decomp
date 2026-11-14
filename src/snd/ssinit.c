@@ -10,14 +10,24 @@ struct SeqStruct* _ss_score[32];
 u32 VBLANK_MINUS;
 s32 _snd_openflag;
 
+#if VERSION >= 41
+unsigned long _snd_vmask = 0;
+#endif
+
 #if VERSION == 36
 static int __ps_libinfo__[] = {0x0A107350, 0x113699AB};
 #elif VERSION == 37 && defined(LIBSND_37_RELEASE)
 static int __ps_libinfo__[] = {0x0C107350, 0x0037C1DA};
 #elif VERSION == 37
 static int __ps_libinfo__[] = {0x12107350, 0x3037B53B};
-#else
+#elif VERSION == 40
 static int __ps_libinfo__[] = {0x15107350, 0x0040B19C};
+#elif VERSION == 41
+static int __ps_libinfo__[] = {0x19107350, 0x004166B3};
+#elif VERSION == 43
+static int __ps_libinfo__[] = {0x25107350, 0x0043539B};
+#else
+static int __ps_libinfo__[] = {0x00107350, 0x00460000};
 #endif
 
 static s16 voice_on[] = {0, 0, 0x1000, 0x3000, 0x00BF, 0, 0, 0};

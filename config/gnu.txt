@@ -1,0 +1,190 @@
+4.3 LIBAPI.LIB src/api/counter.c -O3 -G0 gcc=2.7.2
+4.3 LIBAPI.LIB src/api/gnu/a66.s -
+4.3 LIBAPI.LIB src/api/gnu/c114.s -
+4.3 LIBAPI.LIB src/api/gnu/chclrpad.s -
+4.3 LIBAPI.LIB src/api/gnu/first.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBAPI.LIB src/api/gnu/patch.s -
+4.3 LIBAPI.LIB src/api/mips/a07.s -
+4.3 LIBAPI.LIB src/api/mips/a08.s -
+4.3 LIBAPI.LIB src/api/mips/a09.s -
+4.3 LIBAPI.LIB src/api/mips/a10.s -
+4.3 LIBAPI.LIB src/api/mips/a11.s -
+4.3 LIBAPI.LIB src/api/mips/a12.s -
+4.3 LIBAPI.LIB src/api/mips/a13.s -
+4.3 LIBAPI.LIB src/api/mips/a14.s -
+4.3 LIBAPI.LIB src/api/mips/a15.s -
+4.3 LIBAPI.LIB src/api/mips/a16.s -
+4.3 LIBAPI.LIB src/api/mips/a18.v36.s -
+4.3 LIBAPI.LIB src/api/mips/a19.v36.s -
+4.3 LIBAPI.LIB src/api/mips/a20.v37.s -
+4.3 LIBAPI.LIB src/api/mips/a21.v36.s -
+4.3 LIBAPI.LIB src/api/mips/a23.s -
+4.3 LIBAPI.LIB src/api/mips/a24.s -
+4.3 LIBAPI.LIB src/api/mips/a25.s -
+4.3 LIBAPI.LIB src/api/mips/a36.s -
+4.3 LIBAPI.LIB src/api/mips/a37.s -
+4.3 LIBAPI.LIB src/api/mips/a50.s -
+4.3 LIBAPI.LIB src/api/mips/a52.s -
+4.3 LIBAPI.LIB src/api/mips/a53.s -
+4.3 LIBAPI.LIB src/api/mips/a54.s -
+4.3 LIBAPI.LIB src/api/mips/a65.s -
+4.3 LIBAPI.LIB src/api/mips/a67.s -
+4.3 LIBAPI.LIB src/api/mips/a91.s -
+4.3 LIBAPI.LIB src/api/mips/c57.s -
+4.3 LIBAPI.LIB src/api/mips/c68.s -
+4.3 LIBAPI.LIB src/api/mips/c73.s -
+4.3 LIBAPI.LIB src/api/mips/l02.s -
+4.3 LIBAPI.LIB src/api/mips/l03.s -
+4.3 LIBAPI.LIB src/api/mips/l10.s -
+4.3 LIBAPI.LIB src/api/pad.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+
+4.3 LIBC.LIB src/c/gnu/a63.s -
+4.3 LIBC.LIB src/c/mips/c19.s -
+4.3 LIBC.LIB src/c/mips/c23.s -
+4.3 LIBC.LIB src/c/mips/c25.s -
+4.3 LIBC.LIB src/c/mips/c42.s -
+4.3 LIBC.LIB src/c/mips/c43.s -
+4.3 LIBC.LIB src/c/mips/c63.s -
+
+4.3 LIBCARD.LIB src/card/card.c -O3 -G0
+4.3 LIBCARD.LIB src/card/gnu/end.s -
+4.3 LIBCARD.LIB src/card/gnu/patch.s -
+4.3 LIBCARD.LIB src/card/init.c -O3 -G0
+4.3 LIBCARD.LIB src/card/mips/a74.v36.s -
+4.3 LIBCARD.LIB src/card/mips/a75.v36.s -
+4.3 LIBCARD.LIB src/card/mips/a76.v36.s -
+4.3 LIBCARD.LIB src/card/mips/a78.s -
+4.3 LIBCARD.LIB src/card/mips/a80.s -
+4.3 LIBCARD.LIB src/card/mips/c112.s -
+4.3 LIBCARD.LIB src/card/mips/c171.s -
+4.3 LIBCARD.LIB src/card/mips/c172.s -
+
+4.3 LIBCD.LIB src/cd/bios.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBCD.LIB src/cd/c_002.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_003.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_004.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_005.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_007.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_008.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_009.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_010.c -O2 -G0
+4.3 LIBCD.LIB src/cd/c_011.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBCD.LIB src/cd/cdread2.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBCD.LIB src/cd/cdrom.c -O2 -G0
+4.3 LIBCD.LIB src/cd/event.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBCD.LIB src/cd/sys.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+
+4.3 LIBDS.LIB src/ds/dscb.c -O2 -G0
+
+4.3 LIBETC.LIB src/etc/intr.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBETC.LIB src/etc/intr_dma.c -O2 -G0
+4.3 LIBETC.LIB src/etc/intr_vb.c -O2 -G0
+4.3 LIBETC.LIB src/etc/vmode.c -O2 -G0
+4.3 LIBETC.LIB src/etc/vsync.c -O2 -G0 gcc=cygnus-2.7.2-pre970318
+
+4.3 LIBGPU.LIB src/gpu/ext.c -O3 -G0 gcc=2.7.2
+4.3 LIBGPU.LIB src/gpu/prim.c -O3 -G0 func=GetClut obj=p01
+4.3 LIBGPU.LIB src/gpu/prim.c -O3 -G0 func=GetTPage obj=p00
+
+4.3 LIBGTE.LIB src/gte/gnu/msc00.s -
+4.3 LIBGTE.LIB src/gte/gnu/patchgte.s -
+4.3 LIBGTE.LIB src/gte/mips/reg12.s -
+4.3 LIBGTE.LIB src/gte/mips/reg13.s -
+
+4.3 LIBPRESS.LIB src/press/gnu/vlc.s -
+4.3 LIBPRESS.LIB src/press/libpress.c -O3 -G0
+4.3 LIBPRESS.LIB src/press/table.c -O3 -G0
+
+4.3 LIBSND.LIB src/snd/cc_100.c -O3 -G0
+4.3 LIBSND.LIB src/snd/cc_7.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/cres.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/dmyprint.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/midicc.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/midinote.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/midiprog.c -O3 -G0
+4.3 LIBSND.LIB src/snd/midiread.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/miditime.c -O3 -G0
+4.3 LIBSND.LIB src/snd/next.c -O3 -G0
+4.3 LIBSND.LIB src/snd/pause.c -O3 -G0
+4.3 LIBSND.LIB src/snd/play.c -O3 -G0
+4.3 LIBSND.LIB src/snd/playmode.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/replay.c -O3 -G0
+4.3 LIBSND.LIB src/snd/sepinit.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/sscall.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssclose.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssend.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssinit.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssinit_c.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssloop.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ssopenpj.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssplay.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssquit.c -O3 -G0
+4.3 LIBSND.LIB src/snd/sssattr.c -O3 -G0
+4.3 LIBSND.LIB src/snd/sssmv.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ssstart.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ssstop.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/sssv.c -O3 -G0
+4.3 LIBSND.LIB src/snd/sstable.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/sstick.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ssvol.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/tempo.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ut_gva.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ut_keyv.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ut_rdep.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ut_rev.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/ut_roff.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ut_ron.c -O3 -G0
+4.3 LIBSND.LIB src/snd/ut_vvol.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_aloc1.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_aloc2.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_doff.c -O3 -G0
+4.3 LIBSND.LIB src/snd/vm_f.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_init.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_key.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_n2p.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_no1.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_noff.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_nowof.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_nowon.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_seq.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_stav.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vm_vsu.c -O3 -G0
+4.3 LIBSND.LIB src/snd/vs_mono.c -O3 -G0
+4.3 LIBSND.LIB src/snd/vs_vab.c -O3 -G0
+4.3 LIBSND.LIB src/snd/vs_vh.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vs_vtbp.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSND.LIB src/snd/vs_vtc.c -O3 -G0
+
+4.3 LIBSPU.LIB src/spu/gnu/s_sva.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/gnu/zerobuf.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_crwa.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_dcb.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_gks.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_gvex.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_gvv.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_i.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_ini.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_it.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_itc.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_m.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_m_f.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_m_init.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_m_int.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_m_util.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_n2p.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_q.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_rmp.c -O3 -G0 gcc=cygnus-2.7.2-pre970318 -DOBJ_S_RMP0 obj=s_rmp0
+4.3 LIBSPU.LIB src/spu/s_rmp.c -O3 -G0 gcc=cygnus-2.7.2-pre970318 -DOBJ_S_RMP2 obj=s_rmp2
+4.3 LIBSPU.LIB src/spu/s_sav.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_sca.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_sk.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_snc.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_snv.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_sr.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_sra.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_srmp.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_srv.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_stm.c -O3 -G0
+4.3 LIBSPU.LIB src/spu/s_stsa.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/s_wp.c -O3 -G0 gcc=cygnus-2.7.2-pre970318
+4.3 LIBSPU.LIB src/spu/spu.c -O3 -G0 gcc=cygnus-2.7.2-pre970318

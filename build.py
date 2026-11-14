@@ -3,7 +3,7 @@ import subprocess
 import glob
 import ninja_syntax
 
-progress_objects = {"3.3": [], "3.5": [], "3.6": [], "3.7": [], "4.0": []}
+progress_objects = {"3.3": [], "3.5": [], "3.6": [], "3.7": [], "4.0": [], "4.3": []}
 
 def track_progress_object(obj_name):
     parts = obj_name.split('/')
@@ -902,6 +902,7 @@ def build_37():
         'src/snd/pause.c',
         'src/snd/playmode.c',
         'src/snd/replay.c',
+        'src/snd/sepinit.c',
         'src/snd/sscall.c',
         'src/snd/ssclose.c',
         'src/snd/ssinit.c',
@@ -987,11 +988,77 @@ def build_37():
     ]
     add_lib_wibo(spu40_srcs, "build/3.7/spu", "./psy-q/3.7/PSX/LIB/LIBSPU.LIB", "-O3 -g0 -G0 -funsigned-char -c -I./src/snd -I./include -DVERSION=40", "3.7")
 
+
+GNU_CONFIG = 'config/gnu.txt'
+GNU_DEFAULT_FLAGS = '-O3 -G0'
+GNU_TOOLS = ('cygnus-2.7.2-970404', '2.8-970404')
+
+ninja.rule('gnu_ecoff',
+           command="FUNCS='$CFUNCS' bash tools/gnu_ecoff.sh $in $out '$CPPFLAGS' '$CC1FLAGS' $GCC $BINUTILS"
+                   " && (cpp -MM -MT $out -MF $out.d -I./include -I$$(dirname $in) $CPPFLAGS $in 2>/dev/null || true)",
+           depfile='$out.d', deps='gcc',
+           description='GNU gcc $GCC + as $BINUTILS $in -> $out')
+ninja.rule('check_member',
+           command='python3 tools/check_member.py $LIBRARY $in',
+           description='Checking that $in matches')
+
+
+def build_gnu():
+    import re
+    if not os.path.exists(GNU_CONFIG):
+        return
+    for line in open(GNU_CONFIG):
+        line = line.split('#')[0].split()
+        if not line:
+            continue
+        v, lib, src, flags = line[0], line[1], line[2], ' '.join(line[3:]) or GNU_DEFAULT_FLAGS
+        if flags == '-':
+            flags = ''
+        if not os.path.isdir(f'psy-q/{v}/PSX/LIB'):
+            continue
+        lib = lib if lib.upper().endswith('.LIB') else lib + '.LIB'
+        cpp = ' '.join(f for f in flags.split() if f.startswith(('-I', '-D')))
+        cc1 = ' '.join(f for f in flags.split() if not f.startswith(('-I', '-D')))
+        gcc, binutils = GNU_TOOLS
+        objname = func = None
+        for f in cc1.split():
+            if f.startswith('gcc='):
+                gcc = f[4:]
+            elif f.startswith('as='):
+                binutils = f[3:]
+            elif f.startswith('obj='):
+                objname = f[4:].lower()
+            elif f.startswith('func='):
+                func = f[5:]
+        cc1 = ' '.join(f for f in cc1.split() if not f.startswith(('gcc=', 'as=', 'obj=', 'func=')))
+        name = os.path.splitext(os.path.basename(src))[0]
+        if '.v' in name:
+            name = name.split('.v')[0]
+        m = re.match(r'/\* LIB\w+\.LIB (\w+):', open(src).readline())
+        if m:
+            name = m.group(1).lower()
+        if objname:
+            name = objname
+        obj = f"build/{v}/{lib.upper().replace('.LIB', '')[3:].lower()}/{name}.obj"
+        deps = ['tools/gnu_ecoff.sh', 'tools/ecoff2psyq.py',
+                f'build/gnu/gcc-{gcc}/cc1', f'build/gnu/binutils-{binutils}/as']
+        if func:
+            assert src.endswith('.c'), line
+            deps.append('tools/cfunc.py')
+        track_progress_object(obj)
+        ninja.build(obj, 'gnu_ecoff', inputs=[src], implicit=deps,
+                    variables={'CPPFLAGS': f"-I./src/snd -I./include {cpp} -DVERSION={v.replace('.', '')}",
+                               'CC1FLAGS': cc1, 'GCC': gcc, 'BINUTILS': binutils, 'CFUNCS': func or ''})
+        ninja.build(f"{obj}.check", 'check_member', inputs=[obj], implicit=['tools/check_member.py'],
+                    variables={'LIBRARY': f'./psy-q/{v}/PSX/LIB/{lib}'})
+
+
 build_33()
 build_35()
 build_36()
 build_37()
 build_40()
+build_gnu()
 
 ninja.rule(
     'progress_report',

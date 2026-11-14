@@ -36,7 +36,7 @@ void _spu_setInTransfer(long mode) {
 long _spu_getInTransfer(void) {
     return _spu_inTransfer == 0;
 }
-#else
+#else /* VERSION > 30 */
 #include "libspu_i.h"
 extern long TestEvent(long);
 long SpuIsTransferCompleted(long flag) {
@@ -62,4 +62,4 @@ long SpuIsTransferCompleted(long flag) {
 
     return var_v0;
 }
-#endif
+#endif /* VERSION > 30 */

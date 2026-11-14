@@ -1,6 +1,5 @@
 #include "libsnd_i.h"
 
-
 void _SsSetControlChange(s16 seq_no, s16 sep_no, u8 control) {
     struct SeqStruct* score;
     u8 data;

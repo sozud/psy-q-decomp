@@ -1,3 +1,20 @@
+#if VERSION <= 30
+#include "spu_old.h"
+
+long SpuSetNoiseClock(long n_clock) {
+    long v;
+
+    if (n_clock < 0) {
+        v = 0;
+    } else if (n_clock >= 0x40) {
+        v = 0x3F;
+    } else {
+        v = n_clock;
+    }
+    _spu_ioctl(_spu_fd, 0x50, &v);
+    return v;
+}
+#else /* VERSION > 30 */
 #include "libspu_i.h"
 
 long SpuSetNoiseClock(long n_clock) {
@@ -19,4 +36,4 @@ long SpuSetNoiseClock(long n_clock) {
 
     return clamped;
 }
-
+#endif /* VERSION > 30 */

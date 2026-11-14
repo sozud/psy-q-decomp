@@ -24,7 +24,7 @@ unsigned long SpuSetTransferStartAddr(unsigned long addr) {
     return addr;
 }
 #endif
-#else
+#else /* VERSION > 30 */
 #if VERSION == 36 || VERSION == 37
 #include "libspu_40.h"
 #else
@@ -45,6 +45,9 @@ ulong SpuSetTransferStartAddr(ulong addr) {
 #if VERSION == 36
     _spu_tsa = _spu_FsetRXXa(0xFFFFFFFF, addr);
     return _spu_tsa;
+#elif VERSION >= 41
+    _spu_tsa = _spu_FsetRXXa(0xFFFFFFFF, addr);
+    return _spu_tsa << _spu_mem_mode_plus;
 #else
     base_addr = _spu_FsetRXXa(0xFFFFFFFF, addr);
     _spu_tsa = base_addr;
@@ -59,4 +62,4 @@ unsigned long SpuSetTransferStartAddr(unsigned long addr) {
     return addr;
 }
 #endif
-#endif
+#endif /* VERSION > 30 */

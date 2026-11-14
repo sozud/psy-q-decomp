@@ -174,7 +174,11 @@ void _spu_FsetRXX(u32 offset, u32 value, u32 mode)
 }
 
 u32 _spu_FsetRXXa(s32 arg0, u32 arg1) {
+#if VERSION >= 41
+    u16 temp_a3;
+#else
     u32 temp_a3;
+#endif
 
     if ((_spu_mem_mode != 0) && ((arg1 % _spu_mem_mode_unit) != 0)) {
         arg1 += _spu_mem_mode_unit;
@@ -285,7 +289,11 @@ static s32 _spu_dma_mode;
 
 void _spu_FsetRXX(s32 arg0, u32 arg1, s32 arg2) {
     if (arg2 == 0) {
+#ifdef VERSION_PC
+        write_16(0x1F801C00 + arg0 * 2, arg1, __FILE__, __LINE__);
+#else
         _spu_RXX->raw[arg0] = arg1;
+#endif
         return;
     }
 

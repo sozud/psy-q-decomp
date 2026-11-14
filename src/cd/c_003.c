@@ -11,7 +11,7 @@ void ExitCriticalSection(void);
 void CdDataCallback(void*);
 void CdReadyCallback(void*);
 
-#if VERSION == 40
+#if VERSION >= 40
 extern int DS_active;
 void DsDataCallback(void*);
 void DsReadyCallback(void*);
@@ -19,7 +19,7 @@ void DsReadyCallback(void*);
 
 void StUnSetRing(void) {
     EnterCriticalSection();
-#if VERSION == 40
+#if VERSION >= 40
     if (DS_active == 1) {
         DsDataCallback(0);
         DsReadyCallback(0);

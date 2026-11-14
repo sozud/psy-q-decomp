@@ -21,7 +21,7 @@ typedef struct {
     CdlLOC loc;
 } StHEADER;
 
-#if VERSION == 40
+#if VERSION >= 40
 extern StHEADER* StRingAddr;
 extern s32 StRingBase;
 extern s32 StRgb24;
@@ -35,8 +35,13 @@ extern s32 StSTART_FLAG;
 extern s32 StStartFrame;
 extern s32 StEndFrame;
 extern s32 StFinalSector;
+#if VERSION >= 41
+extern void (*StFunc1)(void);
+extern s32 StFunc2;
+#else
 void (*StFunc1)(void);
 s32 StFunc2;
+#endif
 extern s32 Stframe_no;
 extern s16 Stsector_offset;
 extern s32 StCdIntrFlag;

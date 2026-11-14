@@ -143,7 +143,7 @@ void SpuQuit(void) {
     }
 }
 #endif
-#else
+#else /* VERSION > 30 */
 #if VERSION == 36 || VERSION == 37
 #include "libspu_40.h"
 #else
@@ -158,9 +158,18 @@ static u8 __ps_libinfo__[] USED = {
 #elif VERSION == 37
     'P', 's', '\x11', '\x0C',
     '\xDA', '\xC5', '\x37', '\x00'
-#else
+#elif VERSION == 40
     'P', 's', '\x11', '\x15',
     '\x9C', '\xB4', '\x40', '\x00'
+#elif VERSION == 41
+    'P', 's', '\x11', '\x19',
+    '\xB3', '\x67', '\x41', '\x00'
+#elif VERSION == 43
+    'P', 's', '\x11', '\x25',
+    '\x9B', '\x53', '\x43', '\x00'
+#else
+    'P', 's', '\x11', '\x00',
+    '\x00', '\x00', '\x46', '\x00'
 #endif
 };
 s32 _spu_EVdma = 0;
@@ -181,7 +190,9 @@ u16 _spu_voice_centerNote[24] = {
 #define ZERO8 0, 0, 0, 0, 0, 0, 0, 0
 #define ZERO64 ZERO8, ZERO8, ZERO8, ZERO8, ZERO8, ZERO8, ZERO8, ZERO8
 #define ZERO512 ZERO64, ZERO64, ZERO64, ZERO64, ZERO64, ZERO64, ZERO64, ZERO64
+#if VERSION < 43
 s8 _spu_zerobuf[1024] = { ZERO512, ZERO512 };
+#endif
 #undef ZERO512
 #undef ZERO64
 #undef ZERO8
@@ -469,4 +480,4 @@ void SpuStart(void) {
 }
 
 #endif
-#endif
+#endif /* VERSION > 30 */

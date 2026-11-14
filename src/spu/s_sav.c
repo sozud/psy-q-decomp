@@ -37,6 +37,19 @@ u32 _SpuSetAnyVoice(long on_off, unsigned long voice_bit, s32 arg2, s32 arg3) {
             }
             var_t2 &= ~(voice_bit & 0xFFFFFF);
         break;
+#if VERSION >= 41
+        case 8:
+            if (_spu_env & 1) {
+                _spu_RQ[arg2 - 0xC4] = voice_bit;
+                _spu_RQ[arg3 - 0xC4] = (voice_bit >> 0x10) & 0xFF;
+                _spu_RQmask |= 1 << ((arg2 - 0xC6) >> 1);
+            } else {
+                _spu_RXX->raw[arg2] = voice_bit;
+                _spu_RXX->raw[arg3] = (voice_bit >> 0x10) & 0xFF;
+            }
+            var_t2 = voice_bit & 0xFFFFFF;
+        break;
+#endif
     }
 
     return var_t2 & 0xFFFFFF;

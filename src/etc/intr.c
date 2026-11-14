@@ -213,7 +213,7 @@ s32 setjmp(s32*);
 void* startIntrVSync(); /* extern */
 long long startIntrDMA();
 
-#if VERSION == 40
+#if VERSION >= 40
 static char copyright[] = "Library Programs (c) 1993-1997 Sony Computer Entertainment Inc., All Rights Reserved.";
 #endif
 
@@ -228,7 +228,9 @@ static struct intrEnv_t intrEnv = {
 };
 
 static struct Callbacks jtb = {
-#if VERSION == 40
+#if VERSION >= 43
+    "$Id: intr.c,v 1.75 1997/02/07 09:00:36 makoto Exp $",
+#elif VERSION >= 40
     "$Id: intr.c,v 1.76 1997/02/12 12:45:05 makoto Exp $",
 #elif VERSION == 37
     "$Id: intr.c,v 1.74 1996/12/04 07:30:16 makoto Exp $",

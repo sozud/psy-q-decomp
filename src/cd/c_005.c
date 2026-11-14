@@ -1,4 +1,5 @@
 #include "../types.h"
+#define CDROM_DEFINE_FUNC
 #include "c_002.h"
 
 static s32 HADR0 = 0x1F801800;

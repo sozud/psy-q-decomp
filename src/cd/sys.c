@@ -367,18 +367,33 @@ int CD_getsector(void*, int);
 void CD_datasync(int);
 long DMACallback(int, void (*)());
 
+#if VERSION >= 41
+#if !defined(PIECE) || PIECE == 3
+inline int CdStatus(void) { return CD_status; }
+#else
+extern inline int CdStatus(void) { return CD_status; }
+#endif
+#else
 inline char CdStatus(void) { return CD_status; }
+#endif
 
 #if VERSION != 33
+#if !defined(PIECE) || PIECE == 4
 int CdMode(void) { return CD_mode; }
 #endif
-
-int CdLastCom(void) { return CD_com; }
-
-#if VERSION != 33
-unsigned char* CdLastPos(void) { return CD_pos; }
 #endif
 
+#if !defined(PIECE) || PIECE == 5
+int CdLastCom(void) { return CD_com; }
+#endif
+
+#if VERSION != 33
+#if !defined(PIECE) || PIECE == 6
+unsigned char* CdLastPos(void) { return CD_pos; }
+#endif
+#endif
+
+#if !defined(PIECE) || PIECE == 7
 int CdReset(int mode) {
     if (mode == CdlModeAP) {
         CD_initintr();
@@ -392,44 +407,61 @@ int CdReset(int mode) {
     }
     return 1;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 8
 void CdFlush(void) { CD_flush(); }
+#endif
 
+#if !defined(PIECE) || PIECE == 9
 s32 CdSetDebug(s32 arg0) {
     s32 temp_v0 = CD_debug;
     CD_debug = arg0;
     return temp_v0;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 10
 char* CdComstr(unsigned char com) {
     if (com > 0x1b) {
         return "none";
     }
     return CD_comstr[com];
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 11
 char* CdIntstr(u8 intr) {
     if (intr > 6) {
         return "none";
     }
     return CD_intstr[intr];
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 12
 int CdSync(int mode, u_char* result) { return CD_sync(mode, result); }
+#endif
 
+#if !defined(PIECE) || PIECE == 13
 int CdReady(int mode, u_char* result) { return CD_ready(mode, result); }
+#endif
 
+#if !defined(PIECE) || PIECE == 14
 CdlCB CdSyncCallback(CdlCB func) {
     CdlCB old = CD_cbsync;
     CD_cbsync = func;
     return old;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 15
 CdlCB CdReadyCallback(CdlCB func) {
     CdlCB old = CD_cbready;
     CD_cbready = func;
     return old;
 }
+#endif
 
 #if VERSION == 33
 extern CdlCB CD_cbread;
@@ -441,6 +473,7 @@ CdlCB CdReadCallback(CdlCB func) {
 }
 #endif
 
+#if !defined(PIECE) || PIECE == 16
 static int setloc[] = {
     0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -509,25 +542,36 @@ int CdControlB(u8 com, u8* param, u_char* result) {
     }
     return CD_sync(CdlSync, result) == CdlComplete;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 20
 int CdMix(CdlATV* vol) {
     CD_vol(vol);
     return 1;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 21
 int CdGetSector(void* madr, int size) { return CD_getsector(madr, size) == 0; }
+#endif
 
-#if VERSION == 40
+#if VERSION >= 40
 int CD_getsector2(void*, int);
 
+#if !defined(PIECE) || PIECE == 22
 int CdGetSector2(void* madr, int size) {
     return CD_getsector2(madr, size) == 0;
 }
 #endif
+#endif
 
+#if !defined(PIECE) || PIECE == 23
 long CdDataCallback(void (*func)()) { return DMACallback(3, func); }
+#endif
 
+#if !defined(PIECE) || PIECE == 24
 void CdDataSync(int mode) { CD_datasync(mode); }
+#endif
 
 #if VERSION == 33
 int CD_readsync(int, u_char*);
@@ -547,6 +591,7 @@ int CdRead(int sectors, u_long* buf, int mode) {
 }
 #endif
 
+#if !defined(PIECE) || PIECE == 2
 CdlLOC* CdIntToPos(int i, CdlLOC* p) {
     inline int ENCODE_BCD(int n) { return ((n / 10) << 4) + (n % 10); }
 
@@ -556,14 +601,22 @@ CdlLOC* CdIntToPos(int i, CdlLOC* p) {
     p->minute = ENCODE_BCD(i / 75 / 60);
     return p;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 1
 int CdPosToInt(CdlLOC* p) {
 #define DECODE_BCD(x) (((x) >> 4) * 10 + ((x) & 0xF))
+#if VERSION >= 41
+    return (DECODE_BCD(p->minute) * 60 + DECODE_BCD(p->second)) * 75 +
+           DECODE_BCD(p->sector) - 150;
+#else
     u8 sector = p->sector;
     u8 second = p->second;
     u8 minute = p->minute;
 
     return (DECODE_BCD(minute) * 60 + DECODE_BCD(second)) * 75 +
            DECODE_BCD(sector) - 150;
+#endif
 }
+#endif
 #endif

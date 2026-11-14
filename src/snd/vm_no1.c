@@ -1,7 +1,94 @@
 #include "libsnd_i.h"
 
+#if VERSION >= 41
+void vmNoiseOn(unsigned char voice) {
+    struct SeqStruct* score;
+    s16 i;
+    u16 bitsUpper;
+    u16 bitsLower;
+    u32 voll, volr;
+    u32 voll_t, volr_t;
+    u32 temp;
+    s32 mvol_scaled;
+    s32 pos;
 
-void vmNoiseOn(char arg0) {
+    score = &_ss_score[_svm_cur.seq_sep_no & 0xFF]
+                      [(_svm_cur.seq_sep_no & 0xFF00) >> 8];
+    mvol_scaled = _svm_vh->mvol * 0x3FFF;
+    voll_t = (_svm_cur.volume * mvol_scaled) / 16129;
+    voll_t = (voll_t * _svm_cur.mvol * _svm_cur.tone_vol) / 16129;
+    volr_t = voll_t;
+    if (_svm_cur.seq_sep_no != 0x21) {
+        voll_t = (voll_t * score->voll) / 127;
+        volr_t = (volr_t * score->volr) / 127;
+    }
+    temp = _svm_cur.tone_pan;
+    if (temp < 64) {
+        voll = voll_t;
+        volr = (volr_t * temp) / 63;
+    } else {
+        voll = (voll_t * (127 - temp)) / 63;
+        volr = volr_t;
+    }
+    temp = _svm_cur.mpan;
+    if (temp < 64) {
+        volr = (volr * temp) / 63;
+    } else {
+        voll = (voll * (127 - temp)) / 63;
+    }
+    temp = _svm_cur.pan;
+    if (temp < 64) {
+        volr = (temp * volr) / 63;
+    } else {
+        voll = (voll * (127 - temp)) / 63;
+    }
+    if (_svm_stereo_mono == 1) {
+        if (voll < volr) {
+            voll = volr;
+        } else {
+            volr = voll;
+        }
+    }
+    if (_svm_cur.seq_sep_no != 0x21) {
+        voll = (voll * voll) / 16383;
+        volr = (volr * volr) / 16383;
+    }
+    pos = voice * 8;
+    SpuSetNoiseClock((_svm_cur.note - _svm_cur.tone_center) & 0x3F);
+    ((u16*)_svm_sreg_buf)[pos + 0] = voll;
+    ((u16*)_svm_sreg_buf)[pos + 1] = volr;
+    _svm_sreg_dirty[voice] |= 3;
+    if (voice < 16) {
+        bitsLower = 1 << voice;
+        bitsUpper = 0;
+    } else {
+        bitsLower = 0;
+        bitsUpper = 1 << (voice - 16);
+    }
+    _svm_voice[voice].unk04 = 10;
+    for (i = 0; i < _SsVmMaxVoice; i++) {
+        if ((_snd_vmask & (1 << i)) == 0) {
+            _svm_voice[i].unk1b &= 1;
+        }
+    }
+    _svm_voice[voice].unk1b = 2;
+    _svm_okon1 |= bitsLower;
+    _svm_okon2 |= bitsUpper;
+    _svm_okof1 &= ~_svm_okon1;
+    _svm_okof2 &= ~_svm_okon2;
+    if (_svm_cur.tone_mode & 4) {
+        _svm_orev1 |= bitsLower;
+        _svm_orev2 |= bitsUpper;
+    } else {
+        _svm_orev1 &= ~bitsLower;
+        _svm_orev2 &= ~bitsUpper;
+    }
+    _svm_onos1 = bitsLower;
+    _svm_onos2 = bitsUpper;
+}
+#else
+
+void vmNoiseOn(unsigned char arg0) {
     struct SeqStruct* score =
         &_ss_score[_svm_cur.seq_sep_no & 0xFF]
                   [(_svm_cur.seq_sep_no & 0xFF00) >> 8];
@@ -90,3 +177,4 @@ void vmNoiseOn(char arg0) {
     ((u16*)_svm_sreg)[0x194 / 2] = bitsLower;
     ((u16*)_svm_sreg)[0x196 / 2] = bitsUpper;
 }
+#endif

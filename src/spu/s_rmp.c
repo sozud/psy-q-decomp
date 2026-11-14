@@ -1,4 +1,5 @@
 #include "libspu_i.h"
+#if VERSION < 43 || defined(OBJ_S_RMP0)
 s32 _spu_rev_startaddr[0xA] = {
     0xFFFE,
     0xFB28,
@@ -11,9 +12,13 @@ s32 _spu_rev_startaddr[0xA] = {
     0xCFF8,
     0xF880,
 };
+#endif
+#if VERSION < 43 || defined(OBJ_S_RMP1)
 s32 _spu_rev_workareasize[0xA] = {
     2, 0x4D8, 0x3D8, 0x908, 0xDFC, 0x15BC, 0x1ED8, 0x3008, 0x3008, 0x780
 };
+#endif
+#if VERSION < 43 || defined(OBJ_S_RMP2)
 ReverbPreset _spu_rev_param[0xA] = {
     {
         0,
@@ -106,4 +111,4 @@ ReverbPreset _spu_rev_param[0xA] = {
         },
     },
 };
-
+#endif

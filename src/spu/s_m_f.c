@@ -7,7 +7,9 @@ void SpuFree(unsigned long arg0) {
     s32 temp;
     s32 mask4;
     s32 block_num;
+#if VERSION < 41
     u8 pad[2];
+#endif
     cur_block_num = 0;
     if (temp_v1 = _spu_AllocBlockNum > 0) {
         mask4 = 0x40000000;

@@ -20,8 +20,8 @@ unsigned long SpuWritePartly(unsigned char *addr, unsigned long size) {
 #endif
     return size;
 }
-#else
-#if VERSION == 40
+#else /* VERSION > 30 */
+#if VERSION >= 40
 #include "libspu_i.h"
 unsigned long SpuWritePartly(unsigned char *addr, unsigned long size) {
     s32 temp_s0;
@@ -68,4 +68,4 @@ unsigned long SpuWritePartly(unsigned char* addr, unsigned long size) {
     return var_s1;
 }
 #endif
-#endif
+#endif /* VERSION > 30 */

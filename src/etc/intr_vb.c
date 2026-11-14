@@ -103,7 +103,11 @@ volatile int Vcount = 0;
 void* startIntrVSync(void) {
     static volatile u_long* t1_mode = 0x1F801114;
 
+#if VERSION >= 43
+    *t1_mode = 0x100;
+#else
     *t1_mode = 0x107;
+#endif
     Vcount = 0;
     memclr(&cbIntrVSync, 8);
     InterruptCallback(0, &trapIntrVSync);
@@ -114,7 +118,9 @@ static void trapIntrVSync(void) {
     int i;
 
     Vcount += 1;
+#if VERSION < 41
     (void)Vcount;
+#endif
 
     for (i = 0; i < 8; i++) {
         if (cbIntrVSync[i] != NULL) {

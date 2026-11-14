@@ -91,9 +91,98 @@ s32 _spu_pitch2note(u16 arg0, u16 arg1, u16 arg2) {
 
     return (note_high << 8) | note_low;
 }
-#else
+#else /* VERSION > 30 */
 // SPDX-License-Identifier: MIT
-#if VERSION == 40
+#if VERSION >= 43
+#include "libspu_i.h"
+static u16 _spu_NTable[12] = {
+    0x8000, 0x879C, 0x8FAC, 0x9837, 0xA145, 0xAADC,
+    0xB504, 0xBFC8, 0xCB2F, 0xD744, 0xE411, 0xF1A1,
+};
+static u16 _spu_FTable[128] = {
+    0x8000, 0x800E, 0x801D, 0x802C, 0x803B, 0x804A, 0x8058, 0x8067,
+    0x8076, 0x8085, 0x8094, 0x80A3, 0x80B1, 0x80C0, 0x80CF, 0x80DE,
+    0x80ED, 0x80FC, 0x810B, 0x811A, 0x8129, 0x8138, 0x8146, 0x8155,
+    0x8164, 0x8173, 0x8182, 0x8191, 0x81A0, 0x81AF, 0x81BE, 0x81CD,
+    0x81DC, 0x81EB, 0x81FA, 0x8209, 0x8218, 0x8227, 0x8236, 0x8245,
+    0x8254, 0x8263, 0x8272, 0x8282, 0x8291, 0x82A0, 0x82AF, 0x82BE,
+    0x82CD, 0x82DC, 0x82EB, 0x82FA, 0x830A, 0x8319, 0x8328, 0x8337,
+    0x8346, 0x8355, 0x8364, 0x8374, 0x8383, 0x8392, 0x83A1, 0x83B0,
+    0x83C0, 0x83CF, 0x83DE, 0x83ED, 0x83FD, 0x840C, 0x841B, 0x842A,
+    0x843A, 0x8449, 0x8458, 0x8468, 0x8477, 0x8486, 0x8495, 0x84A5,
+    0x84B4, 0x84C3, 0x84D3, 0x84E2, 0x84F1, 0x8501, 0x8510, 0x8520,
+    0x852F, 0x853E, 0x854E, 0x855D, 0x856D, 0x857C, 0x858B, 0x859B,
+    0x85AA, 0x85BA, 0x85C9, 0x85D9, 0x85E8, 0x85F8, 0x8607, 0x8617,
+    0x8626, 0x8636, 0x8645, 0x8655, 0x8664, 0x8674, 0x8683, 0x8693,
+    0x86A2, 0x86B2, 0x86C1, 0x86D1, 0x86E0, 0x86F0, 0x8700, 0x870F,
+    0x871F, 0x872E, 0x873E, 0x874E, 0x875D, 0x876D, 0x877D, 0x878C,
+};
+
+u16 _spu_note2pitch(int cen_note, int cen_fine, int note, int fine) {
+    u_long pitch;
+    u_int f;
+    short n;
+    short octave;
+    short semi;
+
+    fine += cen_fine;
+    f = (u_short)fine;
+    n = note + (f >> 7) - cen_note;
+    octave = n / 12 - 2;
+    semi = n % 12;
+    fine = f & 0x7F;
+    if (semi < 0) {
+        semi += 12;
+        octave = n / 12 - 3;
+    }
+    pitch = (_spu_NTable[semi] * _spu_FTable[(u_short)fine]) >> 16;
+    if (octave >= 0) {
+        pitch = 0x3FFF;
+    } else {
+        pitch += 1 << (-octave - 1);
+        pitch >>= -octave;
+    }
+    return pitch;
+}
+
+s32 _spu_pitch2note(short note_high, int note_low, u_short pitch) {
+    int octave = 0;
+    int i;
+    u_short semitone;
+    int fine;
+    int step;
+    u_int lo;
+    u_short frac;
+
+    if (pitch >= 0x4000) {
+        pitch = 0x3FFF;
+    }
+    for (i = 0; i < 14; i++) {
+        if ((pitch >> i) & 1) {
+            octave = i;
+        }
+    }
+    pitch = pitch << (15 - octave);
+    for (i = 11; i >= 0; i--) {
+        if (pitch >= _spu_NTable[i]) {
+            semitone = i;
+            break;
+        }
+    }
+    frac = ((u_int)pitch << 15) / _spu_NTable[semitone];
+    for (i = 127; i >= 0; i--) {
+        if (frac >= _spu_FTable[i]) {
+            fine = i;
+            break;
+        }
+    }
+    step = fine + 1;
+    fine = note_low;
+    fine += step;
+    semitone = semitone + (note_high + (octave - 12) * 12) + ((lo = (u_short)fine) >> 7);
+    return (semitone << 8) | (lo & 0x7E);
+}
+#elif VERSION >= 40
 #include "libspu_i.h"
 inline u32 _spu_2pitch(s32 arg0, u32 arg1) {
     u32 sp8;
@@ -311,4 +400,4 @@ s32 _spu_pitch2note(u16 arg0, u16 arg1, u16 arg2) {
     return (note_high << 8) | note_low;
 }
 #endif
-#endif
+#endif /* VERSION > 30 */

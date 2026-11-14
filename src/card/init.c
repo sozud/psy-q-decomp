@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: MIT
 #include "../types.h"
 
 void ChangeClearPAD(long);
-void EnterCriticalSection(void);
+int EnterCriticalSection(void);
 void ExitCriticalSection(void);
 int ReadInitPadFlag(void);
 void InitCARD2(long val);
@@ -10,8 +11,15 @@ void StopCARD2(void);
 void _ExitCard(void);
 void _patch_card(void);
 void _patch_card2(void);
+void _copy_memcard_patch(void);
+void _patch_card_info(void);
+int VSync(int mode);
 
-#if VERSION >= 40
+#if   VERSION >= 43
+static u8 __ps_libinfo__[8] = {0x50, 0x73, 0x03, 0x25, 0x9B, 0x52, 0x43, 0x00};
+#elif VERSION >= 41
+static u8 __ps_libinfo__[8] = {0x50, 0x73, 0x03, 0x19, 0xC4, 0x3B, 0x41, 0x00};
+#elif VERSION >= 40
 static u8 __ps_libinfo__[8] = {0x50, 0x73, 0x03, 0x15, 0x9C, 0x85, 0x40, 0x00};
 #elif VERSION == 37
 static u8 __ps_libinfo__[8] = {0x50, 0x73, 0x03, 0x0C, 0xDA, 0x99, 0x37, 0x00};
@@ -27,6 +35,11 @@ void InitCARD(long val) {
         val = 0;
     }
     InitCARD2(val);
+#if VERSION >= 41
+    _copy_memcard_patch();
+    _patch_card();
+    _patch_card2();
+#endif
 #else
     InitCARD2(val);
     _patch_card();

@@ -454,7 +454,7 @@ void CD_set_test_parmnum(int n)
     ComParm[25] = n;
 }
 
-#else
+#else /* VERSION == 30 */
 
 static volatile u_char *reg0 = (u_char *)0x1F801800;
 static volatile u_char *reg1 = (u_char *)0x1F801801;
@@ -838,20 +838,20 @@ void CD_set_test_parmnum(int n)
 #else
 // SPDX-License-Identifier: MIT
 #include "libcd.h"
-#if VERSION == 40
+#if VERSION >= 40
 typedef struct {
     short left;
     short right;
 } SpuVolume;
 typedef struct {
     u8 voice_regs[0x180];
-    SpuVolume main_vol;
+    SpuVolume main_vol; /* 0x180 */
     u8 pad184[0x1AA - 0x184];
-    u16 spucnt;
+    u16 spucnt; /* 0x1AA */
     u8 pad1AC[0x1B0 - 0x1AC];
-    SpuVolume cd_vol;
-    SpuVolume ex_vol;
-    SpuVolume main_volx;
+    SpuVolume cd_vol;    /* 0x1B0 */
+    SpuVolume ex_vol;    /* 0x1B4 */
+    SpuVolume main_volx; /* 0x1B8 */
 } SPU_RXX;
 #else
 #include "../spu/libspu_i.h"
@@ -859,7 +859,7 @@ typedef struct {
 
 typedef unsigned int size_t;
 
-typedef char Result_t[8];
+typedef u_char Result_t[8];
 
 typedef struct {
 #if VERSION == 33
@@ -887,6 +887,7 @@ typedef struct Alarm_t {
     char* unk8;
 } Alarm_t;
 
+#if !defined(PIECE) || PIECE == 1
 static Result_t Result[3];
 static volatile Alarm_t Alarm;
 
@@ -896,10 +897,16 @@ static u8 __ps_libinfo__[] = {0x50, 0x73, 0x04, 0x0A, 0x1A, 0xD3, 0x36, 0x10};
 static u8 __ps_libinfo__[] = {0x50, 0x73, 0x04, 0x0C, 0xDA, 0x99, 0x37};
 #elif VERSION == 40
 static u8 __ps_libinfo__[] = {0x50, 0x73, 0x04, 0x15, 0x9C, 0x85, 0x40};
+#elif VERSION == 41
+static u8 __ps_libinfo__[] = {0x50, 0x73, 0x04, 0x19, 0xB3, 0x5C, 0x41};
+#elif VERSION == 43
+static u8 __ps_libinfo__[] = {0x50, 0x73, 0x04, 0x25, 0x9B, 0x52, 0x43};
 #endif
 CdlCB CD_cbsync = NULL;
 CdlCB CD_cbready = NULL;
+#if VERSION < 43
 CdlCB CD_cbread = NULL;
+#endif
 int CD_debug = 0;
 int CD_status = 0;
 int CD_status1 = 0;
@@ -909,14 +916,14 @@ unsigned char CD_pos[] = {2, 0, 0, 0};
 unsigned char CD_mode = 0;
 #endif
 unsigned char CD_com = 0;
-#if VERSION == 40
+#if VERSION >= 40
 int DS_active = 0;
 int StMode;
 #endif
 char* CD_comstr[] = {
     "CdlSync",    "CdlNop",
     "CdlSetloc",  "CdlPlay",
-#if VERSION == 40
+#if VERSION >= 40
     "CdlForward", "CdlBackward",
 #else
     "CdlForward", "CdlBackword",
@@ -954,12 +961,15 @@ static int ComAttr[4][32] = {
      0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
+#endif
+
 static volatile u8* reg0 = (u8*)0x1F801800;
 static volatile u8* reg1 = (u8*)0x1F801801;
 static volatile u8* reg2 = (u8*)0x1F801802;
 static volatile u8* reg3 = (u8*)0x1F801803;
 
 static volatile int* com_delay = (int*)0x1F801020;
+#if !defined(PIECE) || PIECE == 1
 static volatile SPU_RXX* spu = (SPU_RXX*)0x1F801C00;
 #if VERSION == 33
 static volatile CD_intr Intr = {0, 0, 0, 0};
@@ -1113,7 +1123,7 @@ static int getintr(void) {
 }
 #else
 static int getintr(void) {
-    volatile char nReg;
+    volatile u_char nReg;
     volatile Result_t buf;
     int i, j;
     int bHasError;
@@ -1155,15 +1165,16 @@ static int getintr(void) {
         bHasError &= (CdlStatError | CdlStatSeekError | CdlStatIdError |
                       CdlStatShellOpen);
     }
+#define DISKERR_DEBUG 0
     if (nReg == 5) {
 #if VERSION >= 37
-        if (CD_debug > 0) {
+        if (CD_debug > DISKERR_DEBUG) {
             printf("DiskError: ");
         }
 #else
         puts("DiskError: ");
 #endif
-        if (CD_debug > 0) {
+        if (CD_debug > DISKERR_DEBUG) {
             printf("com=%s,code=(%02x:%02x)\n", CD_comstr[CD_com], CD_status,
                    CD_status1);
         }
@@ -1615,7 +1626,9 @@ int CD_init(void) {
         .cd_com = &CD_com,
         .cd_status = &CD_status,
         .cd_pos = &CD_pos,
-#if VERSION == 40
+#if VERSION >= 43
+        .rcsid = "$Id: bios.c,v 1.86 1997/03/28 07:42:42 makoto Exp yos $"
+#elif VERSION >= 40
         .rcsid = "$Id: bios.c,v 1.86 1997/03/28 07:42:42 makoto Exp $"
 #elif VERSION == 37
         .rcsid = "$Id: bios.c,v 1.81 1996/12/16 06:24:14 makoto Exp $"
@@ -1671,12 +1684,15 @@ int CD_init(void) {
 }
 #endif
 
+#endif /* PIECE == 1 */
+
 static volatile int* dv5_delay = (int*)0x1F801018;
 static volatile int* d_pcr = (int*)0x1F8010F0;
 static volatile int* d3_madr = (int*)0x1F8010B0;
 static volatile int* d3_bcr = (int*)0x1F8010B4;
 static volatile int* d3_chcr = (int*)0x1F8010B8;
 
+#if !defined(PIECE) || PIECE == 1
 int CD_datasync(int mode) {
     int ret;
 
@@ -1697,7 +1713,9 @@ int CD_datasync(int mode) {
     }
     return ret;
 }
+#endif
 
+#if !defined(PIECE) || PIECE == 2
 int CD_getsector(void* buffer, size_t size) {
     *reg0 = 0;
     *reg3 = 0x80;
@@ -1716,8 +1734,10 @@ int CD_getsector(void* buffer, size_t size) {
     *com_delay = 0x1325;
     return 0;
 }
+#endif
 
-#if VERSION == 40
+#if VERSION >= 40
+#if !defined(PIECE) || PIECE == 3
 int CD_getsector2(void* buffer, size_t size) {
     volatile int readback;
 
@@ -1735,6 +1755,9 @@ int CD_getsector2(void* buffer, size_t size) {
     return 0;
 }
 #endif
+#endif
 
+#if !defined(PIECE) || PIECE == 1
 void CD_set_test_parmnum(int parmNum) { ComAttr[3][25] = parmNum; }
+#endif
 #endif

@@ -34,6 +34,9 @@ jobs:
         sudo dpkg -i comcom32_0.1~alpha3-1_all.deb
         sudo dpkg -i dosemu2_2.0~pre9-1_amd64.deb
 
+    - name: Get GNU toolchain
+      run: bash prep_gnu.sh
+
     - name: Build
       run: |
         cargo build --release --manifest-path ./tools/psy-q-splitter/splitter/Cargo.toml
@@ -65,8 +68,20 @@ jobs:
         name: 3.6_report
         path: build/3.6/report.json
 
+    - name: Upload progress report (3.7)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 3.7_report
+        path: build/3.7/report.json
+
     - name: Upload progress report (4.0)
       uses: actions/upload-artifact@v4
       with:
         name: 4.0_report
         path: build/4.0/report.json
+
+    - name: Upload progress report (4.3)
+      uses: actions/upload-artifact@v4
+      with:
+        name: 4.3_report
+        path: build/4.3/report.json

@@ -2,7 +2,11 @@
 
 short SsUtKeyOnV(short voice, short vabId, short prog, short tone, short note,
                  short fine, short voll, short volr) {
+#if VERSION >= 41
+    short tn;
+#else
     int tn;
+#endif
 
     if (_snd_ev_flag == 1) {
         return -1;
@@ -41,8 +45,10 @@ short SsUtKeyOnV(short voice, short vabId, short prog, short tone, short note,
     _svm_cur.tone_center = _svm_tn[tn].center;
     _svm_cur.tone_shift = _svm_tn[tn].shift;
     _svm_cur.tone_mode = _svm_tn[tn].mode;
+#if VERSION < 43
     _svm_cur.tone_min = _svm_tn[tn].min;
     _svm_cur.tone_max = _svm_tn[tn].max;
+#endif
     if (_svm_cur.tone_vag_idx == 0) {
         _snd_ev_flag = 0;
         return -1;

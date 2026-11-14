@@ -20,7 +20,11 @@ static volatile u32* Dma_CHCR5 = (u32*)0x1F8010D8;
 static volatile u32* Dma_MADR5 = (u32*)0x1F8010D0;
 static volatile u32* i_reg = (u32*)0x1F801070;
 static volatile u32* i_mask = (u32*)0x1F801074;
+#if VERSION >= 41
+u32 debug_cause[1] = {0};
+#else
 u32 debug_cause[2] = {0, 0};
+#endif
 
 static void mem2mem(s32*, s32*, u32, u32);
 
@@ -37,6 +41,9 @@ extern s32 StMode;
 
 void StCdInterrupt(void) {
     static volatile u16* HeaderArea;
+#if VERSION >= 41
+    static int count = 0;
+#endif
     volatile s16 subroutine_arg8[4];
     CdlLOC loc;
     u_char result[8];
@@ -82,10 +89,17 @@ void StCdInterrupt(void) {
     *DEV5_DELAY = 0x20943;
     *COMMON_DELAY = 0x1323;
     if (StMode == 0) {
+#if VERSION >= 41
+        var_v1 = (u8*)&subroutine_arg8[4];
+        for (var_v1_2 = 0; var_v1_2 < 4; var_v1_2++) {
+            var_v1[var_v1_2] = *HADR2;
+        }
+#else
         var_v1 = (u8*)&subroutine_arg8[4];
         do {
             *var_v1++ = *HADR2;
         } while (var_v1 < &subroutine_arg8[6]);
+#endif
         for (var_v1_2 = 0; var_v1_2 < 8; var_v1_2++) {
             *HADR2;
         }
@@ -179,7 +193,11 @@ void StCdInterrupt(void) {
             var_a1 = (u32*)StRingAddr;
             var_a0 = HeaderArea;
             StRingIdx1 = 0;
+#if VERSION >= 41
+            for (var_v1_2 = 0; var_v1_2 < 8; var_v1_2++) {
+#else
             for (var_v1_3 = 0; var_v1_3 < 8; var_v1_3++) {
+#endif
                 *var_a1++ = *var_a0++;
             }
             HeaderArea = (u16*)StRingAddr;

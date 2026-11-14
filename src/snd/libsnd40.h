@@ -20,7 +20,7 @@
 #define CC_DATAENTRY 2
 #define CC_MAINVOL 3
 #define CC_PANPOT 4
-#if VERSION == 40
+#if VERSION >= 40
 #define CC_EXPRESSION 5
 #define CC_DAMPER 6
 #define CC_NRPN1 7
@@ -109,131 +109,138 @@ typedef struct {
 
 #if VERSION < 40
 struct SeqStruct {
-     u8 unk23;
-     u8 pad1[3];
-     u8* seq_ptr;
-     u8* read_pos;
-     u8* next_sep_pos;
-     u8 unk15;
-     u8 running_status;
-     u8 channel_idx;
-     u8 unk18;
-     u8 unk19;
-     u8 fn_idx;
-     u8 unk1B;
-     u8 panpot[16];
-     u8 unk1C;
-     u8 unk1D;
-     u8 unk1E;
-     u8 unk1F;
-     u8 play_mode;
-     u8 programs[16];
-     u8 unk22;
-     u8 unk47;
-     short vol_l;
-     short vol_r;
-     s16 unk4C;
-     s16 unk4E;
-     s16 l_count;
-     s16 unk21;
-     s16 resolution;
-     s16 vab_id;
-     short vol[16];
-     s16 unk52;
-     s16 unk54;
-     s16 unk56;
-     u16 voll;
-     u16 volr;
-     s16 unk5C;
-     s16 unk5E;
-     s32 unk84;
-     s32 unk88;
-     s32 tempo;
-     s32 delta_value;
-     u32 unk94;
-     unsigned int flags;
-     unsigned int v_time_l;
-     unsigned int v_time_r;
-     u32 unkA4;
-     u32 unkA8;
-     u32 unkAC;
+    /* 0x00 */ u8 unk23;
+    /* 0x01 */ u8 pad1[3];
+    /* 0x04 */ u8* seq_ptr;
+    /* 0x08 */ u8* read_pos;
+    /* 0x0C */ u8* next_sep_pos;
+    /* 0x10 */ u8 unk15;
+    /* 0x11 */ u8 running_status;
+    /* 0x12 */ u8 channel_idx;
+    /* 0x13 */ u8 unk18;
+    /* 0x14 */ u8 unk19;
+    /* 0x15 */ u8 fn_idx;
+    /* 0x16 */ u8 unk1B;
+    /* 0x17 */ u8 panpot[16];
+    /* 0x27 */ u8 unk1C;
+    /* 0x28 */ u8 unk1D;
+    /* 0x29 */ u8 unk1E;
+    /* 0x2A */ u8 unk1F;
+    /* 0x2B */ u8 play_mode;
+    /* 0x2C */ u8 programs[16];
+    /* 0x3C */ u8 unk22;
+    /* 0x3D */ u8 unk47;
+    /* 0x3E */ short vol_l;
+    /* 0x40 */ short vol_r;
+    /* 0x42 */ s16 unk4C;
+    /* 0x44 */ s16 unk4E;
+    /* 0x46 */ s16 l_count;
+    /* 0x48 */ s16 unk21;
+    /* 0x4A */ s16 resolution;
+    /* 0x4C */ s16 vab_id;
+    /* 0x4E */ short vol[16];
+    /* 0x6E */ s16 unk52;
+    /* 0x70 */ s16 unk54;
+    /* 0x72 */ s16 unk56;
+    /* 0x74 */ u16 voll;
+    /* 0x76 */ u16 volr;
+    /* 0x78 */ s16 unk5C;
+    /* 0x7A */ s16 unk5E;
+    /* 0x7C */ s32 unk84;
+    /* 0x80 */ s32 unk88;
+    /* 0x84 */ s32 tempo;
+    /* 0x88 */ s32 delta_value;
+    /* 0x8C */ u32 unk94;
+    /* 0x90 */ unsigned int flags;
+    /* 0x94 */ unsigned int v_time_l;
+    /* 0x98 */ unsigned int v_time_r;
+    /* 0x9C */ u32 unkA4;
+    /* 0xA0 */ u32 unkA8;
+    /* 0xA4 */ u32 unkAC;
 #if VERSION == 36
-     s16 unkA8_36;
-     s16 channel_mute;
+    /* 0xA8 */ s16 unkA8_36;
+    /* 0xAA */ s16 channel_mute;
 #else
-     s16 channel_mute;
-     s16 unkAA;
+    /* 0xA8 */ s16 channel_mute;
+    /* 0xAA */ s16 unkAA;
 #endif
 };
 #else
 struct SeqStruct {
-     u8* seq_ptr;
-     u8* read_pos;
-     u8* next_sep_pos;
-     u8* loop_pos;
-     u32 unk10;
-     u8 play_mode;
-     u8 unk15;
-     u8 running_status;
-     u8 channel_idx;
-     u8 unk18;
-     u8 unk19;
-     u8 fn_idx;
-     u8 unk1B;
-     u8 unk1C;
-     u8 unk1D;
-     u8 unk1E;
-     u8 unk1F;
-     u8 l_count;
-     u8 unk21;
-     u8 unk22;
-     u8 unk23;
-     u8 rhythm_n;
-     u8 rhythm_d;
-     u8 vab_id;
-     u8 panpot[16];
-     u8 programs[16];
-     u8 unk47;
-     short vol_l;
-     short vol_r;
-     s16 unk4C;
-     s16 unk4E;
-     s16 resolution;
-     s16 unk52;
-     s16 unk54;
-     s16 unk56;
-     u16 voll;
-     u16 volr;
-     s16 unk5C;
-     s16 unk5E;
-     short vol[16];
-     s16 channel_mute;
-     u8 unk82;
-     u8 unk83;
-     s32 unk84;
-     s32 unk88;
-     s32 tempo;
-     s32 delta_value;
-     u32 unk94;
-     unsigned int flags;
-     int v_time_l;
-     int v_time_r;
-     u32 unkA4;
-     s32 unkA8;
-     s32 unkAC;
+    /* 0x00 */ u8* seq_ptr;
+    /* 0x04 */ u8* read_pos;
+    /* 0x08 */ u8* next_sep_pos;
+    /* 0x0C */ u8* loop_pos;
+    /* 0x10 */ u32 unk10;
+    /* 0x14 */ u8 play_mode;
+    /* 0x15 */ u8 unk15;
+    /* 0x16 */ u8 running_status;
+    /* 0x17 */ u8 channel_idx;
+    /* 0x18 */ u8 unk18;
+    /* 0x19 */ u8 unk19;
+    /* 0x1A */ u8 fn_idx;
+    /* 0x1B */ u8 unk1B;
+    /* 0x1C */ u8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+    /* 0x1F */ u8 unk1F;
+    /* 0x20 */ char l_count;
+    /* 0x21 */ char unk21;
+    /* 0x22 */ char unk22;
+    /* 0x23 */ char unk23;
+#if VERSION >= 43
+    /* 0x24 */ char rhythm_n;
+    /* 0x25 */ char rhythm_d;
+#else
+    /* 0x24 */ u8 rhythm_n;
+    /* 0x25 */ u8 rhythm_d;
+#endif
+    /* 0x26 */ char vab_id;
+    /* 0x27 */ u8 panpot[16];
+    /* 0x37 */ u8 programs[16];
+    /* 0x47 */ u8 unk47;
+    /* 0x48 */ short vol_l;
+    /* 0x4A */ short vol_r;
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ s16 unk4E;
+    /* 0x50 */ s16 resolution;
+    /* 0x52 */ s16 unk52;
+    /* 0x54 */ s16 unk54;
+    /* 0x56 */ s16 unk56;
+    /* 0x58 */ u16 voll;
+    /* 0x5A */ u16 volr;
+    /* 0x5C */ s16 unk5C;
+    /* 0x5E */ s16 unk5E;
+    /* 0x60 */ short vol[16];
+    /* 0x80 */ s16 channel_mute;
+    /* 0x82 */ u8 unk82;
+    /* 0x83 */ u8 unk83;
+    /* 0x84 */ s32 unk84;
+    /* 0x88 */ s32 unk88;
+    /* 0x8C */ s32 tempo;
+    /* 0x90 */ s32 delta_value;
+    /* 0x94 */ u32 unk94;
+    /* 0x98 */ unsigned int flags;
+    /* 0x9C */ int v_time_l;
+    /* 0xA0 */ int v_time_r;
+    /* 0xA4 */ u32 unkA4;
+    /* 0xA8 */ s32 unkA8;
+    /* 0xAC */ s32 unkAC;
 };
 #endif
 
 struct SndSeqTickEnv {
-     s32 tick_mode;
-     s32 manual_tick;
-     void (*tick_cb)(void);
-     void (*vsync_cb)();
-     u8 vsync_tick;
-     u8 unk11;
-     u8 alarm_tick;
-     u8 unk13;
-     int unk14;
+    /* 0x00 */ s32 tick_mode;
+    /* 0x04 */ s32 manual_tick;
+    /* 0x08 */ void (*tick_cb)(void);
+    /* 0x0C */ void (*vsync_cb)();
+    /* 0x10 */ char vsync_tick;
+    /* 0x11 */ char unk11;
+    /* 0x12 */ char alarm_tick;
+    /* 0x13 */ u8 unk13;
+#if VERSION < 41
+    /* 0x14 */ int unk14;
+#endif
 };
 
 struct SpuVoice {
@@ -244,27 +251,30 @@ struct SpuVoice {
     s16 voll1;
     char pan;
     char unkb;
-    s16 note;
+#if VERSION >= 41
+    s16 unkc;
+#endif
+    s16 note; /* 0xC */
     s16 seq_sep_no;
     s16 fake_program;
-    s16 prog;
-    s16 tone;
-    s16 vabId;
+    s16 prog;  /* 0x12 */
+    s16 tone;  /* 0x14 */
+    s16 vabId; /* 0x16 */
     s16 priority;
     u8 pad4[1];
-    u8 unk1b;
-    s16 auto_vol;
+    char unk1b;
+    s16 auto_vol; /* 0x1c */
     s16 unk1e;
     s16 unk20;
     s16 unk22;
-    s16 start_vol;
-    s16 end_vol;
-    s16 auto_pan;
+    s16 start_vol; /* 0x24 */
+    s16 end_vol;   /* 0x26 */
+    s16 auto_pan;  /* 0x28 */
     s16 unk2a;
     s16 unk2c;
     s16 unk2e;
-    s16 start_pan;
-    s16 end_pan;
+    s16 start_pan; /* 0x30 */
+    s16 end_pan;   /* 0x32 */
 };
 
 struct struct_svm {
@@ -285,16 +295,20 @@ struct struct_svm {
     char tone_pan;
     char tone_prior;
     char tone_center;
-    unsigned char tone_shift;
+    char tone_shift;
+#if VERSION < 43
     char tone_min;
     char tone_max;
+#endif
     u8 tone_mode;
     u8 pad;
     short seq_sep_no;
     short tone_vag_idx;
     short voice;
+#if VERSION < 43
     short voiceOffset;
     short field_0x1e;
+#endif
 };
 
 typedef struct tagSpuVoiceRegister {
@@ -343,6 +357,9 @@ extern short _svm_stereo_mono;
 extern SpuReverbAttr _svm_rattr;
 extern u8 _svm_vab_used[NUM_VAB];
 extern char _SsVmMaxVoice;
+#if VERSION >= 41
+extern unsigned long _snd_vmask;
+#endif
 extern u16 _svm_vab_count;
 extern short kMaxPrograms;
 extern struct struct_svm _svm_cur;
@@ -369,10 +386,14 @@ extern s32 _snd_ev_flag;
 extern struct SndSeqTickEnv _snd_seq_tick_env;
 extern SPU_RXX* _svm_sreg;
 extern SPU_VOICE_REG _svm_sreg_buf[NUM_VOICES];
-extern char _svm_sreg_dirty[NUM_VOICES];
+extern unsigned char _svm_sreg_dirty[NUM_VOICES];
 extern unsigned short _svm_okon1;
 extern unsigned short _svm_okon2;
 extern unsigned short _svm_okof1;
+#if VERSION >= 41
+extern unsigned short _svm_onos1;
+extern unsigned short _svm_onos2;
+#endif
 extern unsigned short _svm_okof2;
 extern unsigned short _svm_orev1;
 extern unsigned short _svm_orev2;
@@ -393,7 +414,7 @@ void SetAutoPan(short voice);
 void SetAutoVol(short voice);
 void SeAutoPan(short, short, short, short);
 void SeAutoVol(short, short, short, short);
-void Snd_SetPlayMode(s16, s16, u8, s16);
+void Snd_SetPlayMode(s16, s16, char, s16);
 long SpuIsTransferCompleted(long);
 void SpuQuit(void);
 void SpuSetCommonAttr(SpuCommonAttr* attr);
@@ -416,7 +437,7 @@ short _SsVmSetSeqVol(
 short _SsVmGetSeqVol(short seq_sep_no, short* voll, short* volr);
 void _spu_setInTransfer(s32);
 void vmNoiseOn2(u8 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4);
-#if VERSION == 40
+#if VERSION >= 40
 void _SsSndSetVolData(
     short sep_access_num, short seq_num, short vol, int v_time);
 #else
@@ -427,9 +448,9 @@ void _SsVmDamperOff(void);
 int _SsInitSoundSep(short flag, short i, short vab_id, unsigned long* addr);
 short _SsInitSoundSeq(short seq_no, short vab_id, u8* addr);
 int _SsReadDeltaValue(short seq_access_num, short seq_num);
-char _SsVmAlloc(short voice);
-void vmNoiseOn(char voice);
-void vmNoiseOff(char voice);
+unsigned char _SsVmAlloc(short voice);
+void vmNoiseOn(unsigned char voice);
+void vmNoiseOff(unsigned char voice);
 unsigned short note2pitch2(unsigned short note, unsigned short fine);
 void _SsVmKeyOnNow(unsigned short vagCount, unsigned short pitch);
 int _SsVmVSetUp(short vabId, short prog);

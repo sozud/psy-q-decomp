@@ -13,7 +13,7 @@ void SpuSetKey(long on_off, unsigned long voice_bit) {
         break;
     }
 }
-#else
+#else /* VERSION > 30 */
 #if VERSION >= 36
 #define _spu_RQvoice header_spu_RQvoice
 #if VERSION == 36
@@ -114,4 +114,4 @@ void SpuSetKey(long on_off, unsigned long voice_bit) {
     }
 }
 #endif
-#endif
+#endif /* VERSION > 30 */

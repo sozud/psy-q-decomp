@@ -8,13 +8,15 @@ void _SsSndStop(short sep_access_num, short seq_num) {
     _ss_score[sep_access_num][seq_num].flags &= ~SEQ_FLAG_1;
     _ss_score[sep_access_num][seq_num].flags &= ~SEQ_FLAG_2;
     _ss_score[sep_access_num][seq_num].flags &= ~SEQ_FLAG_8;
-#if VERSION == 40
+#if VERSION >= 40
     _ss_score[sep_access_num][seq_num].flags &= ~SEQ_FLAG_400;
 #endif
     _ss_score[sep_access_num][seq_num].flags |= SEQ_FLAG_4;
     _SsVmSeqKeyOff(sep_access_num | (seq_num << 8));
-#if VERSION == 40
+#if VERSION >= 40
     _SsVmDamperOff();
+#endif
+#if VERSION == 40
     SsUtReverbOff();
 #endif
     score->play_mode = SSPLAY_PAUSE;
