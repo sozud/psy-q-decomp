@@ -7,6 +7,50 @@
 #define ARG 1
 #endif
 
+#if VERSION >= 41
+#define CRES_DONE(n) ((n) <= 0)
+#else
+#define CRES_DONE(n) ((n) == 0)
+#endif
+
+#if VERSION >= 43
+void _SsSndCrescendo(short seq_access_num, short arg1) {
+    struct SeqStruct* score = &_ss_score[seq_access_num][arg1];
+    int vol;
+    int l, r;
+    unsigned short voll, volr;
+
+    if (++score->v_time_r > score->v_time_l) {
+        _ss_score[seq_access_num][arg1].flags &= ~0x10;
+    } else {
+        vol = (score->vol_l * score->v_time_r) / score->v_time_l;
+        vol -= score->vol_r;
+        if (vol != 0) {
+            score->vol_r += vol;
+            _SsVmGetSeqVol(seq_access_num | (arg1 << 8), &voll, &volr);
+            l = voll + vol;
+            if (l > 127) {
+                l = 127;
+            }
+            if (l < 0) {
+                l = 0;
+            }
+            r = volr + vol;
+            if (r > 127) {
+                r = 127;
+            }
+            if (r < 0) {
+                r = 0;
+            }
+            _SsVmSetSeqVol(seq_access_num | (arg1 << 8), l, r, 1);
+            if ((l == 127 && r == 127) || (l == 0 && r == 0)) {
+                _ss_score[seq_access_num][arg1].flags &= ~0x10;
+            }
+        }
+    }
+    _SsVmGetSeqVol(seq_access_num | (arg1 << 8), &score->unk5C, &score->unk5E);
+}
+#else
 void _SsSndCrescendo(short seq_access_num, short arg1) {
     struct SeqStruct* score = &_ss_score[seq_access_num][arg1];
     unsigned short voll, volr;
@@ -27,7 +71,7 @@ void _SsSndCrescendo(short seq_access_num, short arg1) {
                 _SsVmSetSeqVol(seq_access_num | (arg1 << 8), 127, 127, ARG);
                 _ss_score[seq_access_num][arg1].flags &= ~0x10;
             }
-            if (score->v_time_r == 0 || score->vol_r == 0) {
+            if (score->v_time_r == 0 || CRES_DONE(score->vol_r)) {
                 _ss_score[seq_access_num][arg1].flags &= ~0x10;
             }
         }
@@ -37,6 +81,9 @@ void _SsSndCrescendo(short seq_access_num, short arg1) {
             _SsVmGetSeqVol(seq_access_num | (arg1 << 8), &voll, &volr);
             if (voll - score->unk4C >= 127 && volr - score->unk4C >= 127) {
                 _SsVmSetSeqVol(seq_access_num | (arg1 << 8), 127, 127, ARG);
+#if VERSION >= 41
+                _ss_score[seq_access_num][arg1].flags &= ~0x10;
+#endif
             }
             if ((score->v_time_l - score->v_time_r) * -score->unk4C <
                 score->vol_l) {
@@ -47,12 +94,13 @@ void _SsSndCrescendo(short seq_access_num, short arg1) {
             _SsVmSetSeqVol(seq_access_num | (arg1 << 8), 127, 127, ARG);
             _ss_score[seq_access_num][arg1].flags &= ~0x10;
         }
-        if (score->v_time_r == 0 || score->vol_r == 0) {
+        if (score->v_time_r == 0 || CRES_DONE(score->vol_r)) {
             _ss_score[seq_access_num][arg1].flags &= ~0x10;
         }
     }
     _SsVmGetSeqVol(seq_access_num | (arg1 << 8), &score->unk5C, &score->unk5E);
 }
+#endif
 #elif VERSION <= 33
 #include "libsnd_i.h"
 

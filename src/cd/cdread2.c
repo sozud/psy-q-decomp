@@ -5,7 +5,7 @@
 #define CdlModeSize1 0x20
 #define CdlModeStream 0x100
 
-#if VERSION == 40
+#if VERSION >= 40
 extern s32 StMode;
 #else
 s32 StMode;

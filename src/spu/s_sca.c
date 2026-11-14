@@ -184,7 +184,7 @@ void SpuSetCommonAttr(SpuCommonAttr* attr) {
         }
     }
 }
-#else
+#else /* VERSION > 33 */
 // SPDX-License-Identifier: MIT
 #if VERSION >= 36
 #if VERSION == 36
@@ -561,4 +561,4 @@ void SpuSetCommonAttr(SpuCommonAttr* attr) {
     }
 }
 #endif
-#endif
+#endif /* VERSION > 33 */

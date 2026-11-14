@@ -18,7 +18,7 @@ long SpuSetTransferMode(long mode) {
     _spu_trans_mode = mode;
     _spu_ioctl(_spu_fd, 0x21, &v);
 }
-#else
+#else /* VERSION > 30 */
 #include "libspu_i.h"
 
 long SpuSetTransferMode(long mode) {
@@ -38,4 +38,4 @@ long SpuSetTransferMode(long mode) {
     _spu_transMode = temp;
     return temp;
 }
-#endif
+#endif /* VERSION > 30 */

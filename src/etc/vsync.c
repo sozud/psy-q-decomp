@@ -33,7 +33,13 @@ long VSync(long mode) {
         }
     }
     pre_vcount = Vcount;
+#if VERSION >= 41
+    do {
+        Hcount = *t1_count;
+    } while (Hcount != *t1_count);
+#else
     Hcount = *t1_count;
+#endif
     return ret;
 }
 
@@ -61,6 +67,10 @@ static s32 __ps_libinfo__[2] = {0x0A067350, 0x1036D51A};
 static s32 __ps_libinfo__[2] = {0x0C067350, 0x00379BDA};
 #elif VERSION == 40
 static s32 __ps_libinfo__[2] = {0x15067350, 0x0040889C};
+#elif VERSION >= 43
+static s32 __ps_libinfo__[2] = {0x25067350, 0x0043529B};
+#elif VERSION >= 41
+static s32 __ps_libinfo__[2] = {0x19067350, 0x00415DB3};
 #endif
 static volatile s32* gp1 = (s32*)0x1F801814;
 static volatile s32* t1_count = (s32*)0x1F801110;
@@ -72,10 +82,20 @@ s32 VSync(s32 mode) {
     s32 max;
     s32 waitCount;
     static volatile s32 pre_vcount = 0;
+#if VERSION >= 41
+    volatile s32 count;
+#endif
 
     temp_s0 = *gp1;
 
+#if VERSION >= 41
+    do {
+        count = *t1_count;
+    } while (count != *t1_count);
+    ret = (count - Hcount) & 0xFFFF;
+#else
     ret = (*t1_count - Hcount) & 0xFFFF;
+#endif
     if (mode < 0) {
         return Vcount;
     }
@@ -105,7 +125,13 @@ s32 VSync(s32 mode) {
         } while (!((temp_s0 ^ *gp1) & 0x80000000));
     }
     pre_vcount = Vcount;
+#if VERSION >= 41
+    do {
+        Hcount = *t1_count;
+    } while (Hcount != *t1_count);
+#else
     Hcount = *t1_count;
+#endif
     return ret;
 }
 

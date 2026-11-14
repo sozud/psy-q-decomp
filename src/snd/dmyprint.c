@@ -10,7 +10,7 @@
         }                                                                    \
     }
 
-#if VERSION == 40
+#if VERSION >= 40
 void dmy_nothing1(void) {}
 #endif
 

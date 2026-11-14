@@ -1,6 +1,5 @@
 #include "libsnd_i.h"
 
-
 void _SsNoteOn(s16 seq_no, s16 sep_no, u8 note, u8 vol) {
     struct SeqStruct* score;
     u8 ch;
@@ -21,6 +20,16 @@ void _SsNoteOn(s16 seq_no, s16 sep_no, u8 note, u8 vol) {
             _SsVmKeyOff(seq_no | (sep_no << 8), score->vab_id,
                         score->programs[ch], note);
         }
+    }
+#elif VERSION >= 41
+    if (vol != 0) {
+        if (((score->channel_mute >> ch) & 1) == 0) {
+            _SsVmKeyOn(seq_no | (sep_no << 8), score->vab_id,
+                       score->programs[ch], note, voll, pan);
+        }
+    } else {
+        _SsVmKeyOff(seq_no | (sep_no << 8), score->vab_id,
+                    score->programs[ch], note);
     }
 #else
     if (score->voll != 0) {

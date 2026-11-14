@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #include "../types.h"
 
 void EnterCriticalSection(void);
@@ -60,7 +61,7 @@ long PAD_init(long mode, long* tbl, long a2, long a3) {
     ChangeClearPAD(0);
     SetPatchPad();
     PAD_init2(mode, tbl, a2, a3);
-#if VERSION >= 40
+#if VERSION >= 40 && VERSION < 43
     _send_pad();
 #endif
     init_pad_flag = 1;
@@ -77,7 +78,7 @@ int InitPAD(char* bufA, long lenA, char* bufB, long lenB) {
     ChangeClearPAD(0);
     SetPatchPad();
     InitPAD2(bufA, lenA, bufB, lenB);
-#if VERSION >= 40
+#if VERSION >= 40 && VERSION < 43
     _send_pad();
 #endif
     init_pad_flag = 1;
@@ -88,6 +89,9 @@ int StartPAD(void) {
     StartPAD2();
     ChangeClearPAD(0);
     EnablePAD();
+#if VERSION >= 41
+    return 1;
+#endif
 }
 
 void StopPAD(void) {

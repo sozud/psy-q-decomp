@@ -1,8 +1,7 @@
 #include "libsnd_i.h"
 
-
 u8 _SsVmSelectToneAndVag(u8* toneIdx, u8* vagIdx) {
-    u8 i;
+    char i;
     u8 vagCount;
 
     vagCount = 0;

@@ -24,7 +24,11 @@ void SsSeqCalledTbyT(void) {
                     _SsSndCrescendo(seq_index, tIndex);
                 }
                 if (_ss_score[seq_index][tIndex].flags & 0x20) {
+#if VERSION >= 43
+                    _SsSndCrescendo(seq_index, tIndex);
+#else
                     _SsSndDecrescendo(seq_index, tIndex);
+#endif
                 }
                 if (_ss_score[seq_index][tIndex].flags & 0x40) {
                     _SsSndTempo(seq_index, tIndex);

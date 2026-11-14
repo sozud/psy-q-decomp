@@ -32,7 +32,7 @@ long SpuGetKeyStatus(unsigned long voice_bit) {
         return (temp_a0 != 0) * 2;
     }
 }
-#else
+#else /* VERSION > 30 */
 #include "libspu_i.h"
 
 extern u32 _spu_keystat;
@@ -62,7 +62,11 @@ long SpuGetKeyStatus(unsigned long voice_bit) {
             return 3;
         }
     } else {
-        return (temp_a0 != 0) * 2;
+        if (temp_a0 != 0) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 }
-#endif
+#endif /* VERSION > 30 */

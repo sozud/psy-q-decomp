@@ -56,7 +56,16 @@ short SsVabTransBodyPartly(
         vabid_old = vabid;
         not_send_size = _svm_vab_total[vabid];
         SpuSetTransferMode(0);
+#if VERSION >= 43
+        if (SpuSetTransferStartAddr(_svm_vab_start[vabid]) == 0) {
+            not_send_size = 0;
+            vabid_old = -1;
+            _spu_setInTransfer(0);
+            return -1;
+        }
+#else
         SpuSetTransferStartAddr(_svm_vab_start[vabid]);
+#endif
     }
     new_vabid = vabid_old;
     if (new_vabid != vabid) {

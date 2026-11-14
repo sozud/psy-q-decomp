@@ -50,7 +50,64 @@ long SpuClearReverbWorkArea(long mode) {
     }
     return 0;
 }
-#else
+#elif VERSION >= 41
+#include "libspu_i.h"
+
+long SpuClearReverbWorkArea(long rev_mode) {
+    volatile SpuTransferCallbackProc callback;
+    s32 oldTransmode;
+    s32 dstAddr;
+    s32 more;
+    s32 transmodeCleared;
+    u32 size;
+    u32 length;
+
+    callback = 0;
+    transmodeCleared = 0;
+    if (rev_mode < 0 || rev_mode >= 10 ||
+        _SpuIsInAllocateArea_(_spu_rev_startaddr[rev_mode])) {
+        return -1;
+    }
+    if (rev_mode == 0) {
+        length = 0x10 << _spu_mem_mode_plus;
+        dstAddr = 0xFFF0 << _spu_mem_mode_plus;
+    } else {
+        length = (0x10000 - _spu_rev_startaddr[rev_mode]) << _spu_mem_mode_plus;
+        dstAddr = _spu_rev_startaddr[rev_mode] << _spu_mem_mode_plus;
+    }
+    oldTransmode = _spu_transMode;
+    if (_spu_transMode == 1) {
+        _spu_transMode = 0;
+        transmodeCleared = 1;
+    }
+    more = 1;
+    if (_spu_transferCallback != 0) {
+        callback = _spu_transferCallback;
+        _spu_transferCallback = 0;
+    }
+    while (more != 0) {
+        if (length > 0x400) {
+            size = 0x400;
+        } else {
+            size = length;
+            more = 0;
+        }
+        _spu_t(2, dstAddr);
+        _spu_t(1);
+        _spu_t(3, _spu_zerobuf, size);
+        WaitEvent(_spu_EVdma);
+        length -= 0x400;
+        dstAddr += 0x400;
+    }
+    if (transmodeCleared != 0) {
+        _spu_transMode = oldTransmode;
+    }
+    if (callback != 0) {
+        _spu_transferCallback = callback;
+    }
+    return 0;
+}
+#else /* VERSION > 30 */
 #include "libspu_i.h"
 
 long SpuClearReverbWorkArea(long mode) {
@@ -107,4 +164,4 @@ long SpuClearReverbWorkArea(long mode) {
     }
     return 0;
 }
-#endif
+#endif /* VERSION > 30 */

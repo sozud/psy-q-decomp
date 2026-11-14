@@ -1,6 +1,14 @@
 #include "libsnd_i.h"
 
-
+#if VERSION >= 41
+s16 SsUtGetDetVVol(s16 voice, s16* voll, s16* volr) {
+    if (voice >= 0 && voice < NUM_VOICES) {
+        SpuGetVoiceVolume(voice, voll, volr);
+        return 0;
+    }
+    return -1;
+}
+#else
 s16 SsUtGetDetVVol(s16 voice, s16* voll, s16* volr) {
     if (voice >= 0 && voice < NUM_VOICES) {
         *voll = ((u16*)_svm_sreg)[voice * 8 + 0];
@@ -9,6 +17,7 @@ s16 SsUtGetDetVVol(s16 voice, s16* voll, s16* volr) {
     }
     return -1;
 }
+#endif
 
 short SsUtSetDetVVol(short voice, short arg1, short arg2) {
     if (voice >= 0 && voice < NUM_VOICES) {
@@ -21,6 +30,19 @@ short SsUtSetDetVVol(short voice, short arg1, short arg2) {
     return -1;
 }
 
+#if VERSION >= 41
+s16 SsUtGetVVol(s16 voice, s16* voll, s16* volr) {
+    u16 l, r;
+
+    if (voice >= 0 && voice < NUM_VOICES) {
+        SpuGetVoiceVolume(voice, (short*)&l, (short*)&r);
+        *voll = (s16)l / 0x81;
+        *volr = (s16)r / 0x81;
+        return 0;
+    }
+    return -1;
+}
+#else
 s16 SsUtGetVVol(s16 voice, s16* voll, s16* volr) {
     if (voice >= 0 && voice < NUM_VOICES) {
         s16 temp1 = ((u16*)_svm_sreg)[voice * 8 + 0];
@@ -31,6 +53,7 @@ s16 SsUtGetVVol(s16 voice, s16* voll, s16* volr) {
     }
     return -1;
 }
+#endif
 
 #if VERSION == 40
 s16 SsUtSetVVol(s16 voice, s16 voll, s16 volr) {

@@ -2,7 +2,7 @@
 #include "common.h"
 #include <psxsdk/libgpu.h>
 
-extern void (*GPU_printf)(const char* fmt, ...);
+extern int (*GPU_printf)();
 
 #if VERSION == 26
 static char rcsid[] = "$Id: prim.c,v 1.51 1995/01/12 11:35:25 suzu Exp $";
@@ -102,9 +102,15 @@ void SetLineF3(LINE_F3* p) { setlen(p, 5), setcode(p, 0x48); }
 #else
 void SetLineF3(LINE_F3* p) { setLineF3(p); }
 #endif
+#if VERSION >= 43
+void SetLineG3(LINE_G3* p) { setLineG3(p), p->p2 = 0; }
+void SetLineF4(LINE_F4* p) { setLineF4(p); }
+void SetLineG4(LINE_G4* p) { setLineG4(p), p->p2 = 0, p->p3 = 0; }
+#else
 void SetLineG3(LINE_G3* p) { setLineG3(p); }
 void SetLineF4(LINE_F4* p) { setLineF4(p); }
 void SetLineG4(LINE_G4* p) { setLineG4(p); }
+#endif
 #if VERSION > 30 && VERSION < 37
 void SetBlockFill(BLK_FILL* p) { setBlockFill(p); }
 #endif
@@ -222,6 +228,14 @@ void DumpDrawEnv(DRAWENV* env) {
                    (env->tpage >> 5) & 3, (env->tpage << 6) & 0x7C0,
                    (env->tpage * 0x10) & 0x100);
     }
+#elif VERSION == 41
+    {
+        int tpage = env->tpage;
+
+        GPU_printf("tpage: (%d,%d,%d,%d)\n", (tpage >> 7) & 3,
+                   (tpage >> 5) & 3, (tpage << 6) & 0x7C0,
+                   ((tpage << 4) & 0x100) + ((tpage >> 2) & 0x200));
+    }
 #elif VERSION >= 40
     GPU_printf("tpage: (%d,%d,%d,%d)\n", (env->tpage >> 7) & 3,
                (env->tpage >> 5) & 3, (env->tpage << 6) & 0x7C0,
@@ -248,3 +262,4 @@ void DumpDispEnv(DISPENV* env) {
     GPU_printf("isinter %d\n", env->isinter);
     GPU_printf("isrgb24 %d\n", env->isrgb24);
 }
+

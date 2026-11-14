@@ -92,7 +92,43 @@ retry:
     CdReadCallback(def_cbread);
     return 1;
 }
-#elif VERSION == 40
+#elif VERSION >= 43
+extern void (*CD_cbsync)();
+extern void (*CD_cbready)();
+int CD_init(void);
+int CD_initvol(void);
+
+void (*CD_cbread)() = 0;
+int CD_read_dma_mode = 0;
+
+static int CdReset2(void);
+
+int CdInit(void) {
+    int i = 4;
+
+    while (CdReset2() != 1) {
+        if (!i--) {
+            printf("CdInit: Init failed\n");
+            return 0;
+        }
+    }
+    CD_cbsync = def_cbsync;
+    CD_cbready = def_cbready;
+    CD_cbread = def_cbread;
+    CD_read_dma_mode = 0;
+    return 1;
+}
+
+static int CdReset2(void) {
+    if (CD_init()) {
+        return 0;
+    }
+    if (CD_initvol()) {
+        return 0;
+    }
+    return 1;
+}
+#elif VERSION >= 40
 int CdReadMode(int);
 int CdInit(void) {
     int i = 4;

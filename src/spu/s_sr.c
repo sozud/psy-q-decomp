@@ -20,6 +20,28 @@ long SpuSetReverb(long on_off) {
     }
     return _spu_rev_flag;
 }
+#elif VERSION >= 41
+#include "libspu_i.h"
+
+long SpuSetReverb(long on_off) {
+    switch (on_off) {
+    case 0:
+        _spu_rev_flag = 0;
+        _spu_RXX->rxx.spucnt &= ~0x80;
+        break;
+    case 1:
+        if ((_spu_rev_reserve_wa != on_off) &&
+            (_SpuIsInAllocateArea_(_spu_rev_offsetaddr) != 0)) {
+            _spu_rev_flag = 0;
+            _spu_RXX->rxx.spucnt &= ~0x80;
+        } else {
+            _spu_rev_flag = on_off;
+            _spu_RXX->rxx.spucnt |= 0x80;
+        }
+        break;
+    }
+    return _spu_rev_flag;
+}
 #else
 #include "libspu_i.h"
 

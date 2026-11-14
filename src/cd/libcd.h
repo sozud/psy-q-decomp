@@ -50,6 +50,7 @@ typedef void (*CdlCB)(u_char, u_char*);
 #define CdlModeStream 0x100
 #define CdlModeSize1 0x20
 #define CdlModeSize0 0x10
+#define CdlModeRept 0x04
 #define CdlModeAP 0x02
 #define CdlModeDA 0x01
 #define CdlModeSpeed 0x80
@@ -73,7 +74,11 @@ typedef void (*CdlCB)(u_char, u_char*);
 #define CdlReset 0x0A
 #define CdlDemute 0x0C
 
+#if VERSION >= 41
+int CdStatus(void);
+#else
 char CdStatus(void);
+#endif
 int CdMode(void);
 void CdFlush(void);
 int CdControl(u_char, u_char*, u_char*);

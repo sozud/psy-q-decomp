@@ -1,5 +1,86 @@
 #include "libsnd_i.h"
 
+#if VERSION >= 41
+void _SsVmKeyOnNow(unsigned short vagCount, unsigned short pitch) {
+    struct SeqStruct* score;
+    u16 pos;
+    u16 bitsUpper;
+    u16 bitsLower;
+    u32 voll, volr;
+    u32 voll_t, volr_t;
+    s32 mvol_scaled;
+    u8 pv;
+
+    pos = _svm_cur.voice * 8;
+    score = &_ss_score[_svm_cur.seq_sep_no & 0xFF]
+                      [(_svm_cur.seq_sep_no & 0xFF00) >> 8];
+    mvol_scaled = _svm_vh->mvol * 0x3FFF;
+    voll_t = (_svm_cur.volume * mvol_scaled) / 16129;
+    voll_t = (voll_t * _svm_cur.mvol * _svm_cur.tone_vol) / 16129;
+    volr_t = voll_t;
+    if (_svm_cur.seq_sep_no != 0x21) {
+        voll_t = (voll_t * score->voll) / 127;
+        volr_t = (volr_t * score->volr) / 127;
+    }
+    pv = _svm_cur.tone_pan;
+    if (pv < 64) {
+        voll = voll_t;
+        volr = (volr_t * pv) / 63;
+    } else {
+        voll = (voll_t * (127 - pv)) / 63;
+        volr = volr_t;
+    }
+    pv = _svm_cur.mpan;
+    if (pv < 64) {
+        volr = (volr * pv) / 63;
+    } else {
+        voll = (voll * (127 - pv)) / 63;
+    }
+    pv = _svm_cur.pan;
+    if (pv < 64) {
+        volr = (volr * pv) / 63;
+    } else {
+        voll = (voll * (127 - pv)) / 63;
+    }
+    if (_svm_stereo_mono == 1) {
+        if (voll < volr) {
+            voll = volr;
+        } else {
+            volr = voll;
+        }
+    }
+    if (_svm_cur.seq_sep_no != 0x21) {
+        voll = (voll * voll) / 16383;
+        volr = (volr * volr) / 16383;
+    }
+    ((u16*)_svm_sreg_buf)[pos + 2] = pitch;
+    ((u16*)_svm_sreg_buf)[pos + 0] = voll;
+    ((u16*)_svm_sreg_buf)[pos + 1] = volr;
+    _svm_sreg_dirty[_svm_cur.voice] |= 7;
+    _svm_voice[_svm_cur.voice].unk04 = pitch;
+    if (_svm_cur.voice < 16) {
+        bitsLower = 1 << _svm_cur.voice;
+        bitsUpper = 0;
+    } else {
+        bitsLower = 0;
+        bitsUpper = 1 << (_svm_cur.voice - 16);
+    }
+    if (_svm_cur.tone_mode & 4) {
+        _svm_orev1 |= bitsLower;
+        _svm_orev2 |= bitsUpper;
+    } else {
+        _svm_orev1 &= ~bitsLower;
+        _svm_orev2 &= ~bitsUpper;
+    }
+    _svm_onos1 &= ~bitsLower;
+    _svm_onos2 &= ~bitsUpper;
+    _svm_okon1 |= bitsLower;
+    _svm_okon2 |= bitsUpper;
+    _svm_okof1 &= ~_svm_okon1;
+    _svm_okof2 &= ~_svm_okon2;
+}
+#else
+
 #if VERSION == 36
 void _SsVmKeyOnNow(unsigned short vagCount, unsigned short pitch) {
     struct SeqStruct* score =
@@ -153,4 +234,5 @@ void _SsVmKeyOnNow(unsigned short vagCount, unsigned short pitch) {
     _svm_okof1 &= ~_svm_okon1;
     _svm_okof2 &= ~_svm_okon2;
 }
+#endif
 #endif

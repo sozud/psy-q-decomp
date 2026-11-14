@@ -1,7 +1,49 @@
-#if VERSION >= 36
+#if VERSION >= 41
 #include "libsnd_i.h"
 
-#if VERSION == 40
+void _SsSndSetVol(short sep_access_num, short seq_num, short voll, short volr) {
+    struct SeqStruct* score;
+
+    score = &_ss_score[sep_access_num][seq_num];
+    if (score->flags != 1) {
+        score->voll = voll;
+        score->volr = volr;
+    } else {
+        _SsVmSetSeqVol(sep_access_num | (seq_num << 8), voll, volr, 1);
+    }
+}
+
+void SsSeqSetVol(short seq_access_num, short voll, short volr) {
+    struct SeqStruct* score;
+
+    score = _ss_score[seq_access_num];
+    if (score->flags != 1) {
+        score->voll = voll;
+        score->volr = volr;
+    } else {
+        _SsVmSetSeqVol(seq_access_num, voll, volr, 1);
+    }
+}
+
+void SsSepSetVol(short sep_access_num, short seq_num, short voll, short volr) {
+    struct SeqStruct* score;
+
+    score = &_ss_score[sep_access_num][seq_num];
+    if (score->flags != 1) {
+        score->voll = voll;
+        score->volr = volr;
+    } else {
+        _SsVmSetSeqVol(sep_access_num | (seq_num << 8), voll, volr, 1);
+    }
+}
+
+void SsSeqGetVol(short access_num, short seq_num, short* voll, short* volr) {
+    _SsVmGetSeqVol(access_num | (seq_num << 8), voll, volr);
+}
+#elif VERSION >= 36
+#include "libsnd_i.h"
+
+#if VERSION >= 40
 #define ARG 0
 #else
 #define ARG 1

@@ -246,9 +246,14 @@ static s32 mdec_coef[] = {
 
 #if VERSION == 36
 static u32 __ps_libinfo__[2] = {0x0A0E7350, 0x1036F41A};
+#elif VERSION >= 43
+static u32 __ps_libinfo__[2] = {0x250E7350, 0x0043539B};
+#elif VERSION >= 41
+static u32 __ps_libinfo__[2] = {0x190E7350, 0x004165B3};
 #elif VERSION >= 40
 static u32 __ps_libinfo__[2] = {0x150E7350, 0x0040AE9C};
 #endif
+
 
 typedef struct {
     u_char iq_y[64];
@@ -374,22 +379,7 @@ void DecDCTinCallback(void (*func)()) { DMACallback(0, func); }
 
 void DecDCToutCallback(void (*func)()) { DMACallback(1, func); }
 
-static volatile u32* d0_madr = 0x1F801080;
-static volatile u32* d0_bcr = 0x1F801084;
-static volatile u32* d0_chcr = 0x1F801088;
-static volatile u32* d1_madr = 0x1F801090;
-static volatile u32* d1_bcr = 0x1F801094;
-static volatile u32* d1_chcr = 0x1F801098;
-
-static volatile u32 d2_madr = 0x1F8010A0;
-static volatile u32 d2_bcr = 0x1F8010A4;
-static volatile u32 d2_chcr = 0x1F8010A8;
-static volatile u32 d3_madr = 0x1F8010B0;
-static volatile u32 d3_bcr = 0x1F8010B4;
-static volatile u32 d3_chcr = 0x1F8010B8;
-static volatile u32* mdec0 = 0x1F801820;
-static volatile u32* mdec1 = 0x1F801824;
-static volatile u32* d_pcr = 0x1F8010F0;
+#include "libpress_regs.h"
 
 static void MDEC_reset(s32 option) {
     switch (option) {
@@ -466,6 +456,10 @@ static int MDEC_out_sync(void) {
 static u_long MDEC_status(void) { return *mdec1; }
 #endif
 
+#if VERSION >= 43
+static int timeout(const char* funcName) {
+    printf("%s timeout:\n", funcName);
+#else
 static const char g_MDEC_ErrDma[] = "\t DMA=(%d,%d), ADDR=(0x%08x->0x%08x)\n";
 static const char g_MDEC_ErrFifo[] =
     "\t FIFO=(%d,%d),BUSY=%d,DREQ=(%d,%d),RGB24=%d,STP=%d\n";
@@ -482,6 +476,7 @@ static int timeout(const char* funcName) {
     printf(g_MDEC_ErrFifo, ~temp_s0 >> 0x1F, (temp_s0 >> 0x1E) & 1,
            (temp_s0 >> 0x1D) & 1, (temp_s0 >> 0x1C) & 1, (temp_s0 >> 0x1B) & 1,
            (temp_s0 >> 0x19) & 1, (temp_s0 >> 0x17) & 1);
+#endif
 
     *mdec1 = 0x80000000;
     *d0_chcr = 0;

@@ -1,7 +1,6 @@
 #if VERSION >= 36
 #include "libsnd_i.h"
 
-
 void _SsSndTempo(short seq_no, short sep_no) {
     struct SeqStruct* score;
 

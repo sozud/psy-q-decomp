@@ -3,9 +3,10 @@
 
 #define NUM_SPU_CHANNELS 24
 
-#if VERSION == 40
+#if VERSION >= 40
 
 #include "libspu_40.h"
+
 
 #else
 
@@ -22,7 +23,11 @@ extern s32 _spu_EVdma;
 extern s32 _spu_isCalled;
 extern s32 _spu_inTransfer;
 extern u16 _spu_voice_centerNote[];
+#if VERSION >= 43
+s32 _spu_pitch2note(short, int, u_short);
+#else
 s32 _spu_pitch2note(u16, u16, u16);
+#endif
 
 extern s32 D_8003355C;
 extern s32 D_80033560;

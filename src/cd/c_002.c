@@ -6,7 +6,7 @@ static s32 HADR1 = 0x1F801801;
 static s32 HADR2 = 0x1F801802;
 static s32 HADR3 = 0x1F801803;
 
-#if VERSION != 40
+#if VERSION < 40
 s32 Stframe_no;
 s32 StFinalSector;
 s16 Stsector_offset;

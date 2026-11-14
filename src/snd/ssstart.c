@@ -4,14 +4,44 @@
 static void _SsTrapIntrVSync(void);
 static void _SsSeqCalledTbyT_1per2(void);
 
+#if VERSION >= 41
+struct SndSeqTickEnv _snd_seq_tick_env = {
+    60, 1, SsSeqCalledTbyT, NULL, 0, 0, 127, 0};
+#else
 struct SndSeqTickEnv _snd_seq_tick_env = {
     60, 1, SsSeqCalledTbyT, NULL, 0, 0, 127, 0, 0};
+#endif
+
+#if VERSION >= 41
+static void _SsTrapIntrVSync(void) {
+
+    if (_snd_seq_tick_env.vsync_cb) {
+        _snd_seq_tick_env.vsync_cb();
+    }
+    _snd_seq_tick_env.tick_cb();
+}
+
+static void _SsSeqCalledTbyT_1per2(void) {
+    static int n = 0;
+
+    if (n == 0) {
+        n = 1;
+    } else {
+        n = 0;
+        _snd_seq_tick_env.tick_cb();
+    }
+}
+#endif
 
 static void _SsStart(int use_vsync) {
     unsigned short rcnt_target;
     int wait;
     int rcnt_spec;
+#if VERSION >= 41
+    int alarm_tick;
+#else
     u8 alarm_tick;
+#endif
     void (*cb)(void);
     void (*prevCb)(void);
 
@@ -86,6 +116,7 @@ void SsStart(void) { _SsStart(1); }
 
 void SsStart2(void) { _SsStart(0); }
 
+#if VERSION < 41
 static void _SsTrapIntrVSync(void) {
     struct SndSeqTickEnv* env = &_snd_seq_tick_env;
 
@@ -105,6 +136,7 @@ static void _SsSeqCalledTbyT_1per2(void) {
         env->tick_cb();
     }
 }
+#endif
 #else
 #include "libsnd_i.h"
 
